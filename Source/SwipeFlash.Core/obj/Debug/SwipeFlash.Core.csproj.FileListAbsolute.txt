@@ -1,0 +1,14 @@
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.CoreCompileInputs.cache
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.dll
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.pdb
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csprojAssemblyReference.cache
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.dll
+D:\WPF_Apps\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.pdb
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.dll
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.pdb
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csprojAssemblyReference.cache
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.CoreCompileInputs.cache
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.dll
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.pdb

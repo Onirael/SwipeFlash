@@ -1,0 +1,44 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SwipeFlash">
+
+    <!-- Base palette -->
+    
+    <Color x:Key="SwipeFlashLightViolet">#520ecc</Color>
+    <SolidColorBrush x:Key="SwipeFlashLightVioletBrush" Color="{StaticResource SwipeFlashLightViolet}"/>
+
+    <Color x:Key="SwipeFlashDarkViolet">#3a089e</Color>
+    <SolidColorBrush x:Key="SwipeFlashDarkVioletBrush" Color="{StaticResource SwipeFlashDarkViolet}"/>
+
+    <Color x:Key="SwipeFlashBlue">#0034ff</Color>
+    <SolidColorBrush x:Key="SwipeFlashBlueBrush" Color="{StaticResource SwipeFlashBlue}"/>
+
+    <Color x:Key="SwipeFlashYellow">#f0a829</Color>
+    <SolidColorBrush x:Key="SwipeFlashYellowBrush" Color="{StaticResource SwipeFlashYellow}"/>
+
+    <Color x:Key="SwipeFlashOrange">#cc7312</Color>
+    <SolidColorBrush x:Key="SwipeFlashOrangeBrush" Color="{StaticResource SwipeFlashOrange}"/>
+    
+    <!-- Grayscale -->
+
+    <Color x:Key="BackgroundLight">#fafafa</Color>
+    <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}"/>
+
+    <Color x:Key="BackgroundVeryLight">#fff</Color>
+    <SolidColorBrush x:Key="BackgroundVeryLightBrush" Color="{StaticResource BackgroundVeryLight}"/>
+
+    <Color x:Key="ForegroundMain">#686868</Color>
+    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}"/>
+
+    <Color x:Key="ForegroundVeryDark">#000</Color>
+    <SolidColorBrush x:Key="ForegroundVeryDarkBrush" Color="{StaticResource ForegroundVeryDark}"/>
+
+    <Color x:Key="ForegroundDark">#bdbdbd</Color>
+    <SolidColorBrush x:Key="ForegroundDarkBrush" Color="{StaticResource ForegroundDark}"/>
+    
+    <!-- Color variations -->
+
+    <Color x:Key="LightBlue">#99ADFF</Color>
+    <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
+
+</ResourceDictionary>
