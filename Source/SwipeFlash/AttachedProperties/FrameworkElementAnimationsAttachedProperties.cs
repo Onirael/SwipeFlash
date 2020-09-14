@@ -83,5 +83,29 @@ namespace SwipeFlash
             if (!IsFirstLoad)
                 await element.HorizontalFlipAsync(((IFlippableElement)element).FlipAnimDuration);
         }
+    }    
+    
+    /// <summary>
+    /// Animates a framework element, flipping it horizontally
+    /// </summary>
+    public class AnimateSwipeLeftProperty : AnimateBaseProperty<AnimateSwipeLeftProperty>
+    {
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            if (!IsFirstLoad)
+                await element.SlideToLeftAsync((int)((int)Application.Current.MainWindow.Width), duration: 0.4f);
+        }
+    }    
+    
+    /// <summary>
+    /// Animates a framework element, flipping it horizontally
+    /// </summary>
+    public class AnimateSwipeRightProperty : AnimateBaseProperty<AnimateSwipeRightProperty>
+    {
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            if (!IsFirstLoad)
+                await element.SlideToRightAsync((int)((int)Application.Current.MainWindow.Width), duration: 0.4f);
+        }
     }
 }

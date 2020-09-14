@@ -9,6 +9,15 @@
         x:Name="Page"
         Title="MainWindow" Height="450" Width="800">
 
+    <Window.Resources>
+        <DoubleAnimationUsingKeyFrames x:Key="BurstAnimation" Storyboard.TargetProperty="Opacity" Duration="0:0:4">
+            <SplineDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+            <SplineDoubleKeyFrame Value="0" KeyTime="0:0:1"/>
+            <SplineDoubleKeyFrame Value="1" KeyTime="0:0:1.2"/>
+            <SplineDoubleKeyFrame Value="0" KeyTime="0:0:4"/>
+        </DoubleAnimationUsingKeyFrames>
+    </Window.Resources>
+
     <Grid>
 
         <!--#region Background-->
@@ -49,8 +58,31 @@
                     </RadialGradientBrush.GradientStops>
                 </RadialGradientBrush>
             </Border.OpacityMask>
-        </Border> 
-        
+        </Border>
+
+        <Image Source="Images/BurstEffect.png" Opacity="0" HorizontalAlignment="Right" RenderTransformOrigin=".5 .5">
+            <Image.RenderTransform>
+                <ScaleTransform ScaleX="-1"/>
+            </Image.RenderTransform>
+            
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSwipedRight}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <StaticResource ResourceKey="BurstAnimation"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+            
+        </Image>
+
         <!-- Left border -->
         <Border Background="#ff2600">
             <Border.OpacityMask>
@@ -67,7 +99,7 @@
         <!--#endregion-->
 
         <Viewbox Stretch="Uniform" Margin="75">
-            <local:FlashcardControl x:Name="flashCard"/>
+            <local:FlashcardControl/>
         </Viewbox>
         
     </Grid>

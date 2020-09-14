@@ -9,6 +9,8 @@
              Width="300" Height="400"
              DataContext="{x:Static core:FlashcardDesignModel.Instance}"
              local:AnimateFlipProperty.Value="{Binding IsFlipped}"
+             local:AnimateSwipeLeftProperty.Value="{Binding IsSwipedLeft}"
+             local:AnimateSwipeRightProperty.Value="{Binding IsSwipedRight}"
              local:InputBindingBehavior.PropagateInputBindingsToWindow="True">
 
     <UserControl.InputBindings>

@@ -34,7 +34,17 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Whether the card was flipped by the user
         /// </summary>
-        public bool IsFlipped { get; set; }
+        public bool IsFlipped { get; set; } = false;
+
+        /// <summary>
+        /// Whether the card was swiped left by the user
+        /// </summary>
+        public bool IsSwipedLeft { get; private set; } = false;
+
+        /// <summary>
+        /// Whether the card was swiped right by the user
+        /// </summary>
+        public bool IsSwipedRight { get; private set; } = false;
 
         /// <summary>
         /// Whether the card starts on the B side
@@ -106,14 +116,14 @@ namespace SwipeFlash.Core
             UpdateSideWithDelay();
         }
 
-        private void SwipeRight()
-        {
-            throw new NotImplementedException();
-        }
-
         private void SwipeLeft()
         {
-            throw new NotImplementedException();
+            if (!IsSwipedRight) IsSwipedLeft = true;
+        }
+
+        private void SwipeRight()
+        {
+            if (!IsSwipedLeft) IsSwipedRight = true;
         }
 
         #endregion

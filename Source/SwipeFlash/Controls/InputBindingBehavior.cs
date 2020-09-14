@@ -4,10 +4,13 @@ using System.Windows.Input;
 
 namespace SwipeFlash
 {
+    /// <summary>
+    /// A dependency property 
+    /// </summary>
     public class InputBindingBehavior
     {
         #region Dependency Property
-
+        
         public static bool GetPropagateInputBindingsToWindow(FrameworkElement obj)
         {
             return (bool)obj.GetValue(PropagateInputBindingsToWindowProperty);
@@ -22,6 +25,11 @@ namespace SwipeFlash
                                DependencyProperty.RegisterAttached("PropagateInputBindingsToWindow", typeof(bool), typeof(InputBindingBehavior),
                                new PropertyMetadata(false, OnPropagateInputBindingsToWindowChanged));
 
+        /// <summary>
+        /// On Dependency Property changed, binds <see cref="frameworkElement_Loaded(object, RoutedEventArgs)"/> to the <see cref="FrameworkElement"/>
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
         private static void OnPropagateInputBindingsToWindowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((FrameworkElement)d).Loaded += frameworkElement_Loaded;
@@ -29,7 +37,11 @@ namespace SwipeFlash
 
         #endregion
 
-        // On framework element load
+        /// <summary>
+        /// On <see cref="FrameworkElement.Loaded"/> moves the input bindings to the container window
+        /// </summary>
+        /// <param name="sender">The <see cref="FrameworkElement"/> element</param>
+        /// <param name="e"></param>
         private static void frameworkElement_Loaded(object sender, RoutedEventArgs e)
         {
             var frameworkElement = (FrameworkElement)sender;
