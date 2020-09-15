@@ -12,7 +12,9 @@
              local:AnimateSwipeLeftProperty.Value="{Binding IsSwipedLeft}"
              local:AnimateSwipeRightProperty.Value="{Binding IsSwipedRight}"
              local:InputBindingBehavior.PropagateInputBindingsToWindow="{Binding HasInput}"
-             local:IsPendingDestroyProperty.Value="{Binding IsPendingDestroy}">
+             local:IsPendingDestroyProperty.Value="{Binding IsPendingDestroy}"
+             Opacity="{Binding CardQueuePosition, Converter={local:CardQueuePositionToOpacityConverter}}"
+             Margin="{Binding CardQueuePosition, Converter={local:CardQueuePositionToMarginConverter}}">
 
     <UserControl.InputBindings>
         <!-- Flip on click -->

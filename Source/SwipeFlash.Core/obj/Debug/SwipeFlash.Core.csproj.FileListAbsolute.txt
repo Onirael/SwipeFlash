@@ -12,3 +12,10 @@ D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Co
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.dll
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.pdb
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.dll
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.pdb
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csprojAssemblyReference.cache
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.CoreCompileInputs.cache
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.dll
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.pdb

@@ -62,6 +62,12 @@ namespace SwipeFlash.Core
         public bool IsOnSide1 { get; set; }
 
         /// <summary>
+        /// The position in the card queue that the card is currently in
+        /// If the value is set to 0, the card is the front card
+        /// </summary>
+        public int CardQueuePosition { get; set; } = 0;
+
+        /// <summary>
         /// Whether the card is set to be destroyed
         /// </summary>
         public bool IsPendingDestroy { get; set; } = false;
