@@ -45,7 +45,6 @@ namespace SwipeFlash
         /// <param name="duration">The duration of the animation</param>
         /// <param name="offest">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
-        /// <param name="keepMargin">whether to keep the element at the same width during animation</param>
         public static void AddSlideToLeft(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
             var animation = new ThicknessAnimation
@@ -70,7 +69,6 @@ namespace SwipeFlash
         /// <param name="duration">The duration of the animation</param>
         /// <param name="offest">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
-        /// <param name="keepMargin">whether to keep the element at the same width during animation</param>
         public static void AddSlideToRight(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
             var animation = new ThicknessAnimation
@@ -83,6 +81,54 @@ namespace SwipeFlash
 
             // Set the target property name
             Storyboard.SetTargetProperty(animation, new PropertyPath("Margin"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a slide animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="offest">The angle to reach</param>
+        /// <param name="decelerationRatio">The rate of deceleration</param>
+        public static void AddTiltToLeft(this Storyboard storyboard, float duration, double angleOffset, float decelerationRatio = 0.9f)
+        {
+            var animation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = 0,
+                To = -angleOffset,
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("RenderTransform.(TransformGroup.Children)[1].(RotateTransform.Angle)"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a slide animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="offest">The angle to reach</param>
+        /// <param name="decelerationRatio">The rate of deceleration</param>
+        public static void AddTiltToRight(this Storyboard storyboard, float duration, double angleOffset, float decelerationRatio = 0.9f)
+        {
+            var animation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = 0,
+                To = angleOffset,
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("RenderTransform.(TransformGroup.Children)[1].(RotateTransform.Angle)"));
 
             // Add this to the storyboard
             storyboard.Children.Add(animation);

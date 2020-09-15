@@ -1,5 +1,4 @@
-﻿using SwipeFlash.Core;
-using System.Windows;
+﻿using System.Windows;
 
 namespace SwipeFlash
 {
@@ -93,7 +92,7 @@ namespace SwipeFlash
         protected async override void RunAnimation(FrameworkElement element, bool value)
         {
             if (!IsFirstLoad)
-                await element.SlideToLeftAsync((int)((int)Application.Current.MainWindow.Width), duration: 0.4f);
+                await element.SlideAndTilttoLeftAsync((int)(Application.Current.MainWindow.Width * 1.2), 20, duration: 0.4f);
         }
     }    
     
@@ -105,7 +104,7 @@ namespace SwipeFlash
         protected async override void RunAnimation(FrameworkElement element, bool value)
         {
             if (!IsFirstLoad)
-                await element.SlideToRightAsync((int)((int)Application.Current.MainWindow.Width), duration: 0.4f);
+                await element.SlideAndTiltToRightAsync((int)(Application.Current.MainWindow.Width * 1.2), 20, duration: 0.4f);
         }
     }
 }

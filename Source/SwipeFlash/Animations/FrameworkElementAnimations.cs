@@ -33,7 +33,7 @@ namespace SwipeFlash
             await Task.Delay((int)duration * 1000);
         }
 
-        public static async Task SlideToLeftAsync(this FrameworkElement element, int width, float duration = 0.5f)
+        public static async Task SlideAndTilttoLeftAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
         {
             element.SetElementTransform();
 
@@ -43,6 +43,9 @@ namespace SwipeFlash
             // Add the horizontal flip animation
             sb.AddSlideToLeft(duration, width);
 
+            // Add the tilt animation
+            sb.AddTiltToLeft(duration, angle);
+
             // Begin the animation
             sb.Begin(element);
 
@@ -50,7 +53,7 @@ namespace SwipeFlash
             await Task.Delay((int)duration * 1000);
         }
 
-        public static async Task SlideToRightAsync(this FrameworkElement element, int width, float duration = 0.5f)
+        public static async Task SlideAndTiltToRightAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
         {
             element.SetElementTransform();
 
@@ -59,6 +62,9 @@ namespace SwipeFlash
 
             // Add the horizontal flip animation
             sb.AddSlideToRight(duration, width);
+
+            // Add the tilt animation
+            sb.AddTiltToRight(duration, angle);
 
             // Begin the animation
             sb.Begin(element);

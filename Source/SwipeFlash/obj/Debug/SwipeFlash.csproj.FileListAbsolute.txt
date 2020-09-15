@@ -65,3 +65,5 @@ D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.csproj.
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.csproj.CopyComplete
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.exe
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.pdb
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardHost.g.cs
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardHost.baml

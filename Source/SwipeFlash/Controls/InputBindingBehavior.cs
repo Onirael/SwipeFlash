@@ -5,7 +5,8 @@ using System.Windows.Input;
 namespace SwipeFlash
 {
     /// <summary>
-    /// A dependency property 
+    /// A dependency property moving the input bindings from a framework element to its container window
+    /// Only works once, cannot toggle
     /// </summary>
     public class InputBindingBehavior
     {
@@ -32,33 +33,51 @@ namespace SwipeFlash
         /// <param name="e"></param>
         private static void OnPropagateInputBindingsToWindowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FrameworkElement)d).Loaded += frameworkElement_Loaded;
+            // Check if dependency object is a framework element
+            if (!(d is FrameworkElement element))
+                return;
+
+            // If the element hasn't yet been loaded
+            if (!element.IsLoaded)
+                // Hook the helper method to the Loaded event
+                element.Loaded += MoveInputBindingsToWindow;
+            else
+                // Manually run the method
+                MoveInputBindingsToWindow(element, null);
         }
 
         #endregion
 
         /// <summary>
-        /// On <see cref="FrameworkElement.Loaded"/> moves the input bindings to the container window
+        /// Moves the input bindings to the container window
         /// </summary>
         /// <param name="sender">The <see cref="FrameworkElement"/> element</param>
         /// <param name="e"></param>
-        private static void frameworkElement_Loaded(object sender, RoutedEventArgs e)
+        private static void MoveInputBindingsToWindow(object sender, RoutedEventArgs e)
         {
-            var frameworkElement = (FrameworkElement)sender;
-            frameworkElement.Loaded -= frameworkElement_Loaded;
-
-            var window = Window.GetWindow(frameworkElement);
-            if (window == null)
-            {
+            // Check if sender is a framework element
+            if (!(sender is FrameworkElement element))
                 return;
-            }
+
+            // Unhook from the Loaded RoutedEventHandler
+            element.Loaded -= MoveInputBindingsToWindow;
+
+            // Get the current window
+            var window = Window.GetWindow(element);
+
+            // If the window is invalid
+            if (window == null)
+                return;
 
             // Move input bindings from the FrameworkElement to the window.
-            for (int i = frameworkElement.InputBindings.Count - 1; i >= 0; i--)
+            for (int i = element.InputBindings.Count - 1; i >= 0; i--)
             {
-                var inputBinding = (InputBinding)frameworkElement.InputBindings[i];
+                // Get input bindings
+                var inputBinding = element.InputBindings[i];
+                // Add input bindings to window
                 window.InputBindings.Add(inputBinding);
-                frameworkElement.InputBindings.Remove(inputBinding);
+                // Remove input bindings from element
+                element.InputBindings.Remove(inputBinding);
             }
         }
     }

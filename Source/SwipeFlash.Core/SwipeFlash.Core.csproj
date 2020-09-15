@@ -49,8 +49,10 @@
   <ItemGroup>
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
     <Compile Include="Expressions\ExpressionHelpers.cs" />
-    <Compile Include="ViewModel\Design\FlashcardDesignModel.cs" />
-    <Compile Include="ViewModel\FlashcardViewModel.cs" />
+    <Compile Include="ViewModel\Flashcards\Design\FlashcardHostDesignModel.cs" />
+    <Compile Include="ViewModel\Flashcards\Design\FlashcardDesignModel.cs" />
+    <Compile Include="ViewModel\Flashcards\FlashcardHostViewModel.cs" />
+    <Compile Include="ViewModel\Flashcards\FlashcardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
     <Compile Include="ViewModel\Base\RelayParameterizedCommand.cs" />

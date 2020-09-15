@@ -73,13 +73,22 @@
     <Compile Include="Animations\FrameworkElementAnimations.cs" />
     <Compile Include="Animations\StoryboardHelpers.cs" />
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
-    <Compile Include="AttachedProperties\ControlAttachedProperties.cs" />
     <Compile Include="AttachedProperties\FrameworkElementAnimationsAttachedProperties.cs" />
+    <Compile Include="AttachedProperties\UserControlAttachedProperties.cs" />
+    <Compile Include="Controls\FrameworkElementHelpers.cs" />
+    <Compile Include="Controls\FlashcardHost.xaml.cs">
+      <DependentUpon>FlashcardHost.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IFlippableElement.cs" />
     <Compile Include="Controls\InputBindingBehavior.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\ViewModelArrayToViewModelConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Page Include="Controls\FlashcardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FlashcardHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

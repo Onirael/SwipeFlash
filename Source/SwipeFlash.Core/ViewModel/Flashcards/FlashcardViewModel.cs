@@ -25,7 +25,7 @@ namespace SwipeFlash.Core
         /// The text on the B side of the card
         /// </summary>
         public string Side2Text { get; set; }
-        
+
         /// <summary>
         /// The text on the B side of the card
         /// </summary>
@@ -35,6 +35,11 @@ namespace SwipeFlash.Core
         /// Whether the card was flipped by the user
         /// </summary>
         public bool IsFlipped { get; set; } = false;
+
+        /// <summary>
+        /// Whether the card takes in the input by the user
+        /// </summary>
+        public bool HasInput { get; set; } = true;
 
         /// <summary>
         /// Whether the card was swiped left by the user
@@ -57,6 +62,11 @@ namespace SwipeFlash.Core
         public bool IsOnSide1 { get; set; }
 
         /// <summary>
+        /// Whether the card is set to be destroyed
+        /// </summary>
+        public bool IsPendingDestroy { get; set; } = false;
+
+        /// <summary>
         /// The duration of the flip animation in seconds
         /// </summary>
         public double FlipDuration { get; set; } = 0.4;
@@ -65,6 +75,14 @@ namespace SwipeFlash.Core
         /// The duration of the swipe animation
         /// </summary>
         public double SwipeDuration { get; set; } = 0.4;
+
+        #endregion
+
+        #region Event Handlers
+
+        public EventHandler OnCardSwipeLeft;
+
+        public EventHandler OnCardSwipeRight;
 
         #endregion
 
@@ -102,6 +120,12 @@ namespace SwipeFlash.Core
 
             // Sets the initial side
             IsOnSide1 = IsFlipped == IsInverted;
+
+            //Task.Delay(2000).ContinueWith((t) => { if (HasInput) DestroyCard(); });
+
+            // Initializes event handlers
+            OnCardSwipeLeft = new EventHandler((ss, ee) => { });
+            OnCardSwipeRight = new EventHandler((ss, ee) => { });
         }
 
         #endregion
@@ -118,12 +142,20 @@ namespace SwipeFlash.Core
 
         private void SwipeLeft()
         {
+            // Swipe to the left if the card hasn't yet been swiped
             if (!IsSwipedRight) IsSwipedLeft = true;
+
+            // Fire swipe left event
+            OnCardSwipeLeft(this, null);
         }
 
         private void SwipeRight()
         {
+            // Swipe to the right if the card hasn't yet been swiped
             if (!IsSwipedLeft) IsSwipedRight = true;
+
+            // Fire swipe right event
+            OnCardSwipeRight(this, null);
         }
 
         #endregion
@@ -131,11 +163,19 @@ namespace SwipeFlash.Core
         #region Helper Methods
 
         /// <summary>
+        /// Called when the card has been swiped out
+        /// </summary>
+        public void DestroyCard()
+        {
+            IsPendingDestroy = true;
+        }
+
+        /// <summary>
         /// Update the <see cref="IsOnSide1"/> bool after a delay,
         /// used when running the flip animation
         /// </summary>
         /// <returns></returns>
-        public void UpdateSideWithDelay()
+        private void UpdateSideWithDelay()
         {
             // Wait for half the duration of the flip animation
             Task.Delay((int)(FlipDuration * 0.25 * 1000)).ContinueWith((t) =>

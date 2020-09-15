@@ -16,6 +16,6 @@ namespace SwipeFlash
         /// <summary>
         /// <see cref="IFlippableElement"/> interface implementation
         /// </summary>
-        public float FlipAnimDuration => (float)((FlashcardViewModel)DataContext).FlipDuration;
+        public float FlipAnimDuration => DataContext is FlashcardViewModel viewModel ? (float)(viewModel.FlipDuration) : 0f;
     }
 }

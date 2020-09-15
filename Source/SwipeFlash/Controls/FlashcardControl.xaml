@@ -11,7 +11,8 @@
              local:AnimateFlipProperty.Value="{Binding IsFlipped}"
              local:AnimateSwipeLeftProperty.Value="{Binding IsSwipedLeft}"
              local:AnimateSwipeRightProperty.Value="{Binding IsSwipedRight}"
-             local:InputBindingBehavior.PropagateInputBindingsToWindow="True">
+             local:InputBindingBehavior.PropagateInputBindingsToWindow="{Binding HasInput}"
+             local:IsPendingDestroyProperty.Value="{Binding IsPendingDestroy}">
 
     <UserControl.InputBindings>
         <!-- Flip on click -->
