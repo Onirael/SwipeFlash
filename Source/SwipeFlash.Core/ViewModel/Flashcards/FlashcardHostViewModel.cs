@@ -22,6 +22,13 @@ namespace SwipeFlash.Core
         /// </summary>
         public AsyncObservableCollection<FlashcardViewModel> PendingDestroyCards { get; set; }
 
+        public FlashcardViewModel[] FlashcardHistory { get; set; }
+
+        /// <summary>
+        /// The amount of cards stored in the history
+        /// </summary>
+        public int FlashcardHistoryLength { get; set; } = 3;
+
         /// <summary>
         /// The amount of flashcards stored in <see cref="Flashcards"/>
         /// </summary>
@@ -45,7 +52,6 @@ namespace SwipeFlash.Core
         public FlashcardHostViewModel()
         {
             // Initializes the flashcards array
-
             Flashcards = new ObservableCollection<FlashcardViewModel>();
 
             for (int i = 0; i < FlashcardCount; ++i)
@@ -65,6 +71,9 @@ namespace SwipeFlash.Core
 
             // Initialize PendingDestroyCards collection
             PendingDestroyCards = new AsyncObservableCollection<FlashcardViewModel>();
+
+            // Initialize history array
+            FlashcardHistory = new FlashcardViewModel[FlashcardHistoryLength];
         }
 
         #endregion
@@ -86,6 +95,16 @@ namespace SwipeFlash.Core
             }
         }
 
+        public void OnUndo(object sender, EventArgs e)
+        {
+            //
+            // Remove card from undo array and move it to flashcards array
+            // Reverse the cards' queue position animation
+            // Reverse slide out
+            // Move input to new active card
+            //
+        }
+
         /// <summary>
         /// Adds a card to the <see cref="Flashcards"/> array
         /// pushes all the cards in the array, removing the last element
@@ -98,6 +117,10 @@ namespace SwipeFlash.Core
 
             // Add swiped card to PendingDestroyCards array
             PendingDestroyCards.Add(lastCard);
+
+            //
+            // Copy old card to history array
+            //
 
             // Remove it from array after the duration of the swipe
             Task.Delay((int)(lastCard.SwipeDuration * 1000)).ContinueWith((t) =>
@@ -120,8 +143,10 @@ namespace SwipeFlash.Core
                 int newPos = Flashcards.Count - i - 1;
                 Flashcards[i].CardQueuePosition = newPos;
 
+                // If the card is at the front
                 if (newPos == 0)
                 {
+                    // Enable its input after a delay
                     FlashcardViewModel activeCard = Flashcards[i];
                     Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) =>
                     {
