@@ -50,6 +50,7 @@ namespace SwipeFlash
             var marginAnimation = new ThicknessAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = CardQueuePositionToMarginConverter.Convert(newCardQueuePosition + 1),
                 To = CardQueuePositionToMarginConverter.Convert(newCardQueuePosition),
                 DecelerationRatio = decelerationRatio,
             };
@@ -73,6 +74,7 @@ namespace SwipeFlash
             var opacityAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = CardQueuePositionToOpacityConverter.Convert(newCardQueuePosition + 1),
                 To = CardQueuePositionToOpacityConverter.Convert(newCardQueuePosition),
                 DecelerationRatio = decelerationRatio,
             };

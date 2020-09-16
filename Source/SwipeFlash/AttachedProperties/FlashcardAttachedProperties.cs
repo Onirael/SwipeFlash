@@ -22,7 +22,7 @@ namespace SwipeFlash
                 return;
 
             // Run the transition animation
-            AnimateTransition(element, (int)e.NewValue, IsFirstLoad ? 0f : 2f);
+            AnimateTransition(element, (int)e.NewValue, IsFirstLoad ? 0f : .2f);
 
             IsFirstLoad = false;
         }
