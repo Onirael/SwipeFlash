@@ -82,8 +82,6 @@
     <Compile Include="Controls\IFlippableElement.cs" />
     <Compile Include="Controls\InputBindingBehavior.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
-    <Compile Include="ValueConverters\CardQueuePositionToMarginConverter.cs" />
-    <Compile Include="ValueConverters\CardQueuePositionToOpacityConverter.cs" />
     <Compile Include="ValueConverters\ViewModelArrayToViewModelConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Page Include="Controls\FlashcardControl.xaml">

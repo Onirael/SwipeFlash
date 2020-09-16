@@ -11,19 +11,30 @@
              DataContext="{Binding core:FlashcardHostViewModel}">
 
     <Grid>
-        <ItemsControl ItemsSource="{Binding Flashcards}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+        <Viewbox Stretch="Uniform" Margin="-10 20 10 -20">
+            <ContentControl x:Name="Card3" Opacity=".5" >
+                <local:FlashcardControl DataContext="{Binding Flashcards, 
+                                                              Converter={local:ViewModelArrayToViewModelConverter},
+                                                              ConverterParameter=2}"/>
+            </ContentControl>
+        </Viewbox>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:FlashcardControl/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Viewbox Stretch="Uniform" Margin="-5 10 5 -10" >
+            <ContentControl x:Name="Card2">
+                <local:FlashcardControl DataContext="{Binding Flashcards, 
+                                                              Converter={local:ViewModelArrayToViewModelConverter}, 
+                                                              ConverterParameter=1}"/>
+            </ContentControl>
+        </Viewbox>
+        
+        <Viewbox Stretch="Uniform">
+            <ContentControl x:Name="Card1">
+                <local:FlashcardControl DataContext="{Binding Flashcards, 
+                                                              Converter={local:ViewModelArrayToViewModelConverter},
+                                                              ConverterParameter=0}"/>
+            </ContentControl>
+        </Viewbox>
+
     </Grid>
     
 </UserControl>

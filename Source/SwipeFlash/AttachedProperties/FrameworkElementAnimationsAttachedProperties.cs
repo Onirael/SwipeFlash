@@ -21,20 +21,42 @@ namespace SwipeFlash
 
         #endregion
 
-        public override void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        public override void OnValueUpdated(DependencyObject sender, object value)
         {
-            var value = (bool)e.NewValue;
-
             // Get the framework element
             if (!(sender is FrameworkElement element))
                 return;
 
             // Don't fire if the value doesn't change
-            if (sender.GetValue(ValueProperty) == (object)value)
+            if (sender.GetValue(ValueProperty) == value && !IsFirstLoad)
                 return;
-            
-            // Run the animation
-            RunAnimation(element, value);
+
+            // On first load
+            if (IsFirstLoad)
+            {
+                // Create a single self-unhookable event
+                //      hooked to the element's Loaded RoutedEventHandler
+                RoutedEventHandler onElementLoad = null;
+                onElementLoad = (ss, ee) =>
+                {
+                    // Unhook the event
+                    element.Loaded -= onElementLoad;
+
+                    // Run the animation
+                    RunAnimation(element, (bool)value);
+
+                    // Set IsFirstLoad
+                    IsFirstLoad = false;
+                };
+
+                element.Loaded += onElementLoad;
+
+            }
+            else
+            {
+                // Run the animation
+                RunAnimation(element, (bool)value);
+            }
         }
 
         /// <summary>
@@ -57,7 +79,8 @@ namespace SwipeFlash
             if (!(element is IFlippableElement))
                 return;
 
-            await element.HorizontalFlipAsync(((IFlippableElement)element).FlipAnimDuration);
+            if (!IsFirstLoad)
+                await element.HorizontalFlipAsync(((IFlippableElement)element).FlipAnimDuration);
         }
     }    
     
@@ -68,7 +91,8 @@ namespace SwipeFlash
     {
         protected async override void RunAnimation(FrameworkElement element, bool value)
         {
-            await element.SlideAndTilttoLeftAsync((int)(Application.Current.MainWindow.Width * 1.2), 20, duration: 0.4f);
+            if (!IsFirstLoad)
+                await element.SlideAndTilttoLeftAsync((int)(Application.Current.MainWindow.Width * 1.2), 20, duration: 0.4f);
         }
     }    
     
@@ -79,7 +103,8 @@ namespace SwipeFlash
     {
         protected async override void RunAnimation(FrameworkElement element, bool value)
         {
-            await element.SlideAndTiltToRightAsync((int)(Application.Current.MainWindow.Width * 1.2), 20, duration: 0.4f);
+            if (!IsFirstLoad)
+                await element.SlideAndTiltToRightAsync((int)(Application.Current.MainWindow.Width * 1.2), 20, duration: 0.4f);
         }
     }
 }
