@@ -39,7 +39,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Whether the card takes in the input by the user
         /// </summary>
-        public bool HasInput { get; set; } = true;
+        public bool HasInput { get; set; } = false;
 
         /// <summary>
         /// Whether the card was swiped left by the user
@@ -60,6 +60,12 @@ namespace SwipeFlash.Core
         /// Whether the card is currently showing the A side
         /// </summary>
         public bool IsOnSide1 { get; set; }
+
+        /// <summary>
+        /// The position in the card queue that the card is currently in
+        /// If the value is set to 0, the card is the front card
+        /// </summary>
+        public int CardQueuePosition { get; set; } = 0;
 
         /// <summary>
         /// Whether the card is set to be destroyed
@@ -121,8 +127,6 @@ namespace SwipeFlash.Core
             // Sets the initial side
             IsOnSide1 = IsFlipped == IsInverted;
 
-            //Task.Delay(2000).ContinueWith((t) => { if (HasInput) DestroyCard(); });
-
             // Initializes event handlers
             OnCardSwipeLeft = new EventHandler((ss, ee) => { });
             OnCardSwipeRight = new EventHandler((ss, ee) => { });
@@ -147,6 +151,11 @@ namespace SwipeFlash.Core
 
             // Fire swipe left event
             OnCardSwipeLeft(this, null);
+
+            Task.Delay((int)(SwipeDuration * 1000)).ContinueWith((t) =>
+            {
+                DestroyCard();
+            });
         }
 
         private void SwipeRight()
@@ -156,6 +165,11 @@ namespace SwipeFlash.Core
 
             // Fire swipe right event
             OnCardSwipeRight(this, null);
+
+            Task.Delay((int)(SwipeDuration * 1000)).ContinueWith((t) => 
+            {
+                DestroyCard();
+            });
         }
 
         #endregion

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         x:Name="Page"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Swipe Flash" Height="450" Width="800">
 
     <!-- Animations -->
     <Window.Resources>
@@ -104,9 +104,5 @@
 
         <local:FlashcardHost Margin="75"/>
 
-        <!--<Viewbox Stretch="Uniform" Margin="75">
-            <local:FlashcardControl/>
-        </Viewbox>-->
-        
     </Grid>
 </Window>

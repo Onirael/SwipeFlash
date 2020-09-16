@@ -14,10 +14,11 @@ namespace SwipeFlash
         /// Horizontal flip animation
         /// </summary>
         /// <param name="element">The framework element to animate</param>
-        /// <param name="duration">The duration of the animation</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
         /// <returns></returns>
         public static async Task HorizontalFlipAsync(this FrameworkElement element, float duration = 0.5f)
         {
+            // Create the element's transform
             element.SetElementTransform();
 
             // Create the storyboard
@@ -28,13 +29,22 @@ namespace SwipeFlash
 
             // Begin the animation
             sb.Begin(element);
-            
+
             // Wait for it to finish
-            await Task.Delay((int)duration * 1000);
+            await Task.Delay((int)(duration * 1000));
         }
 
-        public static async Task SlideAndTilttoLeftAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
+        /// <summary>
+        /// Slide and tilt to left animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="width">The length of the translation in pixels</param>
+        /// <param name="angle">The tilt angle in degrees</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task SlideAndTiltToLeftAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
         {
+            // Create the element's transform
             element.SetElementTransform();
 
             // Create the storyboard
@@ -50,11 +60,20 @@ namespace SwipeFlash
             sb.Begin(element);
 
             // Wait for it to finish
-            await Task.Delay((int)duration * 1000);
+            await Task.Delay((int)(duration * 1000));
         }
 
+        /// <summary>
+        /// Slide and tilt to right animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="width">The width of the slide animation in pixels</param>
+        /// <param name="angle">The tilt angle in degrees</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
         public static async Task SlideAndTiltToRightAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
         {
+            // Create the element's transform
             element.SetElementTransform();
 
             // Create the storyboard
@@ -70,7 +89,33 @@ namespace SwipeFlash
             sb.Begin(element);
 
             // Wait for it to finish
-            await Task.Delay((int)duration * 1000);
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Moves a queued element to a new queue position, 
+        /// translating and fading it in
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="newCardQueuePosition">The new position of the element in the queue</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task MoveInQueueAsync(this FrameworkElement element, int newCardQueuePosition, float duration = 0.1f)
+        {
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the card queue translation animation
+            sb.AddCardQueueTranslation(duration, newCardQueuePosition);
+
+            // Add the card queue fade in animation
+            sb.AddCardQueueFadeIn(duration, newCardQueuePosition);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
         }
 
         #region Private Helpers

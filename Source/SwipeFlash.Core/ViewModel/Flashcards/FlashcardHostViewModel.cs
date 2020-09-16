@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace SwipeFlash.Core
@@ -6,24 +8,30 @@ namespace SwipeFlash.Core
     /// <summary>
     /// The view model for the flashcard host
     /// </summary>
-    public class FlashcardHostViewModel
+    public class FlashcardHostViewModel : BaseViewModel
     {
         #region Public Properties
 
         /// <summary>
-        /// An array of view models for the flashcards
+        /// An observable collection of view models for the flashcards
         /// </summary>
-        public FlashcardViewModel[] Flashcards { get; set; }
-
+        public ObservableCollection<FlashcardViewModel> Flashcards { get; set; }
+        
         /// <summary>
-        /// The flashcard currently in front
+        /// A list containing cards pending destruction to preserve them from garbage collection
         /// </summary>
-        public int ActiveFlashcard { get; set; } = 0;
+        public AsyncObservableCollection<FlashcardViewModel> PendingDestroyCards { get; set; }
 
         /// <summary>
         /// The amount of flashcards stored in <see cref="Flashcards"/>
         /// </summary>
-        public int FlashcardCount { get; set; } = 3;
+        public int FlashcardCount { get; set; } = 5;
+
+        /// <summary>
+        /// The time in seconds between the swipe of the previous card 
+        /// and the activation of the input on the new active card
+        /// </summary>
+        public double CardChangeInputDelay { get; set; } = 0.15;
 
         /// <summary>
         /// DEVELOPMENT
@@ -37,11 +45,26 @@ namespace SwipeFlash.Core
         public FlashcardHostViewModel()
         {
             // Initializes the flashcards array
-            Flashcards = new FlashcardViewModel[FlashcardCount];
-            for (int i=0; i<FlashcardCount; ++i)
+
+            Flashcards = new ObservableCollection<FlashcardViewModel>();
+
+            for (int i = 0; i < FlashcardCount; ++i)
             {
-                Flashcards[i] = GetNextFlashCard();
+                // Get the new card
+                var newCard = GetNextFlashCard();
+
+                // Set the new card's queue position
+                newCard.CardQueuePosition = i;
+
+                // Enables input on the last card
+                if (i == 0) newCard.HasInput = true;
+
+                // Add the card to the list
+                Flashcards.Insert(0, newCard);
             }
+
+            // Initialize PendingDestroyCards collection
+            PendingDestroyCards = new AsyncObservableCollection<FlashcardViewModel>();
         }
 
         #endregion
@@ -53,17 +76,59 @@ namespace SwipeFlash.Core
         /// </summary>
         public void OnCardSwipe(object sender, EventArgs e)
         {
-            // Disable the input on the old card
-            Flashcards[ActiveFlashcard].HasInput = false;
+            if (Flashcards.Count > 0)
+            {
+                // Disable the input on the old card
+                Flashcards[Flashcards.Count - 1].HasInput = false;
 
-            // Append new flashcard
-            Flashcards[ActiveFlashcard] = GetNextFlashCard();
+                // Append new flashcard
+                PushCardToArray(GetNextFlashCard());
+            }
+        }
 
-            // Update the active flash card
-            ActiveFlashcard = (ActiveFlashcard + 1) % 3;
+        /// <summary>
+        /// Adds a card to the <see cref="Flashcards"/> array
+        /// pushes all the cards in the array, removing the last element
+        /// </summary>
+        /// <param name="card"></param>
+        public void PushCardToArray(FlashcardViewModel card)
+        {
+            // Get swiped card
+            FlashcardViewModel lastCard = Flashcards[Flashcards.Count - 1];
 
-            // Enable the input on the new active card
-            Flashcards[ActiveFlashcard].HasInput = true;
+            // Add swiped card to PendingDestroyCards array
+            PendingDestroyCards.Add(lastCard);
+
+            // Remove it from array after the duration of the swipe
+            Task.Delay((int)(lastCard.SwipeDuration * 1000)).ContinueWith((t) =>
+            {
+                PendingDestroyCards.Remove(lastCard);
+            });
+
+            // Remove swiped card from flashcards array
+            Flashcards.RemoveAt(Flashcards.Count - 1);
+
+            // Add new card to beginning of array
+            Flashcards.Insert(0, card);
+
+            // Set all queue positions
+            for (int i = 0; i < Flashcards.Count; ++i)
+            {
+                Flashcards[Flashcards.Count - 1].HasInput = false;
+
+                // Updates the card queue positions
+                int newPos = Flashcards.Count - i - 1;
+                Flashcards[i].CardQueuePosition = newPos;
+
+                if (newPos == 0)
+                {
+                    FlashcardViewModel activeCard = Flashcards[i];
+                    Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) =>
+                    {
+                        activeCard.HasInput = true;
+                    });
+                }
+            }
         }
 
         /// <summary>
@@ -75,10 +140,16 @@ namespace SwipeFlash.Core
             // DEVELOPMENT //
             FlashcardID++;
 
-            var flashcard =  new FlashcardViewModel()
+            var flashcard = new FlashcardViewModel()
             {
                 Side1Text = $"Test card {FlashcardID}",
                 Side2Text = "Test card side 2",
+                Side1Icon = "🇪🇸",
+                Side2Icon = "🇬🇧",
+
+                HasInput = false,
+
+                CardQueuePosition = FlashcardCount,
             };
             //
 

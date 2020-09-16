@@ -1,4 +1,5 @@
 ﻿using SwipeFlash.Core;
+using System;
 using System.Windows.Controls;
 
 namespace SwipeFlash
@@ -8,14 +9,22 @@ namespace SwipeFlash
     /// </summary>
     public partial class FlashcardControl : UserControl, IFlippableElement
     {
+        #region Constructor
+
         public FlashcardControl()
         {
             InitializeComponent();
         }
 
+        #endregion
+
+        #region Interface Implementation
+
         /// <summary>
         /// <see cref="IFlippableElement"/> interface implementation
         /// </summary>
         public float FlipAnimDuration => DataContext is FlashcardViewModel viewModel ? (float)(viewModel.FlipDuration) : 0f;
+
+        #endregion
     }
 }

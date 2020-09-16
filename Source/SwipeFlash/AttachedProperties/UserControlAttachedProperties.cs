@@ -8,7 +8,7 @@ namespace SwipeFlash
         {
             if ((bool)e.NewValue && sender is FrameworkElement element)
             {
-                element.RemoveChild();
+                element.RemoveFromParent();
             }
         }
     }

@@ -39,6 +39,52 @@ namespace SwipeFlash
         }
 
         /// <summary>
+        /// Adds a card queue translation animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="decelerationratio">The rate of deceleration</param>
+        public static void AddCardQueueTranslation(this Storyboard storyboard, float duration, int newCardQueuePosition, float decelerationRatio = .8f)
+        {
+            // Animation
+            var marginAnimation = new ThicknessAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                To = CardQueuePositionToMarginConverter.Convert(newCardQueuePosition),
+                DecelerationRatio = decelerationRatio,
+            };
+
+            // Set the target property names
+            Storyboard.SetTargetProperty(marginAnimation, new PropertyPath("Margin"));
+
+            // Add animations
+            storyboard.Children.Add(marginAnimation);
+        }
+
+        /// <summary>
+        /// Adds a card queue fade in animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="decelerationratio">The rate of deceleration</param>
+        public static void AddCardQueueFadeIn(this Storyboard storyboard, float duration, int newCardQueuePosition, float decelerationRatio = .8f)
+        {
+            // Animation
+            var opacityAnimation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                To = CardQueuePositionToOpacityConverter.Convert(newCardQueuePosition),
+                DecelerationRatio = decelerationRatio,
+            };
+
+            // Set the target property names
+            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
+
+            // Add animations
+            storyboard.Children.Add(opacityAnimation);
+        }
+
+        /// <summary>
         /// Adds a slide animation to the storyboard
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
@@ -88,7 +134,7 @@ namespace SwipeFlash
 
         /// <summary>
         /// Adds a slide animation to the storyboard
-        /// </summary>
+        /// </summary>  
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
         /// <param name="offest">The angle to reach</param>

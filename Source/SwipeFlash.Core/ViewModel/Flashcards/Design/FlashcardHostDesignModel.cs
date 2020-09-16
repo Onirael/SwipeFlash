@@ -16,10 +16,7 @@
 
         #region Constructor
 
-        public FlashcardHostDesignModel()
-        {
-
-        }
+        public FlashcardHostDesignModel() : base() { }
 
         #endregion
     }

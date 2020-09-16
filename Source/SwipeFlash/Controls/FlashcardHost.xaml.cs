@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using SwipeFlash.Core;
+using System.Windows.Controls;
 
 namespace SwipeFlash
 {
@@ -9,6 +10,8 @@ namespace SwipeFlash
     {
         public FlashcardHost()
         {
+            DataContext = new FlashcardHostViewModel();
+
             InitializeComponent();
         }
 

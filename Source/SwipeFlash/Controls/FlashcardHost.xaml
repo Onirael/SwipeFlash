@@ -7,34 +7,42 @@
              xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{x:Static core:FlashcardHostDesignModel.Instance}"
-             DataContext="{Binding core:FlashcardHostViewModel}">
+             d:DataContext="{x:Static core:FlashcardHostDesignModel.Instance}">
 
-    <Grid>
-        <Viewbox Stretch="Uniform" Margin="-10 20 10 -20">
-            <ContentControl x:Name="Card3" Opacity=".5" >
-                <local:FlashcardControl DataContext="{Binding Flashcards, 
-                                                              Converter={local:ViewModelArrayToViewModelConverter},
-                                                              ConverterParameter=2}"/>
-            </ContentControl>
-        </Viewbox>
+    <Viewbox>
+        <Grid>
+            <!-- Active and queued flashcards -->
+            <ItemsControl ItemsSource="{Binding Flashcards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-        <Viewbox Stretch="Uniform" Margin="-5 10 5 -10" >
-            <ContentControl x:Name="Card2">
-                <local:FlashcardControl DataContext="{Binding Flashcards, 
-                                                              Converter={local:ViewModelArrayToViewModelConverter}, 
-                                                              ConverterParameter=1}"/>
-            </ContentControl>
-        </Viewbox>
-        
-        <Viewbox Stretch="Uniform">
-            <ContentControl x:Name="Card1">
-                <local:FlashcardControl DataContext="{Binding Flashcards, 
-                                                              Converter={local:ViewModelArrayToViewModelConverter},
-                                                              ConverterParameter=0}"/>
-            </ContentControl>
-        </Viewbox>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Spawn the cards with an opacity of 0, it is later set by an attached property -->
+                        <local:FlashcardControl Opacity="1"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-    </Grid>
+            <!-- The cards that are pending destroy -->
+            <ItemsControl ItemsSource="{Binding PendingDestroyCards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:FlashcardControl/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+    </Viewbox>
     
 </UserControl>
