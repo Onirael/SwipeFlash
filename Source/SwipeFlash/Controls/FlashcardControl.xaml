@@ -88,6 +88,8 @@
         <KeyBinding Key="Left" Command="{Binding SwipeLeftCommand}"/>
         <!-- Swipe right -->
         <KeyBinding Key="Right" Command="{Binding SwipeRightCommand}"/>
+        <!-- Undo swipe -->
+        <KeyBinding Key="R" Command="{Binding UndoSwipeCommand}"/>
     </UserControl.InputBindings>
 
 

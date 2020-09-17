@@ -90,6 +90,8 @@ namespace SwipeFlash.Core
 
         public EventHandler OnCardSwipeRight;
 
+        public EventHandler OnUndoSwipe;
+
         #endregion
 
         #region Commands
@@ -109,6 +111,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand SwipeRightCommand { get; set; }
 
+        /// <summary>
+        /// Undo the previous swipe
+        /// </summary>
+        public ICommand UndoSwipeCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -124,18 +131,24 @@ namespace SwipeFlash.Core
             // Initializes the flip command
             SwipeRightCommand = new RelayCommand(SwipeRight);
 
+            // Initializes the undo swipe command
+            UndoSwipeCommand = new RelayCommand(UndoSwipe);
+
             // Sets the initial side
             IsOnSide1 = IsFlipped == IsInverted;
 
             // Initializes event handlers
             OnCardSwipeLeft = new EventHandler((ss, ee) => { });
             OnCardSwipeRight = new EventHandler((ss, ee) => { });
+            OnUndoSwipe = new EventHandler((ss, ee) => { });
         }
-
         #endregion
 
         #region Command Methods
 
+        /// <summary>
+        /// Flips the card
+        /// </summary>
         private void FlipCard()
         {
             // Toggle card flip
@@ -144,6 +157,9 @@ namespace SwipeFlash.Core
             UpdateSideWithDelay();
         }
 
+        /// <summary>
+        /// Swipes the card to the left
+        /// </summary>
         private void SwipeLeft()
         {
             // Swipe to the left if the card hasn't yet been swiped
@@ -151,13 +167,11 @@ namespace SwipeFlash.Core
 
             // Fire swipe left event
             OnCardSwipeLeft(this, null);
-
-            Task.Delay((int)(SwipeDuration * 1000)).ContinueWith((t) =>
-            {
-                DestroyCard();
-            });
         }
 
+        /// <summary>
+        /// Swipe the card to the right
+        /// </summary>
         private void SwipeRight()
         {
             // Swipe to the right if the card hasn't yet been swiped
@@ -165,12 +179,17 @@ namespace SwipeFlash.Core
 
             // Fire swipe right event
             OnCardSwipeRight(this, null);
-
-            Task.Delay((int)(SwipeDuration * 1000)).ContinueWith((t) => 
-            {
-                DestroyCard();
-            });
         }
+
+        /// <summary>
+        /// Undo the previous swipe
+        /// </summary>
+        private void UndoSwipe()
+        {
+            // Fire undo swipe event
+            OnUndoSwipe(this, null);
+        }
+
 
         #endregion
 
@@ -182,6 +201,18 @@ namespace SwipeFlash.Core
         public void DestroyCard()
         {
             IsPendingDestroy = true;
+        }
+
+        /// <summary>
+        /// Resets the card to its unswiped and unflipped state
+        /// </summary>
+        public void ResetCard()
+        {
+            // Reverts the swipe
+            IsSwipedLeft = IsSwipedRight = false;
+
+            // Reverts the flip
+            IsFlipped = false; // Necessary ?
         }
 
         /// <summary>

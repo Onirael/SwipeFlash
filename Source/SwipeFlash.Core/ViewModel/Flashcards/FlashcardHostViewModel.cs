@@ -22,7 +22,7 @@ namespace SwipeFlash.Core
         /// </summary>
         public AsyncObservableCollection<FlashcardViewModel> PendingDestroyCards { get; set; }
 
-        public FlashcardViewModel[] FlashcardHistory { get; set; }
+        public List<FlashcardViewModel> FlashcardHistory { get; set; }
 
         /// <summary>
         /// The amount of cards stored in the history
@@ -73,7 +73,7 @@ namespace SwipeFlash.Core
             PendingDestroyCards = new AsyncObservableCollection<FlashcardViewModel>();
 
             // Initialize history array
-            FlashcardHistory = new FlashcardViewModel[FlashcardHistoryLength];
+            FlashcardHistory = new List<FlashcardViewModel>();
         }
 
         #endregion
@@ -90,18 +90,23 @@ namespace SwipeFlash.Core
                 // Disable the input on the old card
                 Flashcards[Flashcards.Count - 1].HasInput = false;
 
-                // Append new flashcard
-                PushCardToArray(GetNextFlashCard());
+                // Insert new flashcard at index 0
+                PushCardToStack(GetNextFlashCard(), true);
             }
         }
 
         public void OnUndo(object sender, EventArgs e)
         {
+            // If the history is empty quit
+            if (FlashcardHistory.Count == 0)
+                return;
+
+            // Push card to end of array
+            PushCardToStack(FlashcardHistory[FlashcardHistoryLength - 1], false);
+
             //
-            // Remove card from undo array and move it to flashcards array
             // Reverse the cards' queue position animation
             // Reverse slide out
-            // Move input to new active card
             //
         }
 
@@ -109,36 +114,67 @@ namespace SwipeFlash.Core
         /// Adds a card to the <see cref="Flashcards"/> array
         /// pushes all the cards in the array, removing the last element
         /// </summary>
-        /// <param name="card"></param>
-        public void PushCardToArray(FlashcardViewModel card)
+        /// <param name="card">The pushed card's view model</param>
+        /// <param name="addAsFirst">True if the card is to be added as first element, false if it is to be added as last element</param>
+        public void PushCardToStack(FlashcardViewModel card, bool addAsFirst)
         {
-            // Get swiped card
-            FlashcardViewModel lastCard = Flashcards[Flashcards.Count - 1];
-
-            // Add swiped card to PendingDestroyCards array
-            PendingDestroyCards.Add(lastCard);
-
-            //
-            // Copy old card to history array
-            //
-
-            // Remove it from array after the duration of the swipe
-            Task.Delay((int)(lastCard.SwipeDuration * 1000)).ContinueWith((t) =>
+            // If the card is to be pushed to the beginning of the list
+            if (addAsFirst)
             {
-                PendingDestroyCards.Remove(lastCard);
-            });
+                // Get top card
+                FlashcardViewModel lastCard = Flashcards[Flashcards.Count - 1];
 
-            // Remove swiped card from flashcards array
-            Flashcards.RemoveAt(Flashcards.Count - 1);
+                // Add top card to PendingDestroyCards array
+                PendingDestroyCards.Add(lastCard);
 
-            // Add new card to beginning of array
-            Flashcards.Insert(0, card);
+                // Add top card to card history
+                FlashcardHistory.Add(lastCard);
 
-            // Set all queue positions
-            for (int i = 0; i < Flashcards.Count; ++i)
+                // If the history is full
+                if (FlashcardHistory.Count > FlashcardHistoryLength)
+                    // Remove first history element
+                    FlashcardHistory.RemoveAt(0);
+
+                // Remove top card from flashcards array
+                Flashcards.RemoveAt(Flashcards.Count - 1);
+
+                // Remove top card from array after the duration of the swipe
+                Task.Delay((int)(lastCard.SwipeDuration * 1000)).ContinueWith((t) =>
+                {
+                    // Remove the card from the PendingDestroyCards
+                    PendingDestroyCards.Remove(lastCard);
+
+                    // Destroy the UI element
+                    lastCard.DestroyCard();
+                });
+
+                // Add new card to beginning of array
+                Flashcards.Insert(0, card);
+            }
+            // If the element is to be added to the end of the list
+            else
             {
-                Flashcards[Flashcards.Count - 1].HasInput = false;
+                // Reset the card
+                card.ResetCard();
 
+                // Add new card to end
+                Flashcards.Add(card);
+            }
+
+            // Update queue positions
+            UpdateQueuePositions();
+
+        }
+
+        /// <summary>
+        /// Updates the <see cref="FlashcardViewModel.CardQueuePosition"/> of all cards in the <see cref="Flashcards"/> list
+        /// </summary>
+        private void UpdateQueuePositions()
+        {
+            // For each flashcard
+            int flashcardCount = Flashcards.Count;
+            for (int i = 0; i < flashcardCount; ++i)
+            {
                 // Updates the card queue positions
                 int newPos = Flashcards.Count - i - 1;
                 Flashcards[i].CardQueuePosition = newPos;
