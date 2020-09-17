@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SwipeFlash.Core
 {
@@ -15,14 +14,12 @@ namespace SwipeFlash.Core
         /// <summary>
         /// An observable collection of view models for the flashcards
         /// </summary>
-        public ObservableCollection<FlashcardViewModel> Flashcards { get; set; }
-        
-        /// <summary>
-        /// A list containing cards pending destruction to preserve them from garbage collection
-        /// </summary>
-        public AsyncObservableCollection<FlashcardViewModel> PendingDestroyCards { get; set; }
+        public AsyncObservableCollection<FlashcardViewModel> Flashcards { get; set; }
 
-        public List<FlashcardViewModel> FlashcardHistory { get; set; }
+        /// <summary>
+        /// A list containing swiped cards, limited to <see cref="FlashcardHistoryLength"/>
+        /// </summary>
+        public AsyncObservableCollection<FlashcardViewModel> FlashcardHistory { get; set; }
 
         /// <summary>
         /// The amount of cards stored in the history
@@ -32,7 +29,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The amount of flashcards stored in <see cref="Flashcards"/>
         /// </summary>
-        public int FlashcardCount { get; set; } = 5;
+        public int FlashcardCount { get; set; } = 2;
 
         /// <summary>
         /// The time in seconds between the swipe of the previous card 
@@ -47,12 +44,26 @@ namespace SwipeFlash.Core
 
         #endregion
 
+        #region Commands
+
+        /// <summary>
+        /// The command triggered by the undo button
+        /// </summary>
+        public ICommand UndoButtonCommand { get; set; }
+
+        /// <summary>
+        /// The command triggered by the settings button
+        /// </summary>
+        public ICommand SettingsButtonCommand { get; set; }
+
+        #endregion
+
         #region Constructor
 
         public FlashcardHostViewModel()
         {
             // Initializes the flashcards array
-            Flashcards = new ObservableCollection<FlashcardViewModel>();
+            Flashcards = new AsyncObservableCollection<FlashcardViewModel>();
 
             for (int i = 0; i < FlashcardCount; ++i)
             {
@@ -69,16 +80,37 @@ namespace SwipeFlash.Core
                 Flashcards.Insert(0, newCard);
             }
 
-            // Initialize PendingDestroyCards collection
-            PendingDestroyCards = new AsyncObservableCollection<FlashcardViewModel>();
-
             // Initialize history array
-            FlashcardHistory = new List<FlashcardViewModel>();
+            FlashcardHistory = new AsyncObservableCollection<FlashcardViewModel>();
+
+            // Initializes the undo command button command
+            UndoButtonCommand = new RelayCommand(OnUndoButtonPressed);
+
+            // Initializes the undo command button command
+            SettingsButtonCommand = new RelayCommand(OnSettingsButtonPressed);
         }
 
         #endregion
 
         #region Private Helpers
+
+        /// <summary>
+        /// Called when the undo button is pressed
+        /// </summary>
+        private void OnUndoButtonPressed()
+        {
+            // Relay the command to the last swiped card if it exists
+            if (FlashcardHistory.Count > 0)
+                FlashcardHistory[FlashcardHistory.Count - 1].UndoSwipeCommand.Execute(null);
+        }
+
+        /// <summary>
+        /// Called when the settings button is pressed
+        /// </summary>
+        private void OnSettingsButtonPressed()
+        {
+
+        }
 
         /// <summary>
         /// Called when a card is swiped to the left or right
@@ -90,24 +122,42 @@ namespace SwipeFlash.Core
                 // Disable the input on the old card
                 Flashcards[Flashcards.Count - 1].HasInput = false;
 
-                // Insert new flashcard at index 0
-                PushCardToStack(GetNextFlashCard(), true);
+                // If the maximum amount of cards hasn't been reached
+                if (Flashcards.Count <= FlashcardCount)
+                    // Insert new flashcard at index 0
+                    PushCardToStack(GetNextFlashCard(), true);
+                else
+                    // Update stack
+                    PushCardToStack(null, true);
             }
         }
 
-        public void OnUndo(object sender, EventArgs e)
+        /// <summary>
+        /// Called when a card's swipe is undone
+        /// </summary>
+        public void OnUndoSwipe(object sender, EventArgs e)
         {
-            // If the history is empty quit
+            // If the history is empty, quit
             if (FlashcardHistory.Count == 0)
                 return;
 
-            // Push card to end of array
-            PushCardToStack(FlashcardHistory[FlashcardHistoryLength - 1], false);
+            // Get the card to be returned to the stack
+            var undoCard = FlashcardHistory[FlashcardHistory.Count - 1];
 
-            //
-            // Reverse the cards' queue position animation
-            // Reverse slide out
-            //
+            // Reset the card on card Loaded
+            undoCard.ResetCard();
+
+            Task.Delay((int)(undoCard.UndoDuration * 1000)).ContinueWith((t) =>
+            {
+                // Push card to end of list
+                PushCardToStack(undoCard, false);
+
+                // Remove card from history
+                FlashcardHistory.RemoveAt(FlashcardHistory.Count - 1);
+            });
+
+            // Update queue positions with an offset to pre-update before the card is added to the stack post-animation
+            UpdateQueuePositions(1);
         }
 
         /// <summary>
@@ -124,41 +174,32 @@ namespace SwipeFlash.Core
                 // Get top card
                 FlashcardViewModel lastCard = Flashcards[Flashcards.Count - 1];
 
-                // Add top card to PendingDestroyCards array
-                PendingDestroyCards.Add(lastCard);
-
                 // Add top card to card history
                 FlashcardHistory.Add(lastCard);
 
                 // If the history is full
                 if (FlashcardHistory.Count > FlashcardHistoryLength)
-                    // Remove first history element
+                {
+                    // Destroy the UI element
+                    FlashcardHistory[0].DestroyCard();
+
+                    // Remove the card from the FlashcardHistory
                     FlashcardHistory.RemoveAt(0);
+                }
 
                 // Remove top card from flashcards array
                 Flashcards.RemoveAt(Flashcards.Count - 1);
 
-                // Remove top card from array after the duration of the swipe
-                Task.Delay((int)(lastCard.SwipeDuration * 1000)).ContinueWith((t) =>
-                {
-                    // Remove the card from the PendingDestroyCards
-                    PendingDestroyCards.Remove(lastCard);
-
-                    // Destroy the UI element
-                    lastCard.DestroyCard();
-                });
-
-                // Add new card to beginning of array
-                Flashcards.Insert(0, card);
+                if (card != null)
+                    // Add new card to beginning of array
+                    Flashcards.Insert(0, card);
             }
             // If the element is to be added to the end of the list
             else
             {
-                // Reset the card
-                card.ResetCard();
-
-                // Add new card to end
-                Flashcards.Add(card);
+                if (card != null)
+                    // Add new card to end
+                    Flashcards.Add(card);
             }
 
             // Update queue positions
@@ -169,26 +210,26 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Updates the <see cref="FlashcardViewModel.CardQueuePosition"/> of all cards in the <see cref="Flashcards"/> list
         /// </summary>
-        private void UpdateQueuePositions()
+        private void UpdateQueuePositions(int offsetPosition = 0)
         {
             // For each flashcard
             int flashcardCount = Flashcards.Count;
             for (int i = 0; i < flashcardCount; ++i)
             {
                 // Updates the card queue positions
-                int newPos = Flashcards.Count - i - 1;
+                int newPos = Flashcards.Count - i - 1 + offsetPosition;
                 Flashcards[i].CardQueuePosition = newPos;
 
                 // If the card is at the front
                 if (newPos == 0)
                 {
-                    // Enable its input after a delay
-                    FlashcardViewModel activeCard = Flashcards[i];
-                    Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) =>
-                    {
-                        activeCard.HasInput = true;
-                    });
+                    // Delay the input activation on the new active card
+                    FlashcardViewModel activeCard = Flashcards[i]; // Store the variable to avoid error when reading i value on the task thread
+                    Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) => activeCard.HasInput = true);
                 }
+                else
+                    // Disable the card's input
+                    Flashcards[i].HasInput = false;
             }
         }
 
@@ -216,6 +257,7 @@ namespace SwipeFlash.Core
 
             flashcard.OnCardSwipeLeft += OnCardSwipe;
             flashcard.OnCardSwipeRight += OnCardSwipe;
+            flashcard.OnUndoSwipe += OnUndoSwipe;
 
             return flashcard;
         }

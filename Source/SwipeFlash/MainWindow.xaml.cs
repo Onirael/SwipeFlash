@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using SwipeFlash.Core;
+using System.Windows;
 
 namespace SwipeFlash
 {

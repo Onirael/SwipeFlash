@@ -9,6 +9,8 @@
     <FontFamily x:Key="LGCItalic">pack://application;,,,/Fonts/#Louis George Café Italic</FontFamily>
     <FontFamily x:Key="LGCLight">pack://application;,,,/Fonts/#Louis George Café Light</FontFamily>
     <FontFamily x:Key="LGCBold">pack://application;,,,/Fonts/#Louis George Café Bold</FontFamily>
+    <FontFamily x:Key="FontAwesomeSolid">pack://application;,,,/Fonts/#Font Awesome 5 Free Solid</FontFamily>
+    <FontFamily x:Key="FontAwesome">pack://application;,,,/Fonts/#Font Awesome 5 Free Regular</FontFamily>
 
     <!-- Font sizes -->
         
@@ -23,7 +25,7 @@
     <!-- Base styles -->
 
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
-        <Setter Property="FontFamily" Value="{StaticResource LatoThin}"/>
+        <Setter Property="FontFamily" Value="{StaticResource LGCLight}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
     </Style>
 
@@ -37,6 +39,12 @@
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseStyle}"/>
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}"/>
     <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}"/>
+    
+    <!-- Icon codes -->
 
+    <System:String x:Key="FontAwesome_Undo">&#xf0e2;</System:String>
+    <System:String x:Key="FontAwesome_Settings">&#xf013;</System:String>
+    <System:String x:Key="FontAwesome_Close">&#xf00d;</System:String>
+    <System:String x:Key="FontAwesome_Check">&#xf00c;</System:String>
 
 </ResourceDictionary>

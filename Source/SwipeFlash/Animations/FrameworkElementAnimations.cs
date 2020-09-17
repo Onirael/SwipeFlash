@@ -54,7 +54,7 @@ namespace SwipeFlash
             sb.AddSlideToLeft(duration, width);
 
             // Add the tilt animation
-            sb.AddTiltToLeft(duration, angle);
+            sb.AddTilt(duration, -angle);
 
             // Begin the animation
             sb.Begin(element);
@@ -83,7 +83,65 @@ namespace SwipeFlash
             sb.AddSlideToRight(duration, width);
 
             // Add the tilt animation
-            sb.AddTiltToRight(duration, angle);
+            sb.AddTilt(duration, angle);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Slide and tilt to left animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="width">The length of the translation in pixels</param>
+        /// <param name="angle">The tilt angle in degrees</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task SlideAndTiltFromLeftAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
+        {
+            // Create the element's transform
+            element.SetElementTransform(new RotateTransform(-angle));
+
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the horizontal flip animation
+            sb.AddSlideFromLeft(duration, width);
+
+            // Add the tilt animation
+            sb.AddTilt(duration, 0);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Slide and tilt to right animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="width">The width of the slide animation in pixels</param>
+        /// <param name="angle">The tilt angle in degrees</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task SlideAndTiltFromRightAsync(this FrameworkElement element, int width, double angle, float duration = 0.5f)
+        {
+            // Create the element's transform
+            element.SetElementTransform(new RotateTransform(angle));
+
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the horizontal flip animation
+            sb.AddSlideFromRight(duration, width);
+
+            // Add the tilt animation
+            sb.AddTilt(duration, 0);
 
             // Begin the animation
             sb.Begin(element);
@@ -100,16 +158,16 @@ namespace SwipeFlash
         /// <param name="newCardQueuePosition">The new position of the element in the queue</param>
         /// <param name="duration">The duration of the animation in seconds</param>
         /// <returns></returns>
-        public static async Task MoveInQueueAsync(this FrameworkElement element, int newCardQueuePosition, float duration = 0.1f)
+        public static async Task MoveInQueueAsync(this FrameworkElement element, int newCardQueuePosition, bool reverseAnimation, float duration = 0.1f)
         {
             // Create the storyboard
             var sb = new Storyboard();
 
             // Add the card queue translation animation
-            sb.AddCardQueueTranslation(duration, newCardQueuePosition);
+            sb.AddCardQueueTranslation(duration, newCardQueuePosition, reverseAnimation);
 
             // Add the card queue fade in animation
-            sb.AddCardQueueFadeIn(duration, newCardQueuePosition);
+            sb.AddCardQueueFadeIn(duration, newCardQueuePosition, reverseAnimation);
 
             // Begin the animation
             sb.Begin(element);
@@ -120,7 +178,9 @@ namespace SwipeFlash
 
         #region Private Helpers
 
-        private static void SetElementTransform(this FrameworkElement element)
+        private static void SetElementTransform(this FrameworkElement element, 
+                                                     RotateTransform rotateTransform = null,
+                                                     ScaleTransform scaleTransform = null)
         {
             // Check whether the element has a transform group
             if (!(element.RenderTransform is TransformGroup))
@@ -129,13 +189,41 @@ namespace SwipeFlash
                 var newTransform = new TransformGroup();
 
                 // Set the new transform's children
-                newTransform.Children = new TransformCollection() { new ScaleTransform(), new RotateTransform() };
+
+                // Creates a rotate transform if none has been specified
+                if (rotateTransform == null)
+                    scaleTransform = new ScaleTransform();
+                // Creates a scale transform if none has been specified
+                if (rotateTransform == null)
+                    rotateTransform = new RotateTransform();
+
+                newTransform.Children = new TransformCollection() { scaleTransform, rotateTransform };
 
                 // Set the element's transform to the new transform
                 element.RenderTransform = newTransform;
 
                 // Set the element's transform origin to its center
                 element.RenderTransformOrigin = new Point(.5, .5);
+
+                return;
+            }
+
+            if (rotateTransform != null)
+            {
+                // Gets the transform group
+                var transform = element.RenderTransform as TransformGroup;
+
+                // Sets the rotate transform
+                transform.Children[1] = rotateTransform;
+            }
+
+            if (scaleTransform != null)
+            {
+                // Gets the transform group
+                var transform = element.RenderTransform as TransformGroup;
+
+                // Sets the rotate transform
+                transform.Children[1] = scaleTransform;
             }
         }
 

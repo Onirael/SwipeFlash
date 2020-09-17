@@ -82,6 +82,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public double SwipeDuration { get; set; } = 0.4;
 
+        /// <summary>
+        /// The duration of the swipe animation
+        /// </summary>
+        public double UndoDuration { get; set; } = .2;
+
         #endregion
 
         #region Event Handlers
@@ -231,5 +236,6 @@ namespace SwipeFlash.Core
         }
 
         #endregion
+
     }
 }

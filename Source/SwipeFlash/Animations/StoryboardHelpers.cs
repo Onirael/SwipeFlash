@@ -44,14 +44,14 @@ namespace SwipeFlash
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
         /// <param name="decelerationratio">The rate of deceleration</param>
-        public static void AddCardQueueTranslation(this Storyboard storyboard, float duration, int newCardQueuePosition, float decelerationRatio = .8f)
+        public static void AddCardQueueTranslation(this Storyboard storyboard, float duration, int newCardQueuePosition, bool reverseAnimation, float decelerationRatio = .8f)
         {
             // Animation
             var marginAnimation = new ThicknessAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = CardQueuePositionToMarginConverter.Convert(newCardQueuePosition + 1),
-                To = CardQueuePositionToMarginConverter.Convert(newCardQueuePosition),
+                From = CardQueuePositionToMarginConverter.Convert(reverseAnimation ? newCardQueuePosition - 1 : newCardQueuePosition + 1),
+                To = CardQueuePositionToMarginConverter.Convert(reverseAnimation ? newCardQueuePosition : newCardQueuePosition),
                 DecelerationRatio = decelerationRatio,
             };
 
@@ -68,14 +68,14 @@ namespace SwipeFlash
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
         /// <param name="decelerationratio">The rate of deceleration</param>
-        public static void AddCardQueueFadeIn(this Storyboard storyboard, float duration, int newCardQueuePosition, float decelerationRatio = .8f)
+        public static void AddCardQueueFadeIn(this Storyboard storyboard, float duration, int newCardQueuePosition, bool reverseAnimation, float decelerationRatio = .8f)
         {
             // Animation
             var opacityAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = CardQueuePositionToOpacityConverter.Convert(newCardQueuePosition + 1),
-                To = CardQueuePositionToOpacityConverter.Convert(newCardQueuePosition),
+                From = CardQueuePositionToOpacityConverter.Convert(reverseAnimation ? newCardQueuePosition - 1 : newCardQueuePosition + 1),
+                To = CardQueuePositionToOpacityConverter.Convert(reverseAnimation ? newCardQueuePosition : newCardQueuePosition),
                 DecelerationRatio = decelerationRatio,
             };
 
@@ -136,23 +136,23 @@ namespace SwipeFlash
 
         /// <summary>
         /// Adds a slide animation to the storyboard
-        /// </summary>  
+        /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
-        /// <param name="offest">The angle to reach</param>
+        /// <param name="offest">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
-        public static void AddTiltToLeft(this Storyboard storyboard, float duration, double angleOffset, float decelerationRatio = 0.9f)
+        public static void AddSlideFromLeft(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
-            var animation = new DoubleAnimation
+            var animation = new ThicknessAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = 0,
-                To = -angleOffset,
+                From = new Thickness(-offset, 0, offset, 0),
+                To = new Thickness(0),
                 DecelerationRatio = decelerationRatio
             };
 
             // Set the target property name
-            Storyboard.SetTargetProperty(animation, new PropertyPath("RenderTransform.(TransformGroup.Children)[1].(RotateTransform.Angle)"));
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Margin"));
 
             // Add this to the storyboard
             storyboard.Children.Add(animation);
@@ -163,14 +163,37 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
+        /// <param name="offest">The distance to the left to start from</param>
+        /// <param name="decelerationRatio">The rate of deceleration</param>
+        public static void AddSlideFromRight(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
+        {
+            var animation = new ThicknessAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = new Thickness(offset, 0, -offset, 0),
+                To = new Thickness(0),
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Margin"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a slide animation to the storyboard
+        /// </summary>  
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
         /// <param name="offest">The angle to reach</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
-        public static void AddTiltToRight(this Storyboard storyboard, float duration, double angleOffset, float decelerationRatio = 0.9f)
+        public static void AddTilt(this Storyboard storyboard, float duration, double angleOffset, float decelerationRatio = 0.9f)
         {
             var animation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = 0,
                 To = angleOffset,
                 DecelerationRatio = decelerationRatio
             };

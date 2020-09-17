@@ -11,8 +11,17 @@
 
     <Viewbox>
         <Grid>
+            <Grid.RowDefinitions>
+                <!-- Cards -->
+                <RowDefinition Height="*"/>
+                <!-- Buttons -->
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            
+            <!--#region Cards-->
+            
             <!-- Active and queued flashcards -->
-            <ItemsControl ItemsSource="{Binding Flashcards}">
+            <ItemsControl Grid.Row="0" ItemsSource="{Binding Flashcards}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid/>
@@ -28,7 +37,7 @@
             </ItemsControl>
 
             <!-- The cards that are pending destroy -->
-            <ItemsControl ItemsSource="{Binding PendingDestroyCards}">
+            <ItemsControl Grid.Row="0" ItemsSource="{Binding FlashcardHistory}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid/>
@@ -41,6 +50,24 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <!--#endregion-->
+            
+            <!--#region Buttons-->
+
+            <StackPanel Grid.Row="1" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center"
+                        Margin="0 35 0 0">
+                <Button Style="{StaticResource UndoButton}"
+                        Command="{Binding UndoButtonCommand}"/>
+
+                <Button Style="{StaticResource SettingsButton}"
+                        Margin="20 0 0 0"/>
+            </StackPanel>
+
+            <!--#endregion-->
+            
         </Grid>
 
     </Viewbox>

@@ -4,10 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwipeFlash"
+        xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         x:Name="Page"
-        Title="Swipe Flash" Height="450" Width="800">
+        Title="Swipe Flash" Height="450" Width="800"
+        DataContext="{Binding core:WindowViewModel}"
+        d:DataContext="{x:Static core:WindowDesignModel.Instance}">
 
     <!-- Animations -->
     <Window.Resources>
@@ -21,7 +24,7 @@
     </Window.Resources>
 
     <Grid>
-
+        
         <!--#region Background-->
         
         <Border Background="{StaticResource LightBlueBrush}" Opacity="0.7">
@@ -102,7 +105,15 @@
         
         <!--#endregion-->
 
-        <local:FlashcardHost Margin="75"/>
+        <local:FlashcardHost Margin="75 50 75 25"/>
+
+        <Border Background="#80000000"
+                local:AnimateFadeInProperty.Value="{Binding IsSettingsMenuVisible}"/>
+        
+        <local:SettingsMenuControl VerticalAlignment="Top" 
+                                   Margin="0 -10 0 0" 
+                                   Width="500"
+                                   local:AnimateSlideDownProperty.Value="{Binding IsSettingsMenuVisible}"/>
 
     </Grid>
 </Window>

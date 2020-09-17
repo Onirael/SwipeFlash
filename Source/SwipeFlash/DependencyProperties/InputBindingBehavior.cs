@@ -41,15 +41,15 @@ namespace SwipeFlash
                 // If the element hasn't yet been loaded
                 if (!element.IsLoaded)
                     // Hook the helper method to the Loaded event
-                    element.Loaded += MoveInputBindingsToWindow;
+                    element.Loaded += CopyInputBindingsToWindow;
                 else
                     // Manually run the method
-                    MoveInputBindingsToWindow(element, null);
+                    CopyInputBindingsToWindow(element, null);
             }
             else
             {
                 if (element.IsLoaded)
-                    ClearWindowInputBindings();
+                    RemoveCardBindingsFromWindow(element);
             }
         }
 
@@ -60,14 +60,14 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="sender">The <see cref="FrameworkElement"/> element</param>
         /// <param name="e"></param>
-        private static void MoveInputBindingsToWindow(object sender, RoutedEventArgs e)
+        private static void CopyInputBindingsToWindow(object sender, RoutedEventArgs e)
         {
             // Check if sender is a framework element
             if (!(sender is FrameworkElement element))
                 return;
 
             // Unhook from the Loaded RoutedEventHandler
-            element.Loaded -= MoveInputBindingsToWindow;
+            element.Loaded -= CopyInputBindingsToWindow;
 
             // Get the current window
             var window = Window.GetWindow(element);
@@ -83,15 +83,18 @@ namespace SwipeFlash
                 var inputBinding = element.InputBindings[i];
                 // Add input bindings to window
                 window.InputBindings.Add(inputBinding);
-                // Remove input bindings from element
-                element.InputBindings.Remove(inputBinding);
             }
         }
 
-        private static void ClearWindowInputBindings()
+        private static void RemoveCardBindingsFromWindow(FrameworkElement element)
         {
-            // Clear the main window's input bindings
-            Application.Current.MainWindow.InputBindings.Clear();
+            var window = Application.Current.MainWindow;
+
+            for (int i = window.InputBindings.Count - 1; i >= 0; i--)
+            {
+                if (element.InputBindings.Contains(window.InputBindings[i]))
+                    window.InputBindings.RemoveAt(i);
+            }
         }
     }
 }

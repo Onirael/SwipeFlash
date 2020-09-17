@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\App.xaml
-6-1370180003
+8-1084841316
 
-24-559637783
+251170282803
 89-1712125772
-Controls\FlashcardControl.xaml;Controls\FlashcardHost.xaml;MainWindow.xaml;Styles\Icons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
+Controls\FlashcardControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
 
 True
 

@@ -37,7 +37,6 @@ D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\App.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardControl.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardHost.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\MainWindow.baml
-D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Icons.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Fonts.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Colors.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.g.resources
@@ -96,3 +95,7 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.csproj.CoreCompileIn
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.csproj.CopyComplete
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.exe
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.pdb
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Buttons.baml
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\SettingsMenuControl.g.cs
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\SettingsMenuControl.baml
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Checkboxes.baml

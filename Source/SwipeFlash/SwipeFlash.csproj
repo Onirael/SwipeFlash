@@ -145,6 +145,9 @@
     <Compile Include="AttachedProperties\FlashcardAttachedProperties.cs" />
     <Compile Include="AttachedProperties\FrameworkElementAnimationsAttachedProperties.cs" />
     <Compile Include="AttachedProperties\UserControlAttachedProperties.cs" />
+    <Compile Include="Controls\SettingsMenuControl.xaml.cs">
+      <DependentUpon>SettingsMenuControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\FrameworkElementHelpers.cs" />
     <Compile Include="Controls\FlashcardHost.xaml.cs">
       <DependentUpon>FlashcardHost.xaml</DependentUpon>
@@ -163,6 +166,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SettingsMenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -178,7 +185,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\Icons.xaml">
+    <Page Include="Styles\Checkboxes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -213,6 +224,8 @@
     <Resource Include="Fonts\Louis George Cafe Italic.ttf" />
     <Resource Include="Fonts\Louis George Cafe Light.ttf" />
     <Resource Include="Fonts\Louis George Cafe.ttf" />
+    <Resource Include="Fonts\fontawesome_regular.ttf" />
+    <Resource Include="Fonts\fontawesome_solid.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

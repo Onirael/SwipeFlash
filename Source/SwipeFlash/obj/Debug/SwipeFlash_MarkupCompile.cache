@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\
 SwipeFlash
 none
 false
 DEBUG;TRACE
-D:\Unreal\SwipeFlash\Source\SwipeFlash\App.xaml
-6-1370180003
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\App.xaml
+8-1084841316
 
-201064790086
-89-1294905877
-Controls\FlashcardControl.xaml;Controls\FlashcardHost.xaml;MainWindow.xaml;Styles\Icons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
+21-1500256624
+89-1712125772
+Controls\FlashcardControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
 
 False
 
