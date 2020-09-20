@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using SwipeFlash.Core;
+using System.Windows.Controls;
 
 namespace SwipeFlash
 {
@@ -10,6 +11,8 @@ namespace SwipeFlash
         public SettingsMenuControl()
         {
             InitializeComponent();
+
+            DataContext = new SettingsMenuViewModel();
         }
     }
 }

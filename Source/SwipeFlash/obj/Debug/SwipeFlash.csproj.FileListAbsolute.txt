@@ -85,7 +85,6 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\App.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardControl.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardHost.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\MainWindow.baml
-D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Icons.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Fonts.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Colors.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.g.resources
@@ -99,3 +98,9 @@ D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Buttons.bam
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\SettingsMenuControl.g.cs
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\SettingsMenuControl.baml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Checkboxes.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\SettingsMenuControl.g.cs
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\SettingsMenuControl.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Checkboxes.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Buttons.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Debug\Ninject.dll
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Debug\Ninject.xml

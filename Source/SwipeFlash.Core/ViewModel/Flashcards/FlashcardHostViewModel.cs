@@ -109,7 +109,7 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnSettingsButtonPressed()
         {
-
+            IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = true;
         }
 
         /// <summary>

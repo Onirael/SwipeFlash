@@ -151,6 +151,92 @@ namespace SwipeFlash
         }
 
         /// <summary>
+        /// Slide from top animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="width">The width of the slide animation in pixels</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task SlideFromTopAsync(this FrameworkElement element, int width, float duration = 0.5f)
+        {
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the horizontal flip animation
+            sb.AddSlideFromTop(duration, width);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Slide to top animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="width">The width of the slide animation in pixels</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task SlideToTopAsync(this FrameworkElement element, int width, float duration = 0.5f)
+        {
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the horizontal flip animation
+            sb.AddSlideToTop(duration, width);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Fade in animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task FadeInAsync(this FrameworkElement element, float duration = 0.5f)
+        {
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the horizontal flip animation
+            sb.AddFadeIn(duration);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Fade out animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task FadeOutAsync(this FrameworkElement element, float duration = 0.5f)
+        {
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the horizontal flip animation
+            sb.AddFadeOut(duration);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
         /// Moves a queued element to a new queue position, 
         /// translating and fading it in
         /// </summary>

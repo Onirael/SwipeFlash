@@ -91,7 +91,7 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
-        /// <param name="offest">The distance to the left to start from</param>
+        /// <param name="offset">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
         public static void AddSlideToLeft(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
@@ -115,7 +115,7 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
-        /// <param name="offest">The distance to the left to start from</param>
+        /// <param name="offset">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
         public static void AddSlideToRight(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
@@ -139,7 +139,7 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
-        /// <param name="offest">The distance to the left to start from</param>
+        /// <param name="offset">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
         public static void AddSlideFromLeft(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
@@ -163,7 +163,7 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
-        /// <param name="offest">The distance to the left to start from</param>
+        /// <param name="offset">The distance to the left to start from</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
         public static void AddSlideFromRight(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
         {
@@ -184,10 +184,58 @@ namespace SwipeFlash
 
         /// <summary>
         /// Adds a slide animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="offset">The distance to the left to start from</param>
+        /// <param name="decelerationRatio">The rate of deceleration</param>
+        public static void AddSlideFromTop(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
+        {
+            var animation = new ThicknessAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = new Thickness(0, -offset, 0, offset),
+                To = new Thickness(0),
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Margin"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a slide animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="offset">The distance to the left to start from</param>
+        /// <param name="decelerationRatio">The rate of deceleration</param>
+        public static void AddSlideToTop(this Storyboard storyboard, float duration, double offset, float decelerationRatio = 0.9f)
+        {
+            var animation = new ThicknessAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = new Thickness(0),
+                To = new Thickness(0, -offset, 0, offset),
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Margin"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a slide animation to the storyboard
         /// </summary>  
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
-        /// <param name="offest">The angle to reach</param>
+        /// <param name="offset">The angle to reach</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
         public static void AddTilt(this Storyboard storyboard, float duration, double angleOffset, float decelerationRatio = 0.9f)
         {
@@ -200,6 +248,50 @@ namespace SwipeFlash
 
             // Set the target property name
             Storyboard.SetTargetProperty(animation, new PropertyPath("RenderTransform.(TransformGroup.Children)[1].(RotateTransform.Angle)"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a fade in animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation</param>
+        /// <param name="decelerationRatio">The rate of deceleration</param>
+        public static void AddFadeIn(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        {
+            var animation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                To = 1,
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(animation);
+        }
+
+        /// <summary>
+        /// Adds a fade out animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard"></param>
+        /// <param name="duration"></param>
+        /// <param name="decelerationRatio"></param>
+        public static void AddFadeOut(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        {
+            var animation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                To = 0,
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
 
             // Add this to the storyboard
             storyboard.Children.Add(animation);

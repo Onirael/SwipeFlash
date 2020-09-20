@@ -63,6 +63,7 @@
                         Command="{Binding UndoButtonCommand}"/>
 
                 <Button Style="{StaticResource SettingsButton}"
+                        Command="{Binding SettingsButtonCommand}"
                         Margin="20 0 0 0"/>
             </StackPanel>
 

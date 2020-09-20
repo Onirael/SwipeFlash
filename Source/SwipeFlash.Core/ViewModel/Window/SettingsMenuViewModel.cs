@@ -1,16 +1,15 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace SwipeFlash.Core
 {
-    class SettingsViewModel : BaseViewModel
+    public class SettingsMenuViewModel : BaseViewModel
     {
         #region Public Properties
 
         /// <summary>
         /// Whether the flashcard illustrations are enabled
         /// </summary>
-        public bool IllustrationsEnabled { get; set; }
+        public bool IllustrationsEnabled { get; set; } = true;
 
         #endregion
 
@@ -22,7 +21,7 @@ namespace SwipeFlash.Core
 
         #region Constructor
 
-        public SettingsViewModel()
+        public SettingsMenuViewModel()
         {
             CloseSettingsCommand = new RelayCommand(OnCloseSettingsPressed);
         }
@@ -33,7 +32,7 @@ namespace SwipeFlash.Core
 
         private void OnCloseSettingsPressed()
         {
-            throw new NotImplementedException();
+            IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = false;
         }
 
         #endregion

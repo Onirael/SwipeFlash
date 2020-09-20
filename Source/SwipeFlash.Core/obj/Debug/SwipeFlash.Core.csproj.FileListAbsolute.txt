@@ -19,3 +19,6 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Cor
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.dll
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.pdb
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Ninject.dll
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Ninject.xml
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.CopyComplete

@@ -16,10 +16,6 @@
 
         #region Constructor
 
-        public WindowDesignModel()
-        {
-            IsSettingsMenuVisible = false;
-        }
 
         #endregion
     }

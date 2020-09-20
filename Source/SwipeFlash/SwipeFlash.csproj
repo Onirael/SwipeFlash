@@ -155,9 +155,12 @@
     <Compile Include="Animations\IFlippableElement.cs" />
     <Compile Include="DependencyProperties\InputBindingBehavior.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToCollapsedVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\CardQueuePositionConverters.cs" />
     <Compile Include="ValueConverters\ViewModelArrayToViewModelConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="Controls\FlashcardControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

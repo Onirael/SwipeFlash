@@ -148,11 +148,17 @@ namespace SwipeFlash
     /// Animates a framework element, sliding it down
     /// if the value is set to false, the animation is reversed
     /// </summary>
-    public class AnimateSlideDownProperty : AnimateBaseProperty<AnimateSlideDownProperty>
+    public class AnimateSlideInFromTopProperty : AnimateBaseProperty<AnimateSlideInFromTopProperty>
     {
-        protected override void RunAnimation(FrameworkElement element, bool value)
+        protected async override void RunAnimation(FrameworkElement element, bool value)
         {
-            // Slide down animation
+            // If the animation is run forward
+            if (value)
+                // Slide the element in from the top
+                await element.SlideFromTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : 0.4f);
+            else
+                // Slide the element to the top
+                await element.SlideToTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : 0.4f);
         }
     }
 
@@ -162,9 +168,16 @@ namespace SwipeFlash
     /// </summary>
     public class AnimateFadeInProperty : AnimateBaseProperty<AnimateFadeInProperty>
     {
-        protected override void RunAnimation(FrameworkElement element, bool value)
+        protected async override void RunAnimation(FrameworkElement element, bool value)
         {
-            // Fade in animation
+            //If the the animation is run forward
+            if (value)
+                // Fade the element in
+                await element.FadeInAsync(IsFirstLoad ? 0f : 0.4f);
+            else
+                // Fade the element out
+                await element.FadeOutAsync(IsFirstLoad ? 0f : 0.4f);
+
         }
     }
 
