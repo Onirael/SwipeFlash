@@ -54,18 +54,19 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
 
-                                        <Border Grid.Row="0"
+                                        <!-- Stock image -->
+                                        <Border x:Name="imageContainer"
+                                                Grid.Row="0"
                                                 Height="150"
-                                                Width="{Binding ActualHeight}"
+                                                Width="{Binding ActualHeight, ElementName=imageContainer}"
                                                 BorderThickness="3"
                                                 BorderBrush="{StaticResource ForegroundDarkBrush}"
                                                 CornerRadius="150"
-                                                Visibility="{Binding IsOnSide1, Converter={local:BooleanToCollapsedVisibilityConverter}}">
-                                            <Border.Background>
-                                                <ImageBrush ImageSource="/Images/SwipeFlashIcon.ico"/>
-                                            </Border.Background>
+                                                Visibility="{Binding IsOnSide1, Converter={local:BooleanToCollapsedVisibilityConverter}}"
+                                                Background="{Binding Illustration}">
                                         </Border>
 
+                                        <!-- Text -->
                                         <Viewbox Grid.Row="1">
                                             <TextBlock Text="{Binding Side1Text}" 
                                                        MaxWidth="{Binding ActualWidth, ElementName=textContainer}"

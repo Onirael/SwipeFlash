@@ -7,22 +7,32 @@ namespace SwipeFlash.Core
         #region Public Properties
 
         /// <summary>
-        /// Whether the flashcard illustrations are enabled
+        /// The current aplication settings
         /// </summary>
-        public bool IllustrationsEnabled { get; set; } = true;
+        public ApplicationSettings CurrentSettings { get; set; }
 
         #endregion
 
         #region Commands
 
+        /// <summary>
+        /// The command to close the settings menu
+        /// </summary>
         public ICommand CloseSettingsCommand { get; set; }
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public SettingsMenuViewModel()
         {
+            // Get the current settings from the application view model
+            CurrentSettings = IoC.Get<ApplicationViewModel>().UserSettings;
+
+            // Initialize the close button command
             CloseSettingsCommand = new RelayCommand(OnCloseSettingsPressed);
         }
 
@@ -30,9 +40,12 @@ namespace SwipeFlash.Core
 
         #region Command Helpers
 
+        /// <summary>
+        /// Called when the close settings menu button is pressed
+        /// </summary>
         private void OnCloseSettingsPressed()
         {
-            IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = false;
+            IoC.Get<ApplicationViewModel>().UserSettings = CurrentSettings;
         }
 
         #endregion

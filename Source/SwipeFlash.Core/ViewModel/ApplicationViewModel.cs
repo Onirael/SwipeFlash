@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics;
+using System.Windows.Input;
+using Unsplasharp;
 
 namespace SwipeFlash.Core
 {
@@ -12,11 +14,17 @@ namespace SwipeFlash.Core
         /// <summary>
         /// True if the side menu is visible, false it is collapsed
         /// </summary>
-        public bool IsSettingsMenuVisible
-        {
-            get;
-            set;
-        } = false;
+        public bool IsSettingsMenuVisible { get; set; } = false;
+
+        /// <summary>
+        /// The current application settings
+        /// </summary>
+        public ApplicationSettings UserSettings { get; set; }
+
+        /// <summary>
+        /// The Unsplasharp client used to fetch images
+        /// </summary>
+        public UnsplasharpClient IllustrationsClient { get; set; }
 
         #endregion
 
@@ -35,6 +43,23 @@ namespace SwipeFlash.Core
         {
             // Initializes the settings menu visibility
             ToggleSettingsMenuCommand = new RelayCommand(ToggleSettingsMenu);
+
+            // Initialize Unsplasharp client
+            IllustrationsClient = InitializeUnsplasharp();
+
+            bool isClientLoaded = IllustrationsClient != null;
+
+            // DEVELOPMENT ONLY
+            // VALUES WILL BE RETRIEVED FROM A SETTINGS FILE
+            UserSettings = new ApplicationSettings()
+            {
+                IllustrationsEnabled = isClientLoaded ? true : false,
+            };
+
+            string logString = isClientLoaded ? "SUCCESS" : "FAILED";
+            Debugger.Log(0, "UserLog", $"Loaded Unsplasharp client with result {logString}");
+            if (isClientLoaded)
+                Debugger.Log(0, "UserLog", $"\nRemaining API calls: {IllustrationsClient.MaxRateLimit}");
         }
 
         #endregion
@@ -50,5 +75,11 @@ namespace SwipeFlash.Core
         }
 
         #endregion
+
+        private UnsplasharpClient InitializeUnsplasharp()
+        {
+            return new UnsplasharpClient("GKK8X3xKGBUXa6hamQgHPb79GEBlkUZ8vzt23DjKmF0");
+        }
+
     }
 }

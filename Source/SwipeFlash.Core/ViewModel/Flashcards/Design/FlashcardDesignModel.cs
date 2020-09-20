@@ -1,4 +1,6 @@
-﻿namespace SwipeFlash.Core
+﻿using System.Drawing;
+
+namespace SwipeFlash.Core
 {
     /// <summary>
     /// The design model for the flashcards
@@ -18,12 +20,14 @@
 
         public FlashcardDesignModel()
         {
-            Side1Text = "La puerta del dormitorio dónde duerme el señor Javier";
-            Side2Text = "The door";
+            Side1Text = "The door";
+            Side2Text = "La puerta del dormitorio dónde duerme el señor Javier";
             Side1Icon = "🇪🇸";
             Side2Icon = "🇬🇧";
             IsFlipped = false;
             IsInverted = false;
+            IsOnSide1 = true;
+            Illustration = Image.FromFile("/Images/SwipeFlashIcon.ico");
         }
 
         #endregion

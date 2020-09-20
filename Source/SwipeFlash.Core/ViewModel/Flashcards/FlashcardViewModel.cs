@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Unsplasharp.Models;
+using System.Drawing;
 
 namespace SwipeFlash.Core
 {
@@ -87,6 +90,26 @@ namespace SwipeFlash.Core
         /// </summary>
         public double UndoDuration { get; set; } = .2;
 
+        /// <summary>
+        /// Whether the card should display an illustration
+        /// </summary>
+        public bool HasIllustration { get; set; } = false;
+
+        /// <summary>
+        /// The Unsplasharp data of the illustration
+        /// </summary>
+        public Photo IllustrationData { get; set; }
+
+        /// <summary>
+        /// The card's illustration bitmap
+        /// </summary>
+        public Image Illustration { get; set; }
+
+        /// <summary>
+        /// Set to true if the illustration was successfully loaded
+        /// </summary>
+        public bool IsIllustrationLoaded { get; set; } = false;
+
         #endregion
 
         #region Event Handlers
@@ -146,7 +169,15 @@ namespace SwipeFlash.Core
             OnCardSwipeLeft = new EventHandler((ss, ee) => { });
             OnCardSwipeRight = new EventHandler((ss, ee) => { });
             OnUndoSwipe = new EventHandler((ss, ee) => { });
+
+            // Get the application view model
+            var appVieModel = IoC.Get<ApplicationViewModel>();
+
+            //// If illustrations are enabled and this card has an illustration
+            //if (HasIllustration && appVieModel.UserSettings.IllustrationsEnabled)
+            //    LoadIllustrationAsync();
         }
+
         #endregion
 
         #region Command Methods
@@ -233,6 +264,29 @@ namespace SwipeFlash.Core
                 // Update the value
                 IsOnSide1 = IsFlipped == IsInverted;
             });
+        }
+
+        /// <summary>
+        /// Ansynchronously finds an appropriate illustration for this card
+        /// </summary>
+        private async void FindIllustrationAsync()
+        {
+            await IoC.Get<ApplicationViewModel>().IllustrationsClient.SearchPhotos(Side1Text);
+        }
+
+        /// <summary>
+        /// Downloads the illustration
+        /// </summary>
+        /// <returns></returns>
+        private void FetchIllustration()
+        {
+            using (System.Net.WebClient webClient = new System.Net.WebClient())
+            {
+                using (Stream stream = webClient.OpenRead(IllustrationData.Urls.Thumbnail))
+                {
+                    Illustration = Image.FromStream(stream);
+                }
+            }
         }
 
         #endregion

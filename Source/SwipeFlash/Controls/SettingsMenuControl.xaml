@@ -41,7 +41,7 @@
                                                TextWrapping="Wrap"/>
                                     <CheckBox Margin="15 5 0 0" 
                                               VerticalAlignment="Center"
-                                              IsChecked="{Binding IllustrationsEnabled}"/>
+                                              IsChecked="{Binding CurrentSettings.IllustrationsEnabled}"/>
                                 </StackPanel>
 
                                 <Border Grid.Row="1" 
