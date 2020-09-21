@@ -116,6 +116,7 @@
   <ItemGroup>
     <Compile Include="DataModels\ApplicationSettings.cs" />
     <Compile Include="DataModels\AsyncObservableCollection.cs" />
+    <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -124,7 +125,7 @@
     </Compile>
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
-    <Compile Include="Expressions\ExpressionHelpers.cs" />
+    <Compile Include="Helpers\ExpressionHelpers.cs" />
     <Compile Include="ViewModel\Flashcards\Design\FlashcardHostDesignModel.cs" />
     <Compile Include="ViewModel\Flashcards\Design\FlashcardDesignModel.cs" />
     <Compile Include="ViewModel\Flashcards\FlashcardHostViewModel.cs" />

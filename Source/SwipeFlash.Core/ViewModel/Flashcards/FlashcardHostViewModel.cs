@@ -244,7 +244,7 @@ namespace SwipeFlash.Core
 
             var flashcard = new FlashcardViewModel()
             {
-                Side1Text = $"Test card {FlashcardID}",
+                Side1Text = "The cat",
                 Side2Text = "Test card side 2",
                 Side1Icon = "🇪🇸",
                 Side2Icon = "🇬🇧",
@@ -254,6 +254,8 @@ namespace SwipeFlash.Core
                 CardQueuePosition = FlashcardCount,
             };
             //
+
+            flashcard.EnableIllustration();
 
             flashcard.OnCardSwipeLeft += OnCardSwipe;
             flashcard.OnCardSwipeRight += OnCardSwipe;

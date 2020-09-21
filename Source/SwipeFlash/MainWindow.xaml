@@ -9,8 +9,7 @@
         WindowStartupLocation="CenterScreen"
         x:Name="Page"
         Title="Swipe Flash" Height="450" Width="800"
-        DataContext="{Binding core:WindowViewModel}"
-        d:DataContext="{x:Static core:WindowDesignModel.Instance}">
+        DataContext="{Binding core:WindowViewModel}">
 
     <!-- Animations -->
     <Window.Resources>

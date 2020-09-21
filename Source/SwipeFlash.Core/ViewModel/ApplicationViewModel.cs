@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Input;
 using Unsplasharp;
 
@@ -71,10 +70,13 @@ namespace SwipeFlash.Core
 
         #endregion
 
+        #region Private Helpers
+
         private UnsplasharpClient InitializeUnsplasharp()
         {
             return new UnsplasharpClient("GKK8X3xKGBUXa6hamQgHPb79GEBlkUZ8vzt23DjKmF0");
         }
 
+        #endregion
     }
 }

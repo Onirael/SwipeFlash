@@ -22,11 +22,13 @@ namespace SwipeFlash.Core
         {
             Side1Text = "The door";
             Side2Text = "La puerta del dormitorio dónde duerme el señor Javier";
-            Side1Icon = "🇪🇸";
-            Side2Icon = "🇬🇧";
+            Side1Icon = "🇬🇧";
+            Side2Icon = "🇪🇸";
             IsFlipped = false;
             IsInverted = false;
             IsOnSide1 = true;
+
+            EnableIllustration();
         }
 
         #endregion

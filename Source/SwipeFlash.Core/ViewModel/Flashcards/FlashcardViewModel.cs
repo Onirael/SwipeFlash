@@ -95,34 +95,45 @@ namespace SwipeFlash.Core
         public bool HasIllustration { get; set; } = false;
 
         /// <summary>
+        /// Whether the image is currently visible on this side of the card
+        /// </summary>
+        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded;
+
+
+        private Photo _illustrationData;
+        /// <summary>
         /// The Unsplasharp data of the illustration
         /// </summary>
         public Photo IllustrationData
         {
-            get => IllustrationData;
+            get => _illustrationData;
             set
             {
-                IllustrationData = value;
-                if (value != null) DownloadIllustration();
+                _illustrationData = value;
+                // If the new value isn't null, set the illustration's Uri
+                if (value != null) SetIllustrationUri(value.Urls.Thumbnail);
             }
         }
 
+        private BitmapImage _illustration;
         /// <summary>
         /// The card's illustration bitmap
         /// </summary>
         public BitmapImage Illustration
         {
-            get => Illustration;
+            get => _illustration;
             set
-            { Illustration = value;
+            {
+                _illustration = value;
+                // If the value isn't null, set the IsIllustrationLoaded flag
                 if (value != null) IsIllustrationLoaded = true;
             }
         }
 
         /// <summary>
-        /// Set to true if the illustration was successfully loaded
+        /// Flag indicating whether the illustration was successfully loaded
         /// </summary>
-        public bool IsIllustrationLoaded { get; set; } = false;
+        public bool IsIllustrationLoaded { get; private set; } = false;
 
         #endregion
 
@@ -183,15 +194,6 @@ namespace SwipeFlash.Core
             OnCardSwipeLeft = new EventHandler((ss, ee) => { });
             OnCardSwipeRight = new EventHandler((ss, ee) => { });
             OnUndoSwipe = new EventHandler((ss, ee) => { });
-
-            // Get the application view model
-            var appVieModel = IoC.Get<ApplicationViewModel>();
-
-
-            if (HasIllustration && Properties.Settings.Default.IllustrationsEnabled)
-            {
-                FindIllustrationAsync();
-            }
         }
 
         #endregion
@@ -311,31 +313,47 @@ namespace SwipeFlash.Core
         }
 
         /// <summary>
-        /// Ansynchronously finds an appropriate illustration for this card
+        /// Enables the illustration on this card
         /// </summary>
-        private async Task FindIllustrationAsync()
+        public void EnableIllustration()
+        {
+            HasIllustration = true;
+
+            // If this card should have an illustration, call the API
+            if (HasIllustration && Properties.Settings.Default.IllustrationsEnabled)
+                FindIllustrationAsync();
+
+        }
+
+        /// <summary>
+        /// Ansynchronously finds an appropriate illustration for this card via an API call
+        /// </summary>
+        private async void FindIllustrationAsync()
         {
             // Get the search results
-            var foundPhotos = await IoC.Get<ApplicationViewModel>().IllustrationsClient.SearchPhotos(Side1Text);
+            var foundPhotos = await IoC.Get<ApplicationViewModel>().IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle());
 
             // Create a new RNG
             var rand = new Random();
 
+            // If no photos were found, quit
+            if (foundPhotos.Count == 0) return;
+            
             // Get a random photo from the 10 first results
-            IllustrationData = foundPhotos[rand.Next(10)];
+            IllustrationData = foundPhotos[rand.Next(Math.Min(foundPhotos.Count, 10))];
         }
 
         /// <summary>
         /// Downloads the illustration
         /// </summary>
         /// <returns></returns>
-        private void DownloadIllustration()
+        public void SetIllustrationUri(string illustrationUri)
         {
-            // Initializes the bitmap from the URL
-            var filePath = IllustrationData.Urls.Thumbnail;
+            if (Illustration == null)
+                Illustration = new BitmapImage();
 
             Illustration.BeginInit();
-            Illustration.UriSource = new Uri(filePath, UriKind.Absolute);
+            Illustration.UriSource = new Uri(illustrationUri, UriKind.Absolute);
             Illustration.EndInit();
         }
 
