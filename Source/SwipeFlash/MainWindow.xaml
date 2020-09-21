@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen"
         x:Name="Page"
         Title="Swipe Flash" Height="450" Width="800"
-        DataContext="{Binding core:WindowViewModel}">
+        d:DataContext="">
 
     <!-- Animations -->
     <Window.Resources>
@@ -23,7 +23,6 @@
     </Window.Resources>
 
     <Grid>
-        
         <!--#region Background-->
         
         <Border Background="{StaticResource LightBlueBrush}" Opacity="0.7">
@@ -80,6 +79,7 @@
         
         <!--#endregion-->
 
+
         <local:FlashcardHost Margin="75 50 75 25"/>
 
         <Border Background="#80000000"
@@ -93,6 +93,18 @@
                                    Width="500"
                                    local:AnimateSlideInFromTopProperty.Value="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                                                                Source={x:Static local:ViewModelLocator.Instance}}"/>
+
+
+        <!-- No internet warning -->
+        <Border Height="30"
+                Background="Red" 
+                VerticalAlignment="Top"
+                local:AnimateSlideInFromTopProperty.Value="{Binding ApplicationViewModel.IsNetworkErrorMessageVisible, 
+                                                            Source={x:Static local:ViewModelLocator.Instance}}">
+            <Label Content="Could not communicate with the illustrations server" 
+                   HorizontalAlignment="Center" 
+                   Foreground="{StaticResource BackgroundLightBrush}"/>
+        </Border>
 
     </Grid>
 </Window>

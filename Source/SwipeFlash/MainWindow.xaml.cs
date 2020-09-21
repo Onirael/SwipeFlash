@@ -11,6 +11,8 @@ namespace SwipeFlash
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new WindowViewModel();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows.Input;
+﻿using Dna;
 using Unsplasharp;
 
 namespace SwipeFlash.Core
@@ -21,14 +20,20 @@ namespace SwipeFlash.Core
         /// </summary>
         public UnsplasharpClient IllustrationsClient { get; set; }
 
-        #endregion
-
-        #region Command
+        /// <summary>
+        /// Whether the Unsplash server is currently reachable
+        /// </summary>
+        public bool IsServerReachable { get; private set; } = true;
 
         /// <summary>
-        /// A command to toggle the visibility of the settings menu
+        /// Whether the illustrations are enabled
         /// </summary>
-        public ICommand ToggleSettingsMenuCommand { get; set; }
+        public bool IllustrationsEnabled { get; private set; }
+
+        /// <summary>
+        /// Whether the "server unreachable" message should be displayed
+        /// </summary>
+        public bool IsNetworkErrorMessageVisible => !IsServerReachable && IllustrationsEnabled;
 
         #endregion
 
@@ -36,45 +41,59 @@ namespace SwipeFlash.Core
 
         public ApplicationViewModel()
         {
-            // Initializes the settings menu visibility
-            ToggleSettingsMenuCommand = new RelayCommand(ToggleSettingsMenu);
-
             // Initialize Unsplasharp client
-            if (Properties.Settings.Default.IllustrationsEnabled)
-            {
-                IllustrationsClient = InitializeUnsplasharp();
+            IllustrationsClient = InitializeUnsplasharp();
 
-                bool isClientLoaded = IllustrationsClient != null;
+            // Start monitoring the availability of the Unsplash server
+            MonitorServerstatus();
 
-                string logString = isClientLoaded ? "SUCCESS" : "FAILED";
-                Debugger.Log(0, "UserLog", $"Loaded Unsplasharp client with result {logString}");
-
-                // Add network check
-
-                Properties.Settings.Default.IllustrationsEnabled = isClientLoaded;
-            }
-
-        }
-
-        #endregion
-
-        #region Command Helpers
-
-        /// <summary>
-        /// Toggles the visibility of the settings menu
-        /// </summary>
-        public void ToggleSettingsMenu()
-        {
-            IsSettingsMenuVisible ^= true;
+            // Hook OnSettingsChanged to Settings' PropertyChanged Event
+            Properties.Settings.Default.PropertyChanged += OnSettingsChanged;
         }
 
         #endregion
 
         #region Private Helpers
 
+        /// <summary>
+        /// Initializes the Unsplasharp client
+        /// </summary>
+        /// <returns></returns>
         private UnsplasharpClient InitializeUnsplasharp()
         {
             return new UnsplasharpClient("GKK8X3xKGBUXa6hamQgHPb79GEBlkUZ8vzt23DjKmF0");
+        }
+
+        /// <summary>
+        /// Pings the Unsplash server to see if it is responsive
+        /// </summary>
+        private void MonitorServerstatus()
+        {
+            var httpWatcher = new HttpEndpointChecker(
+                "https://unsplash.com/",
+                200,
+                (result) => { IsServerReachable = result; });
+        }
+        
+        /// <summary>
+        /// Called when the user settings have been changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnSettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            // Switch on property name
+            switch (e.PropertyName)
+            {
+                // If IllustrationsEnabled has been updated
+                case nameof(Properties.Settings.Default.IllustrationsEnabled):
+                    // Update the local property
+                    IllustrationsEnabled = Properties.Settings.Default.IllustrationsEnabled;
+                    break;
+
+                default:
+                    return;
+            }
         }
 
         #endregion

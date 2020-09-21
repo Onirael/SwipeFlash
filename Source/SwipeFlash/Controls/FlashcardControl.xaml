@@ -64,7 +64,7 @@
                                                 CornerRadius="150"
                                                 Visibility="{Binding IsImageVisible, Converter={local:BooleanToCollapsedVisibilityConverter}}">
                                             <Border.Background>
-                                                <ImageBrush ImageSource="{Binding Illustration}"/>
+                                                <ImageBrush ImageSource="{Binding Illustration}" Stretch="UniformToFill"/>
                                             </Border.Background>
                                         </Border>
 
@@ -89,6 +89,17 @@
                                                        Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
                                         </Viewbox>
                                     </Grid>
+                                    
+                                    <!-- Image credit -->
+                                    <TextBlock HorizontalAlignment="Right"
+                                               VerticalAlignment="Bottom"
+                                               Margin="0 0 20 10"
+                                               FontSize="{StaticResource FontSizeSmaller}"
+                                               Foreground="{StaticResource ForegroundDarkBrush}"
+                                               Visibility="{Binding IsImageVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                               Text="{Binding ImageCreditText}">
+                                    </TextBlock>
+
                                 </Grid>
 
                             </Border>

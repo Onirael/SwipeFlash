@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Unsplasharp.Models;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
 
 namespace SwipeFlash.Core
 {
@@ -94,11 +95,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public bool HasIllustration { get; set; } = false;
 
+        private bool _appIllustrationsEnabled { get; set; } = Properties.Settings.Default.IllustrationsEnabled;
         /// <summary>
         /// Whether the image is currently visible on this side of the card
         /// </summary>
-        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded;
-
+        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded && _appIllustrationsEnabled;
 
         private Photo _illustrationData;
         /// <summary>
@@ -111,7 +112,7 @@ namespace SwipeFlash.Core
             {
                 _illustrationData = value;
                 // If the new value isn't null, set the illustration's Uri
-                if (value != null) SetIllustrationUri(value.Urls.Thumbnail);
+                if (value != null) SetIllustrationUri(value.Urls.Small);
             }
         }
 
@@ -134,6 +135,14 @@ namespace SwipeFlash.Core
         /// Flag indicating whether the illustration was successfully loaded
         /// </summary>
         public bool IsIllustrationLoaded { get; private set; } = false;
+
+        /// <summary>
+        /// The image credit display text
+        /// </summary>
+        public string ImageCreditText => 
+            IllustrationData != null ? 
+            $"Image credit:\n{IllustrationData.User.FirstName} {IllustrationData.User.LastName} on Unsplash" : 
+            "No illustration data";
 
         #endregion
 
@@ -194,6 +203,9 @@ namespace SwipeFlash.Core
             OnCardSwipeLeft = new EventHandler((ss, ee) => { });
             OnCardSwipeRight = new EventHandler((ss, ee) => { });
             OnUndoSwipe = new EventHandler((ss, ee) => { });
+
+            // Hook the OnSettingsUpdated method to settings' Property changed
+            Properties.Settings.Default.PropertyChanged += OnSettingsUpdated;
         }
 
         #endregion
@@ -330,8 +342,18 @@ namespace SwipeFlash.Core
         /// </summary>
         private async void FindIllustrationAsync()
         {
+            // Get the application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // If the server is unreachable
+            if (!appVM.IsServerReachable)
+                return;
+            
+            // Logs the remaining API calls count
+            Debugger.Log(0, "UserLog", $"API calls remaining: {IoC.Get<ApplicationViewModel>().IllustrationsClient.RateLimitRemaining}\n");
+
             // Get the search results
-            var foundPhotos = await IoC.Get<ApplicationViewModel>().IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle());
+            var foundPhotos = await appVM.IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle());
 
             // Create a new RNG
             var rand = new Random();
@@ -352,12 +374,27 @@ namespace SwipeFlash.Core
             if (Illustration == null)
                 Illustration = new BitmapImage();
 
-            Illustration.BeginInit();
+            // Try initializing, an exception will be raised if it has begun Init but not ended it yet
+            try { Illustration.BeginInit(); } catch { };
             Illustration.UriSource = new Uri(illustrationUri, UriKind.Absolute);
-            Illustration.EndInit();
+            try { Illustration.EndInit(); } catch { };
+        }
+
+        /// <summary>
+        /// Called when the settings have been updated
+        /// </summary>
+        private void OnSettingsUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            // Update the illustrations enabled private property
+            _appIllustrationsEnabled = Properties.Settings.Default.IllustrationsEnabled;
+
+            // If the IllustrationsEnabled property changed to true
+            bool isPropertyIllustrationsEnabled = e.PropertyName == nameof(Properties.Settings.Default.IllustrationsEnabled);
+            if (isPropertyIllustrationsEnabled && _appIllustrationsEnabled && IllustrationData == null)
+                // Fire the FindIllustration method
+                FindIllustrationAsync();
         }
 
         #endregion
-
     }
 }

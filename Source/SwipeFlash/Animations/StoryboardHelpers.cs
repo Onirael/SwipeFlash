@@ -218,7 +218,6 @@ namespace SwipeFlash
             var animation = new ThicknessAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = new Thickness(0),
                 To = new Thickness(0, -offset, 0, offset),
                 DecelerationRatio = decelerationRatio
             };
