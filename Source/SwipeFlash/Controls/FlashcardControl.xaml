@@ -62,8 +62,10 @@
                                                 BorderThickness="3"
                                                 BorderBrush="{StaticResource ForegroundDarkBrush}"
                                                 CornerRadius="150"
-                                                Visibility="{Binding IsOnSide1, Converter={local:BooleanToCollapsedVisibilityConverter}}"
-                                                Background="{Binding Illustration}">
+                                                Visibility="{Binding IsOnSide1, Converter={local:BooleanToCollapsedVisibilityConverter}}">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="/Images/SwipeFlashIcon.ico"/>
+                                            </Border.Background>
                                         </Border>
 
                                         <!-- Text -->

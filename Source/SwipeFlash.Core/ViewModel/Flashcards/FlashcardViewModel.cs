@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Unsplasharp.Models;
-using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace SwipeFlash.Core
 {
@@ -98,12 +97,27 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The Unsplasharp data of the illustration
         /// </summary>
-        public Photo IllustrationData { get; set; }
+        public Photo IllustrationData
+        {
+            get => IllustrationData;
+            set
+            {
+                IllustrationData = value;
+                if (value != null) DownloadIllustration();
+            }
+        }
 
         /// <summary>
         /// The card's illustration bitmap
         /// </summary>
-        public Image Illustration { get; set; }
+        public BitmapImage Illustration
+        {
+            get => Illustration;
+            set
+            { Illustration = value;
+                if (value != null) IsIllustrationLoaded = true;
+            }
+        }
 
         /// <summary>
         /// Set to true if the illustration was successfully loaded
@@ -173,9 +187,11 @@ namespace SwipeFlash.Core
             // Get the application view model
             var appVieModel = IoC.Get<ApplicationViewModel>();
 
-            //// If illustrations are enabled and this card has an illustration
-            //if (HasIllustration && appVieModel.UserSettings.IllustrationsEnabled)
-            //    LoadIllustrationAsync();
+
+            if (HasIllustration && Properties.Settings.Default.IllustrationsEnabled)
+            {
+                FindIllustrationAsync();
+            }
         }
 
         #endregion
@@ -187,6 +203,13 @@ namespace SwipeFlash.Core
         /// </summary>
         private void FlipCard()
         {
+            // Get application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Quit if settings menu is visible
+            if (appVM.IsSettingsMenuVisible)
+                return;
+
             // Toggle card flip
             IsFlipped ^= true;
 
@@ -198,6 +221,13 @@ namespace SwipeFlash.Core
         /// </summary>
         private void SwipeLeft()
         {
+            // Get application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Quit if settings menu is visible
+            if (appVM.IsSettingsMenuVisible)
+                return;
+
             // Swipe to the left if the card hasn't yet been swiped
             if (!IsSwipedRight) IsSwipedLeft = true;
 
@@ -210,6 +240,13 @@ namespace SwipeFlash.Core
         /// </summary>
         private void SwipeRight()
         {
+            // Get application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Quit if settings menu is visible
+            if (appVM.IsSettingsMenuVisible)
+                return;
+
             // Swipe to the right if the card hasn't yet been swiped
             if (!IsSwipedLeft) IsSwipedRight = true;
 
@@ -222,6 +259,13 @@ namespace SwipeFlash.Core
         /// </summary>
         private void UndoSwipe()
         {
+            // Get application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Quit if settings menu is visible
+            if (appVM.IsSettingsMenuVisible)
+                return;
+
             // Fire undo swipe event
             OnUndoSwipe(this, null);
         }
@@ -269,24 +313,30 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Ansynchronously finds an appropriate illustration for this card
         /// </summary>
-        private async void FindIllustrationAsync()
+        private async Task FindIllustrationAsync()
         {
-            await IoC.Get<ApplicationViewModel>().IllustrationsClient.SearchPhotos(Side1Text);
+            // Get the search results
+            var foundPhotos = await IoC.Get<ApplicationViewModel>().IllustrationsClient.SearchPhotos(Side1Text);
+
+            // Create a new RNG
+            var rand = new Random();
+
+            // Get a random photo from the 10 first results
+            IllustrationData = foundPhotos[rand.Next(10)];
         }
 
         /// <summary>
         /// Downloads the illustration
         /// </summary>
         /// <returns></returns>
-        private void FetchIllustration()
+        private void DownloadIllustration()
         {
-            using (System.Net.WebClient webClient = new System.Net.WebClient())
-            {
-                using (Stream stream = webClient.OpenRead(IllustrationData.Urls.Thumbnail))
-                {
-                    Illustration = Image.FromStream(stream);
-                }
-            }
+            // Initializes the bitmap from the URL
+            var filePath = IllustrationData.Urls.Thumbnail;
+
+            Illustration.BeginInit();
+            Illustration.UriSource = new Uri(filePath, UriKind.Absolute);
+            Illustration.EndInit();
         }
 
         #endregion

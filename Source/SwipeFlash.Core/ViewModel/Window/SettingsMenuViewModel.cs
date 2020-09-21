@@ -9,7 +9,11 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The current aplication settings
         /// </summary>
-        public ApplicationSettings CurrentSettings { get; set; }
+        public bool IllustrationsEnabled
+        {
+            get => Properties.Settings.Default.IllustrationsEnabled;
+            set => Properties.Settings.Default.IllustrationsEnabled = value;
+        }
 
         #endregion
 
@@ -29,9 +33,6 @@ namespace SwipeFlash.Core
         /// </summary>
         public SettingsMenuViewModel()
         {
-            // Get the current settings from the application view model
-            CurrentSettings = IoC.Get<ApplicationViewModel>().UserSettings;
-
             // Initialize the close button command
             CloseSettingsCommand = new RelayCommand(OnCloseSettingsPressed);
         }
@@ -45,7 +46,7 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnCloseSettingsPressed()
         {
-            IoC.Get<ApplicationViewModel>().UserSettings = CurrentSettings;
+            IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = false;
         }
 
         #endregion

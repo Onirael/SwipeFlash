@@ -185,9 +185,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SwipeFlash.Core\SwipeFlash.Core.csproj">
       <Project>{29fbe0f9-2fdf-48a6-a248-cd83613a8eb2}</Project>
       <Name>SwipeFlash.Core</Name>

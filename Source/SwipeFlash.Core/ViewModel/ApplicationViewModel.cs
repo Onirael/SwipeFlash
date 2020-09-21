@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Unsplasharp;
 
@@ -15,11 +16,6 @@ namespace SwipeFlash.Core
         /// True if the side menu is visible, false it is collapsed
         /// </summary>
         public bool IsSettingsMenuVisible { get; set; } = false;
-
-        /// <summary>
-        /// The current application settings
-        /// </summary>
-        public ApplicationSettings UserSettings { get; set; }
 
         /// <summary>
         /// The Unsplasharp client used to fetch images
@@ -45,21 +41,20 @@ namespace SwipeFlash.Core
             ToggleSettingsMenuCommand = new RelayCommand(ToggleSettingsMenu);
 
             // Initialize Unsplasharp client
-            IllustrationsClient = InitializeUnsplasharp();
-
-            bool isClientLoaded = IllustrationsClient != null;
-
-            // DEVELOPMENT ONLY
-            // VALUES WILL BE RETRIEVED FROM A SETTINGS FILE
-            UserSettings = new ApplicationSettings()
+            if (Properties.Settings.Default.IllustrationsEnabled)
             {
-                IllustrationsEnabled = isClientLoaded ? true : false,
-            };
+                IllustrationsClient = InitializeUnsplasharp();
 
-            string logString = isClientLoaded ? "SUCCESS" : "FAILED";
-            Debugger.Log(0, "UserLog", $"Loaded Unsplasharp client with result {logString}");
-            if (isClientLoaded)
-                Debugger.Log(0, "UserLog", $"\nRemaining API calls: {IllustrationsClient.MaxRateLimit}");
+                bool isClientLoaded = IllustrationsClient != null;
+
+                string logString = isClientLoaded ? "SUCCESS" : "FAILED";
+                Debugger.Log(0, "UserLog", $"Loaded Unsplasharp client with result {logString}");
+
+                // Add network check
+
+                Properties.Settings.Default.IllustrationsEnabled = isClientLoaded;
+            }
+
         }
 
         #endregion

@@ -41,7 +41,7 @@
                                                TextWrapping="Wrap"/>
                                     <CheckBox Margin="15 5 0 0" 
                                               VerticalAlignment="Center"
-                                              IsChecked="{Binding CurrentSettings.IllustrationsEnabled}"/>
+                                              IsChecked="{Binding IllustrationsEnabled}"/>
                                 </StackPanel>
 
                                 <Border Grid.Row="1" 
@@ -64,7 +64,8 @@
                                         Style="{StaticResource RoundIconButton}"
                                         Content="{StaticResource FontAwesome_Close}"
                                         Foreground="{StaticResource ForegroundVeryDarkBrush}"
-                                        Command="{Binding CloseSettingsCommand}"/>
+                                        Command="{Binding CloseSettingsCommand}"
+                                        HorizontalAlignment="Center"/>
 
                             </Grid>
                         </Border>

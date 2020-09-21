@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SwipeFlash
 {
@@ -9,8 +10,8 @@ namespace SwipeFlash
     /// </summary>
     public class InputBindingBehavior
     {
-        #region Dependency Property
-        
+        #region Propagate Input Bindings to Window Dependency Property
+
         public static bool GetPropagateInputBindingsToWindow(FrameworkElement obj)
         {
             return (bool)obj.GetValue(PropagateInputBindingsToWindowProperty);
@@ -86,6 +87,10 @@ namespace SwipeFlash
             }
         }
 
+        /// <summary>
+        /// Removes the card input bindings from the window
+        /// </summary>
+        /// <param name="element"></param>
         private static void RemoveCardBindingsFromWindow(FrameworkElement element)
         {
             var window = Application.Current.MainWindow;

@@ -29,7 +29,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The amount of flashcards stored in <see cref="Flashcards"/>
         /// </summary>
-        public int FlashcardCount { get; set; } = 2;
+        public int FlashcardCount { get; set; } = 4;
 
         /// <summary>
         /// The time in seconds between the swipe of the previous card 
@@ -225,7 +225,7 @@ namespace SwipeFlash.Core
                 {
                     // Delay the input activation on the new active card
                     FlashcardViewModel activeCard = Flashcards[i]; // Store the variable to avoid error when reading i value on the task thread
-                    Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) => activeCard.HasInput = true);
+                    Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) => activeCard.HasInput = true); // Error when switching input !!!!!!!
                 }
                 else
                     // Disable the card's input

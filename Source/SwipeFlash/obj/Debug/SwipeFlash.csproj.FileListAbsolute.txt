@@ -1,4 +1,3 @@
-D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\SwipeFlash.exe.config
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\SwipeFlash.exe
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\SwipeFlash.pdb
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\Emoji.Wpf.dll
@@ -91,3 +90,4 @@ D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\Ninject.dll
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\Ninject.xml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\Unsplasharp.dll
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\System.Net.Http.dll
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\bin\Debug\SwipeFlash.Core.dll.config

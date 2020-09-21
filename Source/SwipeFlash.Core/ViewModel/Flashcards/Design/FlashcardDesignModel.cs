@@ -27,7 +27,6 @@ namespace SwipeFlash.Core
             IsFlipped = false;
             IsInverted = false;
             IsOnSide1 = true;
-            Illustration = Image.FromFile("/Images/SwipeFlashIcon.ico");
         }
 
         #endregion

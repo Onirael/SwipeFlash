@@ -45,3 +45,4 @@ D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\System.Xml.Re
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Unsplasharp.dll
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Newtonsoft.Json.xml
 D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\System.Drawing.Common.dll
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.dll.config
