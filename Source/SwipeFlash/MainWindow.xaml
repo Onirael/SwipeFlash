@@ -23,6 +23,7 @@
     </Window.Resources>
 
     <Grid>
+
         <!--#region Background-->
         
         <Border Background="{StaticResource LightBlueBrush}" Opacity="0.7">
@@ -95,7 +96,7 @@
                                                                                Source={x:Static local:ViewModelLocator.Instance}}"/>
 
 
-        <!-- No internet warning -->
+         <!--No internet warning--> 
         <Border Height="30"
                 Background="Red" 
                 VerticalAlignment="Top"

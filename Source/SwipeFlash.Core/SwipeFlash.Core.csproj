@@ -179,6 +179,10 @@
   <ItemGroup>
     <Compile Include="DataModels\ApplicationSettings.cs" />
     <Compile Include="DataModels\AsyncObservableCollection.cs" />
+    <None Include="Data\UserData.JSON" />
+    <None Include="Data\StaticData.JSON" />
+    <Compile Include="DataModels\FlashcardData.cs" />
+    <Compile Include="FlashcardManager.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

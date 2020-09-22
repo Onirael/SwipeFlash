@@ -144,6 +144,11 @@ namespace SwipeFlash.Core
             $"Image credit:\n{IllustrationData.User.FirstName} {IllustrationData.User.LastName} on Unsplash" : 
             "No illustration data";
 
+        /// <summary>
+        /// Whether this card indicates the end of the card stack
+        /// </summary>
+        public bool IsEndOfStackCard { get; set; }
+
         #endregion
 
         #region Event Handlers
@@ -217,12 +222,14 @@ namespace SwipeFlash.Core
         /// </summary>
         private void FlipCard()
         {
+            // Quit if this card is the end of stack card
+            if (IsEndOfStackCard) return;
+
             // Get application view model
             var appVM = IoC.Get<ApplicationViewModel>();
 
             // Quit if settings menu is visible
-            if (appVM.IsSettingsMenuVisible)
-                return;
+            if (appVM.IsSettingsMenuVisible) return;
 
             // Toggle card flip
             IsFlipped ^= true;
@@ -290,6 +297,31 @@ namespace SwipeFlash.Core
         #region Helper Methods
 
         /// <summary>
+        /// Initializes the card with a card data container
+        /// </summary>
+        /// <param name="cardData">The struct containing the card data</param>
+        public void InitCard(FlashcardData cardData)
+        {
+            // If the card is end of stack, set flag and quit
+            if (cardData.IsEndOfStackCard)
+            {
+                IsEndOfStackCard = true;
+                return;
+            }
+
+            // Initializes card values from card data object
+            Side1Text = cardData.Side1Text;
+            Side2Text = cardData.Side2Text;
+            Side1Icon = cardData.Side1Icon;
+            Side2Icon = cardData.Side2Icon;
+            IsInverted = cardData.IsInverted;
+
+            // Enable illustration
+            if (cardData.HasIllustration) EnableIllustration();
+
+        }
+
+        /// <summary>
         /// Called when the card has been swiped out
         /// </summary>
         public void DestroyCard()
@@ -332,7 +364,7 @@ namespace SwipeFlash.Core
             HasIllustration = true;
 
             // If this card should have an illustration, call the API
-            if (HasIllustration && Properties.Settings.Default.IllustrationsEnabled)
+            if (Properties.Settings.Default.IllustrationsEnabled)
                 FindIllustrationAsync();
 
         }

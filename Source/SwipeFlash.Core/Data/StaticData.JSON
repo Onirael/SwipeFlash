@@ -1,0 +1,57 @@
+﻿{
+  "categories": [
+    {
+      "name": "spanish",
+      "icon": "🇪🇸"
+    },
+    {
+      "name": "english",
+      "icon": "🇬🇧"
+    }
+    ],
+  "flashcards": [
+    {
+      "family": "spanishToEnglish",
+      "category1": "spanish",
+      "category2": "english",
+      "cards": [
+        {
+          "id": 0,
+          "side1Text": "The door",
+          "side2Text": "La puerta",
+          "hasIllustration": true
+        },
+        {
+          "id": 1,
+          "side1Text": "The cat",
+          "side2Text": "El gato",
+          "hasIllustration": true
+        },
+        {
+          "id": 3,
+          "side1Text": "The man",
+          "side2Text": "El hombre",
+          "hasIllustration": true
+        },
+        {
+          "id": 4,
+          "side1Text": "The woman",
+          "side2Text": "La mujer",
+          "hasIllustration": true
+        },
+        {
+          "id": 5,
+          "side1Text": "The lamp",
+          "side2Text": "La lámpara",
+          "hasIllustration": true
+        },
+        {
+          "id": 6,
+          "side1Text": "to admit",
+          "side2Text": "admitir",
+          "hasIllustration": false
+        }
+      ]
+    }
+  ]
+}

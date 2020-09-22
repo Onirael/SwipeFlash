@@ -35,6 +35,9 @@ namespace SwipeFlash.Core
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+
+            // Bind to a single instance of Flashcard manager
+            Kernel.Bind<FlashcardManager>().ToConstant(new FlashcardManager());
         }
 
         #endregion
