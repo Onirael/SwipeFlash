@@ -239,25 +239,16 @@ namespace SwipeFlash.Core
         /// <returns></returns>
         private FlashcardViewModel GetNextFlashCard()
         {
-            // DEVELOPMENT //
-            FlashcardID++;
+            // Create a new flashcard view model
+            var flashcard = new FlashcardViewModel();
 
-            var flashcard = new FlashcardViewModel()
-            {
-                Side1Text = "The street lamp",
-                Side2Text = "Test card side 2",
-                Side1Icon = "🇪🇸",
-                Side2Icon = "🇬🇧",
-
-                HasInput = false,
-
-                CardQueuePosition = FlashcardCount,
-            };
-            //
+            // Get the data for the new flashcard
+            var newFlashcardData = IoC.Get<FlashcardManager>().GetNext();
             
-            // Enable the illustration on this card
-            flashcard.EnableIllustration();
+            // Initialize the flashcard view model with the  data
+            flashcard.InitCard(newFlashcardData);
 
+            // Hook methods to EventHandlers
             flashcard.OnCardSwipeLeft += OnCardSwipe;
             flashcard.OnCardSwipeRight += OnCardSwipe;
             flashcard.OnUndoSwipe += OnUndoSwipe;
