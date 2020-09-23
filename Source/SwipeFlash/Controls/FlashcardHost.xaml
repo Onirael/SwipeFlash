@@ -13,13 +13,13 @@
         <Grid>
             <Grid.RowDefinitions>
                 <!-- Cards -->
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="400"/>
                 <!-- Buttons -->
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             
             <!--#region Cards-->
-            
+
             <!-- Active and queued flashcards -->
             <ItemsControl Grid.Row="0" ItemsSource="{Binding Flashcards}">
                 <ItemsControl.ItemsPanel>

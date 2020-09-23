@@ -65,6 +65,29 @@ namespace SwipeFlash.Core
             // Initializes the flashcards array
             Flashcards = new AsyncObservableCollection<FlashcardViewModel>();
 
+            // Initialize history array
+            FlashcardHistory = new AsyncObservableCollection<FlashcardViewModel>();
+
+            // Initializes the undo command button command
+            UndoButtonCommand = new RelayCommand(OnUndoButtonPressed);
+
+            // Initializes the undo command button command
+            SettingsButtonCommand = new RelayCommand(OnSettingsButtonPressed);
+
+            // Hooks the initlaize flashcard list function to the OnQueueInitialized event
+            IoC.Get<FlashcardManager>().OnQueueInitialized += InitializeFlashcardList;
+        }
+
+        #endregion
+
+        #region Private Helpers
+
+        /// <summary>
+        /// Called when the flashcard manager has finished loading the card queue
+        /// initializes the flashcard list
+        /// </summary>
+        private void InitializeFlashcardList(object sender, EventArgs e)
+        {
             for (int i = 0; i < FlashcardCount; ++i)
             {
                 // Get the new card
@@ -79,20 +102,7 @@ namespace SwipeFlash.Core
                 // Add the card to the list
                 Flashcards.Insert(0, newCard);
             }
-
-            // Initialize history array
-            FlashcardHistory = new AsyncObservableCollection<FlashcardViewModel>();
-
-            // Initializes the undo command button command
-            UndoButtonCommand = new RelayCommand(OnUndoButtonPressed);
-
-            // Initializes the undo command button command
-            SettingsButtonCommand = new RelayCommand(OnSettingsButtonPressed);
         }
-
-        #endregion
-
-        #region Private Helpers
 
         /// <summary>
         /// Called when the undo button is pressed

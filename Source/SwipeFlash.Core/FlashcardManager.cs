@@ -39,6 +39,20 @@ namespace SwipeFlash.Core
         /// </summary>
         Random Rand;
 
+        /// <summary>
+        /// Whether the queue was initialized
+        /// </summary>
+        public bool IsQueueInitialized = false;
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Fires when the card queue has been initialized
+        /// </summary>
+        public EventHandler OnQueueInitialized;
+
         #endregion
 
         #region Constructor
@@ -94,6 +108,13 @@ namespace SwipeFlash.Core
                 {
                     // Add card to queue
                     AddFlashcardToQueue();
+                }
+
+                // If this is the initialization of the array
+                if (!IsQueueInitialized)
+                {
+                    OnQueueInitialized(this, null);
+                    IsQueueInitialized = true;
                 }
             });
         }
@@ -163,7 +184,7 @@ namespace SwipeFlash.Core
                 {
                     // If the card exceeds the array, return an end of stack card
                     newFlashcardData.IsEndOfStackCard = true;
-                    FlashcardID = 0;
+                    FlashcardID = -1;
                 }
 
                 // Adds card to array
