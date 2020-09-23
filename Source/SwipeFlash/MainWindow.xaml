@@ -8,19 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         x:Name="Page"
-        Title="Swipe Flash" Height="450" Width="800"
-        d:DataContext="">
-
-    <!-- Animations -->
-    <Window.Resources>
-        <!-- Burst animation -->
-        <DoubleAnimationUsingKeyFrames x:Key="BurstAnimation" Storyboard.TargetProperty="Opacity" Duration="0:0:4">
-            <SplineDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
-            <SplineDoubleKeyFrame Value="0" KeyTime="0:0:1"/>
-            <SplineDoubleKeyFrame Value="1" KeyTime="0:0:1.2"/>
-            <SplineDoubleKeyFrame Value="0" KeyTime="0:0:4"/>
-        </DoubleAnimationUsingKeyFrames>
-    </Window.Resources>
+        Title="Swipe Flash" Height="450" Width="800">
 
     <Grid>
 
@@ -80,32 +68,51 @@
         
         <!--#endregion-->
 
+        <Grid Opacity="0"
+              local:AnimateFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
+                                                  Source={x:Static local:ViewModelLocator.Instance}}">
+            
+            <local:FlashcardHost d:DataContext="{x:Static core:FlashcardHostDesignModel.Instance}"
+                                 Margin="75 50 75 25"/>
 
-        <local:FlashcardHost Margin="75 50 75 25"/>
+            <!--#region No Internet Warning-->
+            
+            <Border Height="30"
+                    Background="Red" 
+                    VerticalAlignment="Top"
+                    local:AnimateSlideInFromTopProperty.Value="{Binding ApplicationViewModel.IsNetworkErrorMessageVisible, 
+                                                                Source={x:Static local:ViewModelLocator.Instance}}">
+                <Label Content="Could not communicate with the illustrations server" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource BackgroundLightBrush}"/>
+            </Border>
+            
+            <!--#endregion-->
+            
+        </Grid>
 
-        <Border Background="#80000000"
+        <!--#region Settings-->
+        
+            <!-- Settings menu backdrop -->
+            <Border Background="#80000000"
                 IsHitTestVisible="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                    Source={x:Static local:ViewModelLocator.Instance}}"
                 local:AnimateFadeInProperty.Value ="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                                     Source={x:Static local:ViewModelLocator.Instance}}"/>
 
-        <local:SettingsMenuControl VerticalAlignment="Top" 
+            <!-- Settings menu control -->
+            <local:SettingsMenuControl VerticalAlignment="Top"
                                    Margin="0 -10 0 0" 
                                    Width="500"
                                    local:AnimateSlideInFromTopProperty.Value="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                                                                Source={x:Static local:ViewModelLocator.Instance}}"/>
+        <!--#endregion-->
 
-
-         <!--No internet warning--> 
-        <Border Height="30"
-                Background="Red" 
-                VerticalAlignment="Top"
-                local:AnimateSlideInFromTopProperty.Value="{Binding ApplicationViewModel.IsNetworkErrorMessageVisible, 
-                                                            Source={x:Static local:ViewModelLocator.Instance}}">
-            <Label Content="Could not communicate with the illustrations server" 
-                   HorizontalAlignment="Center" 
-                   Foreground="{StaticResource BackgroundLightBrush}"/>
-        </Border>
+        <Image Source="/Images/SwipeFlashIcon.ico"
+               Margin="50"
+               local:AnimateScaleAndFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
+                                                           Source={x:Static local:ViewModelLocator.Instance},
+                                                           Converter={local:InvertBooleanConverter}}"/>
 
     </Grid>
 </Window>

@@ -205,7 +205,7 @@ namespace SwipeFlash
             // Create the storyboard
             var sb = new Storyboard();
 
-            // Add the horizontal flip animation
+            // Add the fade in animation
             sb.AddFadeIn(duration);
 
             // Begin the animation
@@ -226,7 +226,7 @@ namespace SwipeFlash
             // Create the storyboard
             var sb = new Storyboard();
 
-            // Add the horizontal flip animation
+            // Add the fade out animation
             sb.AddFadeOut(duration);
 
             // Begin the animation
@@ -234,6 +234,60 @@ namespace SwipeFlash
 
             // Wait for it to finish
             await Task.Delay((int)(duration * 1000));
+        }
+
+        /// <summary>
+        /// Scale up and fade in animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task ScaleAndFadeInAsync(this FrameworkElement element, float duration = 0.5f)
+        {
+            element.SetElementTransform();
+            
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the fade in animation
+            sb.AddFadeIn(duration);
+
+            // Add the scale up animation
+            sb.AddScaleUp(duration);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+
+        }
+
+        /// <summary>
+        /// Scale down and fade out animation
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task ScaleAndFadeOutAsync(this FrameworkElement element, float duration = 0.5f)
+        {
+            element.SetElementTransform();
+
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the fade out animation
+            sb.AddFadeOut(duration);
+
+            // Add the scale down animation
+            sb.AddScaleDown(duration);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+
         }
 
         /// <summary>

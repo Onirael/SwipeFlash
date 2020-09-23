@@ -1,4 +1,5 @@
 ﻿using SwipeFlash.Core;
+using System.ComponentModel;
 using System.Windows;
 
 namespace SwipeFlash
@@ -11,7 +12,7 @@ namespace SwipeFlash
         public MainWindow()
         {
             InitializeComponent();
-
+            
             DataContext = new WindowViewModel();
         }
     }

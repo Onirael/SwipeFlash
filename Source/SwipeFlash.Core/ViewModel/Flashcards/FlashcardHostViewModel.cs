@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -91,7 +92,7 @@ namespace SwipeFlash.Core
             for (int i = 0; i < FlashcardCount; ++i)
             {
                 // Get the new card
-                var newCard = GetNextFlashCard();
+                var newCard = GetNextFlashcard();
 
                 // Set the new card's queue position
                 newCard.CardQueuePosition = i;
@@ -102,6 +103,14 @@ namespace SwipeFlash.Core
                 // Add the card to the list
                 Flashcards.Insert(0, newCard);
             }
+
+            Task.Delay(1000).ContinueWith((t) =>
+            {
+
+            // Set the application view model's content loaded flag
+            IoC.Get<ApplicationViewModel>().IsContentLoaded = true;
+
+            });
         }
 
         /// <summary>
@@ -135,7 +144,7 @@ namespace SwipeFlash.Core
                 // If the maximum amount of cards hasn't been reached
                 if (Flashcards.Count <= FlashcardCount)
                     // Insert new flashcard at index 0
-                    PushCardToStack(GetNextFlashCard(), true);
+                    PushCardToStack(GetNextFlashcard(), true);
                 else
                     // Update stack
                     PushCardToStack(null, true);
@@ -247,14 +256,14 @@ namespace SwipeFlash.Core
         /// Retrieves the next flash card and returns a view model
         /// </summary>
         /// <returns></returns>
-        private FlashcardViewModel GetNextFlashCard()
+        virtual protected FlashcardViewModel GetNextFlashcard()
         {
             // Create a new flashcard view model
             var flashcard = new FlashcardViewModel();
 
             // Get the data for the new flashcard
             var newFlashcardData = IoC.Get<FlashcardManager>().GetNext();
-            
+
             // Initialize the flashcard view model with the  data
             flashcard.InitCard(newFlashcardData);
 

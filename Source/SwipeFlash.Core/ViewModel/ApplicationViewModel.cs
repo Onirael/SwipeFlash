@@ -35,6 +35,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public bool IsNetworkErrorMessageVisible => !IsServerReachable && IllustrationsEnabled;
 
+        /// <summary>
+        /// True if the window content was loaded and the card queue is set
+        /// </summary>
+        public bool IsContentLoaded { get; set; } = false;
+
         #endregion
 
         #region Constructor

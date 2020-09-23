@@ -374,6 +374,8 @@ namespace SwipeFlash.Core
         /// </summary>
         private async void FindIllustrationAsync()
         {
+            if (IsEndOfStackCard) return;
+
             // Get the application view model
             var appVM = IoC.Get<ApplicationViewModel>();
 

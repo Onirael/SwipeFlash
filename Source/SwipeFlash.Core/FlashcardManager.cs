@@ -72,7 +72,7 @@ namespace SwipeFlash.Core
         #endregion
 
         #region Private Helpers
-        
+
         /// <summary>
         /// Asynchronously initializes the JSON objects
         /// </summary>
@@ -88,9 +88,17 @@ namespace SwipeFlash.Core
             string staticDataFile = parentDirectory + "/SwipeFlash.Core/Data/StaticData.JSON";
             string userDataFile = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
 
-            // Parse JSON files
-            await Task.Run(() => StaticData = JObject.Parse(File.ReadAllText(staticDataFile)));
-            await Task.Run(() => UserData = JObject.Parse(File.ReadAllText(userDataFile)));
+            // Asynchronously parse JSON files
+            await Task.Run(() =>
+            {
+                try
+                {
+                    StaticData = JObject.Parse(File.ReadAllText(staticDataFile));
+                    UserData = JObject.Parse(File.ReadAllText(userDataFile));
+                }
+                catch { }
+
+            });
 
             // Fill the card queue
             FillCardQueueAsync();
@@ -105,16 +113,17 @@ namespace SwipeFlash.Core
             {
                 // While the card queue isn't full
                 while (CardQueue.Count < CardQueueMaxLength)
-                {
                     // Add card to queue
                     AddFlashcardToQueue();
-                }
 
-                // If this is the initialization of the array
+                // If the array has not yet been flagged as initialized
                 if (!IsQueueInitialized)
                 {
-                    OnQueueInitialized(this, null);
+                    // Set the queue initialized flag
                     IsQueueInitialized = true;
+
+                    // Fire the OnQueueInitialized event handler
+                    OnQueueInitialized(this, null);
                 }
             });
         }

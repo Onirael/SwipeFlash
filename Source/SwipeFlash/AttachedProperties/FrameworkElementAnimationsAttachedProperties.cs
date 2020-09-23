@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 
 namespace SwipeFlash
 {
@@ -21,6 +22,10 @@ namespace SwipeFlash
 
             // Don't fire if the value doesn't change
             if (sender.GetValue(ValueProperty) == (object)value)
+                return;
+
+            // Don't fire if in design mode
+            if (DesignerProperties.GetIsInDesignMode(element))
                 return;
 
             // Run the animation
@@ -60,6 +65,10 @@ namespace SwipeFlash
 
             // Don't fire if the value doesn't change
             if (sender.GetValue(ValueProperty) == value && !IsFirstLoad)
+                return;
+
+            // Don't fire if in design mode
+            if (DesignerProperties.GetIsInDesignMode(element))
                 return;
 
             // On first load
@@ -178,6 +187,24 @@ namespace SwipeFlash
                 // Fade the element out
                 await element.FadeOutAsync(IsFirstLoad ? 0f : 0.4f);
 
+        }
+    }
+
+    /// <summary>
+    /// Animates a framework element, scaling and fading it in
+    /// if the value is set to false, the animation is reversed
+    /// </summary>
+    public class AnimateScaleAndFadeInProperty : AnimateBaseProperty<AnimateScaleAndFadeInProperty>
+    {
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            // If the animation is run forward
+            if (value)
+                // Scale and fade the element in 
+                await element.ScaleAndFadeInAsync(0.5f);
+            else
+                // Scale and fade the element out
+                await element.ScaleAndFadeOutAsync(0.5f);
         }
     }
 

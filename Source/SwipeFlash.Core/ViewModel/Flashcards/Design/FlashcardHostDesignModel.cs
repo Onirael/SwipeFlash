@@ -14,10 +14,44 @@
 
         #endregion
 
-        #region Constructor
+        #region Private Properties
 
-        public FlashcardHostDesignModel() : base() { }
+        /// <summary>
+        /// The queue position of the new cards
+        /// </summary>
+        private int QueuePosition = 0;
 
         #endregion
+
+        #region Constructor
+
+        public FlashcardHostDesignModel() : base()
+        {
+            Flashcards = new AsyncObservableCollection<FlashcardViewModel>()
+            {
+                GetNextFlashcard(),
+                GetNextFlashcard(),
+                GetNextFlashcard(),
+            };
+        }
+
+        #endregion
+
+        protected override FlashcardViewModel GetNextFlashcard()
+        {
+            var newFlashcard = new FlashcardViewModel()
+            {
+                Side1Text = "The door",
+                Side2Text = "La puerta",
+                Side1Icon = "🇪🇸",
+                Side2Icon = "🇬🇧",
+                HasIllustration = true,
+                CardQueuePosition = 2 - QueuePosition,
+            };
+
+            QueuePosition++;
+
+            return newFlashcard;
+        }
     }
 }

@@ -295,5 +295,69 @@ namespace SwipeFlash
             // Add this to the storyboard
             storyboard.Children.Add(animation);
         }
+
+        /// <summary>
+        /// Adds a scale up animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard"></param>
+        /// <param name="duration"></param>
+        /// <param name="decelerationRatio"></param>
+        public static void AddScaleUp(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        {
+            var scaleXAnimation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = 0,
+                To = 1,
+                DecelerationRatio = decelerationRatio
+            };
+
+            var scaleYAnimation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                From = 0,
+                To = 1,
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"));
+            Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(scaleXAnimation);
+            storyboard.Children.Add(scaleYAnimation);
+        }
+
+        /// <summary>
+        /// Adds a scale down animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard"></param>
+        /// <param name="duration"></param>
+        /// <param name="decelerationRatio"></param>
+        public static void AddScaleDown(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        {
+            var scaleXAnimation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                To = 0,
+                DecelerationRatio = decelerationRatio
+            };
+
+            var scaleYAnimation = new DoubleAnimation
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                To = 0,
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"));
+            Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(scaleXAnimation);
+            storyboard.Children.Add(scaleYAnimation);
+        }
     }
 }
