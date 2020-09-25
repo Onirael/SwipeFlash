@@ -13,7 +13,7 @@
     <Grid>
 
         <!--#region Background-->
-        
+
         <Border Background="{StaticResource LightBlueBrush}" Opacity="0.7">
             <Border.OpacityMask>
                 <LinearGradientBrush>
@@ -29,17 +29,17 @@
         <!-- Background gradient -->
         <Border Name="gradient" Background="{StaticResource BackgroundLightBrush}">
 
-                <Border.OpacityMask>
-                    <RadialGradientBrush GradientOrigin=".5 1" Center=".5 1" Opacity=".7" RadiusX="1" RadiusY="2">
-                        <RadialGradientBrush.GradientStops>
-                            <GradientStop Offset="0" Color="#ffffffff"/>
-                            <GradientStop Offset=".4" Color="#80ffffff"/>
-                            <GradientStop Offset="1" Color="#00ffffff"/>
-                        </RadialGradientBrush.GradientStops>
-                    </RadialGradientBrush>
-                </Border.OpacityMask>
-            </Border>
-            
+            <Border.OpacityMask>
+                <RadialGradientBrush GradientOrigin=".5 1" Center=".5 1" Opacity=".7" RadiusX="1" RadiusY="2">
+                    <RadialGradientBrush.GradientStops>
+                        <GradientStop Offset="0" Color="#ffffffff"/>
+                        <GradientStop Offset=".4" Color="#80ffffff"/>
+                        <GradientStop Offset="1" Color="#00ffffff"/>
+                    </RadialGradientBrush.GradientStops>
+                </RadialGradientBrush>
+            </Border.OpacityMask>
+        </Border>
+
         <!-- Right border -->
         <Border Background="#00ff00">
             <Border.OpacityMask>
@@ -65,18 +65,17 @@
                 </RadialGradientBrush>
             </Border.OpacityMask>
         </Border>
-        
+
         <!--#endregion-->
 
-        <Grid Opacity="0"
-              local:AnimateFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
-                                                  Source={x:Static local:ViewModelLocator.Instance}}">
-            
+        <Grid local:AnimateContentFadeInProperty.Value="{Binding ApplicationViewModel.IsContentVisible, 
+                                                         Source={x:Static local:ViewModelLocator.Instance}}">
+
             <local:FlashcardHost d:DataContext="{x:Static core:FlashcardHostDesignModel.Instance}"
                                  Margin="75 50 75 25"/>
 
             <!--#region No Internet Warning-->
-            
+
             <Border Height="30"
                     Background="Red" 
                     VerticalAlignment="Top"
@@ -86,26 +85,27 @@
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource BackgroundLightBrush}"/>
             </Border>
-            
+
             <!--#endregion-->
-            
+
         </Grid>
 
         <!--#region Settings-->
-        
-            <!-- Settings menu backdrop -->
-            <Border Background="#80000000"
+
+        <!-- Settings menu backdrop -->
+        <Border Background="#80000000"
                 IsHitTestVisible="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                    Source={x:Static local:ViewModelLocator.Instance}}"
                 local:AnimateFadeInProperty.Value ="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
-                                                    Source={x:Static local:ViewModelLocator.Instance}}"/>
+                                                     Source={x:Static local:ViewModelLocator.Instance}}"/>
 
-            <!-- Settings menu control -->
-            <local:SettingsMenuControl VerticalAlignment="Top"
+        <!-- Settings menu control -->
+        <local:SettingsMenuControl VerticalAlignment="Top"
                                    Margin="0 -10 0 0" 
                                    Width="500"
-                                   local:AnimateSlideInFromTopProperty.Value="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
+                                   local:AnimateSettingsSlideInProperty.Value="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                                                                Source={x:Static local:ViewModelLocator.Instance}}"/>
+        
         <!--#endregion-->
 
         <Image Source="/Images/SwipeFlashIcon.ico"

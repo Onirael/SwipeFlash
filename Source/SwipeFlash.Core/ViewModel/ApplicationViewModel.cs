@@ -1,4 +1,5 @@
 ﻿using Dna;
+using System.Threading.Tasks;
 using Unsplasharp;
 
 namespace SwipeFlash.Core
@@ -36,9 +37,30 @@ namespace SwipeFlash.Core
         public bool IsNetworkErrorMessageVisible => !IsServerReachable && IllustrationsEnabled;
 
         /// <summary>
+        /// The delay between the loading of the content and the apparition of that content
+        /// </summary>
+        public double ContentAppearDelay { get; private set; } = 0.2;
+
+        private bool _isContentLoaded = false;
+        /// <summary>
         /// True if the window content was loaded and the card queue is set
         /// </summary>
-        public bool IsContentLoaded { get; set; } = false;
+        public bool IsContentLoaded
+        {
+            get => _isContentLoaded;
+            set
+            {
+                // Updates the current value
+                _isContentLoaded = value;
+                // Sets the content visibility after a delay
+                Task.Delay((int)(ContentAppearDelay * 1000)).ContinueWith((t) => { IsContentVisible = true; });
+            }
+        }
+
+        /// <summary>
+        /// Whether the window content is currently visible
+        /// </summary>
+        public bool IsContentVisible { get; set; } = false;
 
         #endregion
 

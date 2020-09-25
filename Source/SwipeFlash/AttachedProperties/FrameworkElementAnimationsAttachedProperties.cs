@@ -12,6 +12,15 @@ namespace SwipeFlash
     public abstract class AnimateBaseTriggeredProperty<Parent> : BaseAttachedProperty<Parent, bool>
         where Parent : BaseAttachedProperty<Parent, bool>, new()
     {
+        #region Public Properties
+
+        /// <summary>
+        /// The duration of the animation in seconds
+        /// </summary>
+        public float AnimDuration { get; set; } = 0.5f;
+
+        #endregion
+
         public override void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var value = (bool)e.NewValue;
@@ -54,6 +63,11 @@ namespace SwipeFlash
         /// A flag indicating whether this is the first time this property has been loaded
         /// </summary>
         public bool IsFirstLoad { get; set; } = true;
+
+        /// <summary>
+        /// The duration of the animation in seconds
+        /// </summary>
+        public float AnimDuration { get; set; } = 0.5f;
 
         #endregion
 
@@ -159,15 +173,18 @@ namespace SwipeFlash
     /// </summary>
     public class AnimateSlideInFromTopProperty : AnimateBaseProperty<AnimateSlideInFromTopProperty>
     {
+        // Initializes constants
+        public AnimateSlideInFromTopProperty() : base() { AnimDuration = 0.4f; }
+
         protected async override void RunAnimation(FrameworkElement element, bool value)
         {
             // If the animation is run forward
             if (value)
                 // Slide the element in from the top
-                await element.SlideFromTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : 0.4f);
+                await element.SlideFromTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
             else
                 // Slide the element to the top
-                await element.SlideToTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : 0.4f);
+                await element.SlideToTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
         }
     }
 
@@ -201,11 +218,55 @@ namespace SwipeFlash
             // If the animation is run forward
             if (value)
                 // Scale and fade the element in 
-                await element.ScaleAndFadeInAsync(0.5f);
+                await element.ScaleAndFadeInAsync(0.7, 0.2f);
             else
                 // Scale and fade the element out
-                await element.ScaleAndFadeOutAsync(0.5f);
+                await element.ScaleAndFadeOutAsync(0.7, 0.2f);
         }
     }
+
+    #region Instances
+
+    /// <summary>
+    /// Animates the settings menu slide in and out
+    /// </summary>
+    public class AnimateSettingsSlideInProperty : AnimateBaseProperty<AnimateSettingsSlideInProperty>
+    {
+        // Initializes constants
+        public AnimateSettingsSlideInProperty() : base() { AnimDuration = 0.4f; }
+
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            // If the animation is run forward
+            if (value)
+                // Slide the element in from the top
+                await element.SlideFromTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
+            else
+                // Slide the element to the top
+                await element.SlideToTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
+        }
+    }
+
+    /// <summary>
+    /// Animates a framework element, fading it in
+    /// if the value is set to false, the animation is reversed
+    /// </summary>
+    public class AnimateContentFadeInProperty : AnimateBaseProperty<AnimateContentFadeInProperty>
+    {
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            //If the the animation is run forward
+            if (value)
+                // Fade the element in
+                await element.FadeInAsync(IsFirstLoad ? 0f : 0.4f);
+            else
+                // Fade the element out
+                await element.FadeOutAsync(IsFirstLoad ? 0f : 0.4f);
+
+        }
+    }
+
+
+    #endregion
 
 }

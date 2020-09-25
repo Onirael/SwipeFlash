@@ -64,9 +64,6 @@ namespace SwipeFlash.Core
 
             // Initializes the random generator
             Rand = new Random();
-
-            // Initializes the JSON data
-            InitJSONDataAsync();
         }
 
         #endregion
@@ -77,7 +74,7 @@ namespace SwipeFlash.Core
         /// Asynchronously initializes the JSON objects
         /// </summary>
         /// <returns></returns>
-        private async void InitJSONDataAsync()
+        public void InitJSONData()
         {
             // Store the location of the files
             var parentDirectory = Directory.GetParent(
@@ -89,7 +86,7 @@ namespace SwipeFlash.Core
             string userDataFile = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
 
             // Asynchronously parse JSON files
-            await Task.Run(() =>
+            Task.Run(() =>
             {
                 try
                 {
@@ -107,9 +104,9 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Asynchronously updates the card queue
         /// </summary>
-        private async void FillCardQueueAsync()
+        private void FillCardQueueAsync()
         {
-            await Task.Run(() =>
+            Task.Run(() =>
             {
                 // While the card queue isn't full
                 while (CardQueue.Count < CardQueueMaxLength)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -77,6 +76,10 @@ namespace SwipeFlash.Core
 
             // Hooks the initlaize flashcard list function to the OnQueueInitialized event
             IoC.Get<FlashcardManager>().OnQueueInitialized += InitializeFlashcardList;
+
+            // Initialize the JSON data
+            // This must be done after InitializeFlashcardList has been hooked
+            IoC.Get<FlashcardManager>().InitJSONData();
         }
 
         #endregion
@@ -89,27 +92,30 @@ namespace SwipeFlash.Core
         /// </summary>
         private void InitializeFlashcardList(object sender, EventArgs e)
         {
-            for (int i = 0; i < FlashcardCount; ++i)
+            Task.Run(() =>
             {
-                // Get the new card
-                var newCard = GetNextFlashcard();
+                for (int i = 0; i < FlashcardCount; ++i)
+                {
+                    // Get the new card
+                    var newCard = GetNextFlashcard();
 
-                // Set the new card's queue position
-                newCard.CardQueuePosition = i;
+                    // Set the new card's queue position
+                    newCard.CardQueuePosition = i;
 
-                // Enables input on the last card
-                if (i == 0) newCard.HasInput = true;
+                    // Enables input on the last card
+                    if (i == 0) newCard.HasInput = true;
 
-                // Add the card to the list
-                Flashcards.Insert(0, newCard);
-            }
+                    // Add the card to the list
+                    Flashcards.Insert(0, newCard);
+                }
 
-            Task.Delay(1000).ContinueWith((t) =>
-            {
+                Task.Delay(1000).ContinueWith((t) =>
+                {
 
-            // Set the application view model's content loaded flag
-            IoC.Get<ApplicationViewModel>().IsContentLoaded = true;
+                    // Set the application view model's content loaded flag
+                    IoC.Get<ApplicationViewModel>().IsContentLoaded = true;
 
+                });
             });
         }
 

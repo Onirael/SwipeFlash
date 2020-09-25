@@ -302,12 +302,12 @@ namespace SwipeFlash
         /// <param name="storyboard"></param>
         /// <param name="duration"></param>
         /// <param name="decelerationRatio"></param>
-        public static void AddScaleUp(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        public static void AddScaleUp(this Storyboard storyboard, float duration, double minScale, float decelerationRatio = 0.9f)
         {
             var scaleXAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = 0,
+                From = minScale,
                 To = 1,
                 DecelerationRatio = decelerationRatio
             };
@@ -315,7 +315,7 @@ namespace SwipeFlash
             var scaleYAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                From = 0,
+                From = minScale,
                 To = 1,
                 DecelerationRatio = decelerationRatio
             };
@@ -335,19 +335,19 @@ namespace SwipeFlash
         /// <param name="storyboard"></param>
         /// <param name="duration"></param>
         /// <param name="decelerationRatio"></param>
-        public static void AddScaleDown(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        public static void AddScaleDown(this Storyboard storyboard, float duration, double minScale, float decelerationRatio = 0.9f)
         {
             var scaleXAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                To = 0,
+                To = minScale,
                 DecelerationRatio = decelerationRatio
             };
 
             var scaleYAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(duration)),
-                To = 0,
+                To = minScale,
                 DecelerationRatio = decelerationRatio
             };
 

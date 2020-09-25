@@ -382,12 +382,18 @@ namespace SwipeFlash.Core
             // If the server is unreachable
             if (!appVM.IsServerReachable)
                 return;
-            
-            // Logs the remaining API calls count
-            Debugger.Log(0, "UserLog", $"API calls remaining: {IoC.Get<ApplicationViewModel>().IllustrationsClient.RateLimitRemaining}\n");
 
             // Get the search results
             var foundPhotos = await appVM.IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle());
+
+            // Gets the remaining API calls count
+            var apiCallsRemaining = IoC.Get<ApplicationViewModel>().IllustrationsClient.RateLimitRemaining;
+
+            // Logs the remaining API calls count
+            Debugger.Log(0, "UserLog", $"API calls remaining: {apiCallsRemaining}\n");
+
+            // If there are no API calls remaining, disable the illustrations
+            if (apiCallsRemaining <= 0) Properties.Settings.Default.IllustrationsEnabled = false;
 
             // Create a new RNG
             var rand = new Random();

@@ -242,7 +242,7 @@ namespace SwipeFlash
         /// <param name="element">The framework element to animate</param>
         /// <param name="duration">The duration of the animation in seconds</param>
         /// <returns></returns>
-        public static async Task ScaleAndFadeInAsync(this FrameworkElement element, float duration = 0.5f)
+        public static async Task ScaleAndFadeInAsync(this FrameworkElement element, double minScale, float duration = 0.5f)
         {
             element.SetElementTransform();
             
@@ -253,7 +253,7 @@ namespace SwipeFlash
             sb.AddFadeIn(duration);
 
             // Add the scale up animation
-            sb.AddScaleUp(duration);
+            sb.AddScaleUp(duration, minScale);
 
             // Begin the animation
             sb.Begin(element);
@@ -269,7 +269,7 @@ namespace SwipeFlash
         /// <param name="element">The framework element to animate</param>
         /// <param name="duration">The duration of the animation in seconds</param>
         /// <returns></returns>
-        public static async Task ScaleAndFadeOutAsync(this FrameworkElement element, float duration = 0.5f)
+        public static async Task ScaleAndFadeOutAsync(this FrameworkElement element, double minScale, float duration = 0.5f)
         {
             element.SetElementTransform();
 
@@ -280,7 +280,7 @@ namespace SwipeFlash
             sb.AddFadeOut(duration);
 
             // Add the scale down animation
-            sb.AddScaleDown(duration);
+            sb.AddScaleDown(duration, minScale);
 
             // Begin the animation
             sb.Begin(element);
