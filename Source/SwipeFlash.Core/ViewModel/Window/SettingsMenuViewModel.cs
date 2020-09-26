@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using SwipeFlash;
 
 namespace SwipeFlash.Core
 {
@@ -24,6 +25,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand CloseSettingsCommand { get; set; }
 
+        /// <summary>
+        /// The command to open the file parser
+        /// </summary>
+        public ICommand OpenFileParserCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -35,6 +41,9 @@ namespace SwipeFlash.Core
         {
             // Initialize the close button command
             CloseSettingsCommand = new RelayCommand(OnCloseSettingsPressed);
+
+            // Initialize the open file parser button command
+            OpenFileParserCommand = new RelayCommand(OnOpenFileParserPressed);
         }
 
         #endregion
@@ -47,6 +56,11 @@ namespace SwipeFlash.Core
         private void OnCloseSettingsPressed()
         {
             IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = false;
+        }
+
+        private void OnOpenFileParserPressed()
+        {
+
         }
 
         #endregion

@@ -31,18 +31,25 @@
                                     <RowDefinition Height="70"/>
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 0">
+                                <StackPanel Orientation="Vertical">
                                     <!-- Enable illustrations -->
-                                    <TextBlock Grid.Row="0" 
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 0">
+                                        <TextBlock Grid.Row="0" 
                                                FontFamily="{StaticResource LGCRegular}"
                                                FontSize="{StaticResource FontSizeLarge}"
                                                Text="Enable illustrations (internet required)"
                                                MaxWidth="200"
                                                TextWrapping="Wrap"/>
-                                    <CheckBox Margin="15 5 0 0" 
+                                        <CheckBox Margin="15 5 0 0" 
                                               VerticalAlignment="Center"
                                               IsChecked="{Binding IllustrationsEnabled}"/>
+                                    </StackPanel>
+
+                                    <!-- Open file parser button -->
+                                    <Button Content="Open file parser" HorizontalAlignment="Center" Margin="0 20 0 0"/>
                                 </StackPanel>
+                                
+
 
                                 <Border Grid.Row="1" 
                                         Margin="50 20"
