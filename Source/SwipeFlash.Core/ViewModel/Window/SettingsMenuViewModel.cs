@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using SwipeFlash;
 
 namespace SwipeFlash.Core
 {
@@ -28,7 +27,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The command to open the file parser
         /// </summary>
-        public ICommand OpenFileParserCommand { get; set; }
+        public ICommand OpenManageCardsCommand { get; set; }
 
         #endregion
 
@@ -43,7 +42,7 @@ namespace SwipeFlash.Core
             CloseSettingsCommand = new RelayCommand(OnCloseSettingsPressed);
 
             // Initialize the open file parser button command
-            OpenFileParserCommand = new RelayCommand(OnOpenFileParserPressed);
+            OpenManageCardsCommand = new RelayCommand(OnManageCardsPressed);
         }
 
         #endregion
@@ -58,9 +57,12 @@ namespace SwipeFlash.Core
             IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = false;
         }
 
-        private void OnOpenFileParserPressed()
+        /// <summary>
+        /// Called when the Manage cards button is pressed
+        /// </summary>
+        private void OnManageCardsPressed()
         {
-
+            IoC.Get<WindowService>().CreateWindow(WindowType.FlashcardManager);
         }
 
         #endregion

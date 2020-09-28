@@ -26,7 +26,7 @@
                             SnapsToDevicePixels="True" 
                             CornerRadius="10"
                             RenderTransformOrigin=".5 .5">
-                        
+
                         <Border.Effect>
                             <DropShadowEffect Opacity="0.2" ShadowDepth="0" BlurRadius="5"/>
                         </Border.Effect>
@@ -94,8 +94,16 @@
 
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-            </Setter.Value>
+            </Setter.Value>            
         </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsDefault" Value="True">
+                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource BackgroundVeryLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+        
     </Style>
     
     <!-- Round icon button -->

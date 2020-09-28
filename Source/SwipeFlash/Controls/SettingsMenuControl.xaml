@@ -46,7 +46,10 @@
                                     </StackPanel>
 
                                     <!-- Open file parser button -->
-                                    <Button Content="Open file parser" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+                                    <Button Content="Manage flashcards..." 
+                                            HorizontalAlignment="Center"
+                                            Command="{Binding OpenManageCardsCommand}"
+                                            Margin="0 20 0 0"/>
                                 </StackPanel>
                                 
 

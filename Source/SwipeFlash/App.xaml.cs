@@ -8,6 +8,8 @@ namespace SwipeFlash
     /// </summary>
     public partial class App : Application
     {
+        private WindowManager mWindowManager;
+
         /// <summary>
         /// Custom startup so we load our IoC immediately before anything else
         /// </summary>
@@ -19,6 +21,8 @@ namespace SwipeFlash
 
             // Setup Ioc
             IoC.Setup();
+
+            mWindowManager = new WindowManager();
 
             // Show the main window
             Current.MainWindow = new MainWindow();

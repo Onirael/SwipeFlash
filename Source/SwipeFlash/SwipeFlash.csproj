@@ -63,8 +63,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -94,6 +96,9 @@
     <Compile Include="AttachedProperties\FlashcardAttachedProperties.cs" />
     <Compile Include="AttachedProperties\FrameworkElementAnimationsAttachedProperties.cs" />
     <Compile Include="AttachedProperties\UserControlAttachedProperties.cs" />
+    <Compile Include="Controls\FlashcardFamilyListElementControl.xaml.cs">
+      <DependentUpon>FlashcardFamilyListElementControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SettingsMenuControl.xaml.cs">
       <DependentUpon>SettingsMenuControl.xaml</DependentUpon>
     </Compile>
@@ -110,8 +115,18 @@
     <Compile Include="ValueConverters\ViewModelArrayToViewModelConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="WindowService.cs" />
+    <Compile Include="Windows\AddFlashcardsWindow.xaml.cs">
+      <DependentUpon>AddFlashcardsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FlashcardManagerWindow.xaml.cs">
+      <DependentUpon>FlashcardManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowManager.cs" />
     <Page Include="Controls\FlashcardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FlashcardFamilyListElementControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,6 +135,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SettingsMenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddFlashcardsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\FlashcardManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

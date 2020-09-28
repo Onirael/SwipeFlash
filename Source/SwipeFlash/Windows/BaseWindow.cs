@@ -3,7 +3,15 @@ using System.Windows;
 
 namespace SwipeFlash
 {
-    public class BaseWindow<VM> : Window
+    public class BaseWindow : Window
+    {
+        /// <summary>
+        /// The type of the window
+        /// </summary>
+        public WindowType BaseWindowType { get; set; }
+    }
+
+    public class BaseWindow<VM> : BaseWindow
         where VM : BaseViewModel, new()
     {
         #region Private Properties

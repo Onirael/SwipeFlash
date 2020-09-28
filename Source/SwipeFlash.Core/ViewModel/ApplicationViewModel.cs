@@ -1,4 +1,5 @@
 ﻿using Dna;
+using System;
 using System.Threading.Tasks;
 using Unsplasharp;
 
@@ -61,6 +62,17 @@ namespace SwipeFlash.Core
         /// Whether the window content is currently visible
         /// </summary>
         public bool IsContentVisible { get; set; } = false;
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Fired when a file is selected from any OpenFileDialog, 
+        /// when a dialog is open, the sender should hook to this event to listen for the result, 
+        /// passes the resulting file as a parameter
+        /// </summary>
+        public EventHandler<string> OnFileSelected { get; set; }
 
         #endregion
 

@@ -38,6 +38,9 @@ namespace SwipeFlash.Core
 
             // Bind to a single instance of Flashcard manager
             Kernel.Bind<FlashcardManager>().ToConstant(new FlashcardManager());
+
+            // Bind to a single instance of Window service
+            Kernel.Bind<WindowService>().ToConstant(new WindowService());
         }
 
         #endregion
