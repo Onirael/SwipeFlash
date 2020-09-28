@@ -2,6 +2,7 @@
   "flashcards": [
     {
       "family": "spanishToEnglish",
+      "isEnabled": true,
       "cards": [
         {
           "id": 0,

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
 namespace SwipeFlash.Core
 {
@@ -17,7 +17,7 @@ namespace SwipeFlash.Core
 
         public FlashcardManagerWindowDesignModel()
         {
-            FlashcardFamilies = new List<FlashcardFamilyListElementViewModel>()
+            FlashcardFamilies = new ObservableCollection<FlashcardFamilyListElementViewModel>()
             {
                 new FlashcardFamilyListElementViewModel()
                 {

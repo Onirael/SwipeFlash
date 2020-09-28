@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SwipeFlash.Core
@@ -11,7 +11,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The flashcard families to display in the scroll viewer
         /// </summary>
-        public List<FlashcardFamilyListElementViewModel> FlashcardFamilies { get; set;}
+        public ObservableCollection<FlashcardFamilyListElementViewModel> FlashcardFamilies { get; set;}
 
         #endregion
 
@@ -33,11 +33,16 @@ namespace SwipeFlash.Core
 
         public FlashcardManagerWindowViewModel()
         {
+            // Fills the FlashcardFamilies array
+            GetFlashcardFamilies();
+
             // Initializes the Add flashcards button command
             AddFlashcardsCommand = new RelayCommand(OnAddFlashcardsPressed);
 
             // Initializes the OK button command
             PressOKCommand = new RelayCommand(OnOKPressed);
+
+            FlashcardFamilies = new ObservableCollection<FlashcardFamilyListElementViewModel>();
         }
 
         #endregion
@@ -64,5 +69,23 @@ namespace SwipeFlash.Core
 
         #endregion
 
+        #region Private Helpers
+
+        /// <summary>
+        /// Gets the flashcard families from the flashcard manager
+        /// </summary>
+        private void GetFlashcardFamilies()
+        {
+            Task.Run(() =>
+            {
+                // Get the families from the flashcard manager
+                var familiesData = IoC.Get<FlashcardManager>().FlashcardFamilies;
+
+                // For each family data struct, create a family view model
+                foreach (var familyData in familiesData) { FlashcardFamilies.Add(new FlashcardFamilyListElementViewModel(familyData)); }
+            });
+        }
+        
+        #endregion
     }
 }

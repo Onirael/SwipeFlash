@@ -1,5 +1,6 @@
 ﻿using Dna;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Unsplasharp;
 
@@ -63,6 +64,16 @@ namespace SwipeFlash.Core
         /// </summary>
         public bool IsContentVisible { get; set; } = false;
 
+        /// <summary>
+        /// The path to the static data JSON file
+        /// </summary>
+        public string StaticDataPath { get; set; }
+
+        /// <summary>
+        /// The path to the user data JSON file
+        /// </summary>
+        public string UserDataPath { get; set; }
+
         #endregion
 
         #region Event Handlers
@@ -88,6 +99,15 @@ namespace SwipeFlash.Core
 
             // Hook OnSettingsChanged to Settings' PropertyChanged Event
             Properties.Settings.Default.PropertyChanged += OnSettingsChanged;
+
+            // Store the location of the data files
+            var parentDirectory = Directory.GetParent(
+                                  Directory.GetParent(
+                                  Directory.GetParent(
+                                  Directory.GetCurrentDirectory()).ToString()).ToString());
+
+            StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData.JSON";
+            UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
         }
 
         #endregion

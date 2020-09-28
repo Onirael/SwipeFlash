@@ -103,6 +103,7 @@
         <!-- Settings menu control -->
         <local:SettingsMenuControl VerticalAlignment="Top"
                                    Margin="0 -10 0 0" 
+                                   IsHitTestVisible="True"
                                    Width="500"
                                    local:AnimateSettingsSlideInProperty.Value="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                                                                Source={x:Static local:ViewModelLocator.Instance}}"/>

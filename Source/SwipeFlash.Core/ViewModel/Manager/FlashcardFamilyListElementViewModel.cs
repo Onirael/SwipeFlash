@@ -20,5 +20,20 @@
         public bool IsFamilyEnabled { get; set; }
 
         #endregion
+
+        #region Constructor
+
+        public FlashcardFamilyListElementViewModel()
+        {
+        }
+
+        public FlashcardFamilyListElementViewModel(FlashcardFamilyData familyData)
+        {
+            DisplayName = familyData.Name;
+            CardCount = familyData.CardCount;
+            IsFamilyEnabled = familyData.IsEnabled;
+        }
+
+        #endregion
     }
 }

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:SwipeFlash"
              xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
              mc:Ignorable="d"
-             d:DesignWidth="500">
+             d:DesignWidth="500"
+             IsHitTestVisible="True">
 
     <UserControl.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">

@@ -92,7 +92,7 @@ namespace SwipeFlash.Core
         {
             IoC.Get<WindowService>().DestroyWindow(WindowType.AddFlashcards);
         }
-
+    
         /// <summary>
         /// Called when the Cancel button is pressed
         /// </summary>

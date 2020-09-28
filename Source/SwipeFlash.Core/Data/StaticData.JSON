@@ -12,6 +12,7 @@
   "flashcards": [
     {
       "family": "spanishToEnglish",
+      "displayName":  "Spanish to English",
       "category1": "spanish",
       "category2": "english",
       "cards": [

@@ -56,6 +56,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand SettingsButtonCommand { get; set; }
 
+        /// <summary>
+        /// The command triggered by the edit card button
+        /// </summary>
+        public ICommand EditCardCommand { get; set; }
+
         #endregion
 
         #region Constructor

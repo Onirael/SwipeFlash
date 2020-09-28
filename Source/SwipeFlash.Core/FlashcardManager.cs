@@ -31,9 +31,6 @@ namespace SwipeFlash.Core
         /// </summary>
         JObject UserData;
 
-        // DEVELOPMENT ONLY
-        public int FlashcardID;
-
         /// <summary>
         /// The random generator for this object
         /// </summary>
@@ -42,11 +39,24 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Whether the queue was initialized
         /// </summary>
-        public bool IsQueueInitialized = false;
+        public bool IsQueueInitialized { get; set; } = false;
+
+        /// <summary>
+        /// A collection containing the existing card families
+        /// </summary>
+        public List<FlashcardFamilyData> FlashcardFamilies { get; set; }
+
+        // DEVELOPMENT ONLY
+        public int FlashcardID;
 
         #endregion
 
         #region Event Handlers
+
+        /// <summary>
+        /// Fires when the JSON data has been parsed
+        /// </summary>
+        private EventHandler OnJSONLoaded;
 
         /// <summary>
         /// Fires when the card queue has been initialized
@@ -64,6 +74,11 @@ namespace SwipeFlash.Core
 
             // Initializes the random generator
             Rand = new Random();
+
+            FlashcardFamilies = new List<FlashcardFamilyData>();
+
+            // Finds flashcard families as soon as the JSON has been parsed
+            OnJSONLoaded += FindFlashcardFamilies;
         }
 
         #endregion
@@ -76,35 +91,66 @@ namespace SwipeFlash.Core
         /// <returns></returns>
         public void InitJSONData()
         {
-            // Store the location of the files
-            var parentDirectory = Directory.GetParent(
-                                  Directory.GetParent(
-                                  Directory.GetParent(
-                                  Directory.GetCurrentDirectory()).ToString()).ToString());
+            // Gets the application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
 
-            string staticDataFile = parentDirectory + "/SwipeFlash.Core/Data/StaticData.JSON";
-            string userDataFile = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
+            // Gets the JSON data paths
+            string staticDataFile = appVM.StaticDataPath;
+            string userDataFile = appVM.UserDataPath;
 
             // Asynchronously parse JSON files
             Task.Run(() =>
             {
                 try
                 {
+                    // Parse JSON files
                     StaticData = JObject.Parse(File.ReadAllText(staticDataFile));
                     UserData = JObject.Parse(File.ReadAllText(userDataFile));
+
+                    // Fire JSON loaded event
+                    OnJSONLoaded(this, null);
                 }
                 catch { }
 
             });
 
             // Fill the card queue
-            FillCardQueueAsync();
+            FillCardQueue();
+
+        }
+
+        /// <summary>
+        /// Finds all the flashcard families and stores them in the collection
+        /// </summary>
+        private void FindFlashcardFamilies(object sender, EventArgs e)
+        {
+            // If the data is valid
+            if (StaticData != null && UserData != null)
+            {
+                // Get the families enumerable
+                var familiesEnumerable = StaticData["flashcards"].AsJEnumerable();
+
+                // For each family
+                foreach(var family in familiesEnumerable)
+                {
+                    // Create a family data struct
+                    var familyData = new FlashcardFamilyData()
+                    {
+                        Name = (string)family["displayName"],
+                        CardCount = family["cards"].AsJEnumerable().Count(),
+                        IsEnabled = (bool)UserData["flashcards"].Where(result => (string)result["family"] == (string)family["family"]).First()["isEnabled"],
+                    };
+
+                    // Store it in FlashcardFamilies
+                    FlashcardFamilies.Add(familyData);
+                }
+            }
         }
 
         /// <summary>
         /// Asynchronously updates the card queue
         /// </summary>
-        private void FillCardQueueAsync()
+        private void FillCardQueue()
         {
             Task.Run(() =>
             {
@@ -142,7 +188,7 @@ namespace SwipeFlash.Core
             CardQueue.RemoveAt(0);
 
             // Fills the card queue
-            FillCardQueueAsync();
+            FillCardQueue();
 
             return nextCard;
         }
