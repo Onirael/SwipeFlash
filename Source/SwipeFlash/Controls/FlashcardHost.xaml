@@ -65,6 +65,12 @@
                 <Button Style="{StaticResource SettingsButton}"
                         Command="{Binding SettingsButtonCommand}"
                         Margin="20 0 0 0"/>
+                
+                <Button Style="{StaticResource RoundIconButton}"
+                        Content="{StaticResource FontAwesome_Edit}"
+                        Foreground="{StaticResource SwipeFlashYellowBrush}"
+                        Command="{Binding EditCardCommand}"
+                        Margin="20 0 0 0"/>
             </StackPanel>
 
             <!--#endregion-->

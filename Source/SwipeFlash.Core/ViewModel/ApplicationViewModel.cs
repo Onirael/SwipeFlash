@@ -106,8 +106,8 @@ namespace SwipeFlash.Core
                                   Directory.GetParent(
                                   Directory.GetCurrentDirectory()).ToString()).ToString());
 
-            StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData.JSON";
-            UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
+            StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData_TEST.JSON";
+            UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData_TEST.JSON";
         }
 
         #endregion

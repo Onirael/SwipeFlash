@@ -6,6 +6,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:local="clr-namespace:SwipeFlash"
                   xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
+                  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
                   mc:Ignorable="d"
                   WindowStyle="ToolWindow"
                   WindowStartupLocation="CenterOwner"
@@ -34,27 +35,26 @@
         <!-- From file -->
         <Border Grid.Row="1"
                 BorderBrush="{StaticResource ForegroundDarkBrush}" 
-                BorderThickness="1" 
-                Padding="10"
+                BorderThickness="1"
                 CornerRadius="10"
                 Background="{StaticResource BackgroundLightBrush}"
                 Margin="10 0 10 20">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10">
                 <StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                         <!-- Section header -->
                         <TextBlock Text="From file: "
-                               FontSize="{StaticResource FontSizeLarger}"
-                               Grid.Row="0"
-                               VerticalAlignment="Center"/>
+                                   FontSize="{StaticResource FontSizeLarger}"
+                                   Grid.Row="0"
+                                   VerticalAlignment="Center"/>
 
                         <Button Content="Select file..."
-                            Margin="10 3 10 0"
-                            Height="35"
-                            Padding="10 0"
-                            VerticalAlignment="Center"
-                            Command="{Binding SelectFileCommand}"
-                            FontSize="{StaticResource FontSizeRegular}"/>
+                                Margin="10 0 10 0"
+                                Height="25"
+                                Padding="10 0"
+                                VerticalAlignment="Center"
+                                Command="{Binding SelectFileCommand}"
+                                FontSize="{StaticResource FontSizeRegular}"/>
                     </StackPanel>
 
                     <!-- Section content -->
@@ -77,20 +77,55 @@
                             <TextBox FontSize="{StaticResource FontSizeLarge}"
                                  Text="{Binding FamilyName}"/>
 
+                            <!-- Logo input -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Side 1 logo input -->
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Side 1 logo:"
+                                               Margin="0 0 0 5"
+                                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                                    <TextBox Name="logo1"
+                                                       Padding="0 4"
+                                                       Width="50"
+                                                       HorizontalAlignment="Left"
+                                                       Text="{Binding Side1Logo}"/>
+
+                                </StackPanel>
+                                <!-- Side 2 logo input -->
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Side 2 logo:"
+                                               Margin="0 0 0 5"
+                                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                                    <TextBox Padding="0 4"
+                                             Width="50"
+                                             HorizontalAlignment="Left"
+                                             Text="{Binding Side2Logo}">
+                                    </TextBox>
+                                </StackPanel>
+                            </Grid>
+
                             <!-- Ignore lines input -->
                             <TextBlock Text="Ignore lines with pattern:"
-                                   Margin="0 0 0 5"
-                                   FontSize="{StaticResource FontSizeLarge}"/>
+                                       Margin="0 0 0 5"
+                                       FontSize="{StaticResource FontSizeLarge}"/>
                             <TextBox FontSize="{StaticResource FontSizeLarge}"
-                                 Text="{Binding IgnorePatternDescription}"/>
+                                     Text="{Binding IgnorePatternDescription}"/>
 
                             <!-- Separators input -->
                             <TextBlock Text="Separators (tab by default):"
-                                   Margin="0 0 0 5"
-                                   FontSize="{StaticResource FontSizeLarge}"/>
+                                       Margin="0 0 0 5"
+                                       FontSize="{StaticResource FontSizeLarge}"/>
                             <TextBox FontSize="{StaticResource FontSizeLarge}"
-                                 AcceptsTab="True"
-                                 Text="{Binding SeparatorsDescription}"/>
+                                     AcceptsTab="True"
+                                     Text="{Binding SeparatorsDescription}"/>
 
                             <!-- Line pattern input -->
                             <TextBlock Text="Line pattern:"

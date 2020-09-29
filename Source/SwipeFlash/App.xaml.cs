@@ -25,7 +25,8 @@ namespace SwipeFlash
             mWindowManager = new WindowManager();
 
             // Show the main window
-            Current.MainWindow = new MainWindow();
+            //Current.MainWindow = new MainWindow();
+            Current.MainWindow = new FlashcardManagerWindow();
             Current.MainWindow.Show();
         }
     }

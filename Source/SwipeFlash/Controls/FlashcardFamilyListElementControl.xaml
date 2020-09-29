@@ -11,6 +11,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Column="0">
@@ -23,6 +24,12 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
+
+        <Button Grid.Column="2" 
+                Style="{StaticResource BorderlessIconButton}"
+                Content="{StaticResource FontAwesome_Trash}"
+                Margin="10"
+                Command="{Binding DeleteFamily}"/>
 
     </Grid>
 </UserControl>

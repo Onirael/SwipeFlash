@@ -32,6 +32,16 @@ namespace SwipeFlash.Core
         public string FamilyName { get; set; } = "";
 
         /// <summary>
+        /// The emoji logo for side 1
+        /// </summary>
+        public string Side1Logo { get; set; } = "";
+
+        /// <summary>
+        /// The emoji logo for side 2
+        /// </summary>
+        public string Side2Logo { get; set; } = "";
+
+        /// <summary>
         /// The user-defined line ignore pattern 
         /// </summary>
         public string IgnorePatternDescription { get; set; } = "";
@@ -79,6 +89,18 @@ namespace SwipeFlash.Core
 
             // Initializes the choose file button command
             SelectFileCommand = new RelayCommand(OnSelectFilePressed);
+
+            // DEVELOPMENT ONLY
+
+            SelectedFilePath = "D:/Unreal/SwipeFlash/Source/Resources/SpanishToEnglish.txt";
+            FamilyName = "Test family";
+            Side1Logo = "❤";
+            Side2Logo = "🐸";
+            IgnorePatternDescription = "#*";
+            SeparatorsDescription = "";
+            LinePatternDescription = "{1},gender,{2}; gender=={\"m\":{1}=\"el \"+{1}, \"f\":{1}=\"la \"+{1}, \"m/f\":{1}=\"el \"+{1}}";
+
+            //
         }
 
         #endregion

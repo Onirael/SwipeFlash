@@ -182,6 +182,8 @@
     <Compile Include="DataModels\FlashcardFamilyData.cs" />
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="ViewModel\Base\WindowService.cs" />
+    <None Include="Data\StaticData_TEST.JSON" />
+    <None Include="Data\UserData_TEST.JSON" />
     <None Include="Data\UserData.JSON" />
     <None Include="Data\StaticData.JSON" />
     <Compile Include="DataModels\FlashcardData.cs" />

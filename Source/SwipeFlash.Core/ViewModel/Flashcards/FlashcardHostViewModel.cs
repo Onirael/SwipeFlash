@@ -79,6 +79,9 @@ namespace SwipeFlash.Core
             // Initializes the undo command button command
             SettingsButtonCommand = new RelayCommand(OnSettingsButtonPressed);
 
+            // Initializes the edit card button command
+            EditCardCommand = new RelayCommand(OnEditCardButtonPressed);
+
             // Hooks the initlaize flashcard list function to the OnQueueInitialized event
             IoC.Get<FlashcardManager>().OnQueueInitialized += InitializeFlashcardList;
 
@@ -140,6 +143,14 @@ namespace SwipeFlash.Core
         private void OnSettingsButtonPressed()
         {
             IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible = true;
+        }
+
+        /// <summary>
+        /// Called when the edit card button is pressed
+        /// </summary>
+        private void OnEditCardButtonPressed()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

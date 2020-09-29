@@ -105,12 +105,157 @@
         </Style.Triggers>
         
     </Style>
+
+    <!-- Borderless icon button -->
+    <Style x:Key="BorderlessIconButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundDarkBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Padding" Value="10"/>
+
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>        
+        <Setter Property="Margin" Value="0 10"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <Border Name="container"
+                            CornerRadius="{Binding ActualWidth, ElementName=container}"
+                            Height="{Binding ActualWidth, ElementName=container}">
+
+
+                        <Border.Tag>
+                            <System:Double>0.0</System:Double>
+                        </Border.Tag>
+                        
+                        <Border.Background>
+                            <SolidColorBrush>
+                                <SolidColorBrush.Color>
+                                    <MultiBinding Converter="{local:ColorLerpConverter}">
+                                        <!-- Lerp colors -->
+                                        <Binding Path="{TemplateBinding Background}"/>
+                                        <Binding>
+                                            <Binding.Source>
+                                                <StaticResource ResourceKey="ForegroundDark"/>
+                                            </Binding.Source>
+                                        </Binding>
+                                        <!-- Lerp scalar -->
+                                        <Binding Path="Tag" ElementName="container"/>
+                                    </MultiBinding>
+                                </SolidColorBrush.Color>
+                            </SolidColorBrush>
+                            
+                        </Border.Background>
+                        
+                        <Viewbox>
+                            <!-- Button Text -->
+                            <TextBlock x:Name="contentPresenter" Text="{TemplateBinding Content}"
+                                       Focusable="False"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                       FontSize="{TemplateBinding FontSize}"
+                                       Margin="{TemplateBinding Padding}"
+                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                
+                                <TextBlock.Tag>
+                                    <System:Double>0.0</System:Double>
+                                </TextBlock.Tag>
+
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush>
+                                        <SolidColorBrush.Color>
+                                            <MultiBinding Converter="{local:ColorLerpConverter}">
+                                                <!-- Lerp colors -->
+                                                <Binding Path="{TemplateBinding Foreground}"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <StaticResource ResourceKey="ForegroundVeryDarkBrush"/>
+                                                    </Binding.Source>
+                                                </Binding>
+                                                <!-- Lerp scalar -->
+                                                <Binding Path="Tag" ElementName="container"/>
+                                            </MultiBinding>
+                                        </SolidColorBrush.Color>
+                                    </SolidColorBrush>
+                                </TextBlock.Foreground>
+                                
+                            </TextBlock>
+                        </Viewbox>
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="container" 
+                                                     Storyboard.TargetProperty="Tag" 
+                                                     To="1" 
+                                                     Duration="0:0:0.05"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="container" 
+                                                     Storyboard.TargetProperty="Tag" 
+                                                     To="0" 
+                                                     Duration="0:0:0.05"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <EventTrigger RoutedEvent="PreviewMouseDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Tag"
+                                                     Storyboard.TargetName="contentPresenter"
+                                                     To="1" 
+                                                     Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <EventTrigger RoutedEvent="PreviewMouseUp">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Tag" 
+                                                     Storyboard.TargetName="contentPresenter"
+                                                     To="0" 
+                                                     Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{StaticResource ForegroundDarkBrush}"/>
+                            <Setter Property="Foreground" Value="#FF838383"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsDefault" Value="True">
+                <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource BackgroundVeryLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
     
     <!-- Round icon button -->
     <Style x:Key="RoundIconButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="30"/>
 
         <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarger}"/>
