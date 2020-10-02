@@ -2,7 +2,7 @@
 
 namespace SwipeFlash.Core
 {
-    public class FlashcardFamilyListElementDesignModel : FlashcardFamilyListElementViewModel
+    public class FlashcardFamilyListElementDesignModel : FlashcardFamilyListItemViewModel
     {
         #region Singleton
 

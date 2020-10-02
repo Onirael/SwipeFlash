@@ -2,50 +2,37 @@
 using System.Windows.Media;
 using System.Globalization;
 using System.Windows.Data;
-using System.Collections.Generic;
 
 namespace SwipeFlash
 {
     /// <summary>
-    /// A converter that takes in two colors and a scalar and returns a color lerp
+    /// A converter taking in two <see cref="Color"/> values
+    /// and a scalar to blend (lerp) them
+    /// Values must be passed in in the right order:
+    /// 0 : Background
+    /// 1 : Foreground
+    /// 2 : Scalar
     /// </summary>
     public class ColorLerpConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            // Check if there are two values
+            // Check if there are three values
             if (values.Length != 3)
                 return null;
 
-            // Initialize expected input members
-            double blendScalar = 0;
-            List<Color> colors = new List<Color>();
-
-
-            // Count each type
-            int foundColors = 0;
-            int foundScalars = 0;
-            foreach (var value in values)
-            {
-                if (value is Color color)
-                {
-                    colors.Add(color);
-                    foundColors++;
-
-                }
-                else if (value is double dValue)
-                {
-                    blendScalar = dValue;
-                    foundScalars++;
-                }
-            }
+            // If SolidColorBrush values are passed in, convert them to colors
+            if (values[0] is SolidColorBrush brush1) values[0] = brush1.Color;
+            if (values[1] is SolidColorBrush brush2) values[1] = brush2.Color;
             
-            // Check if the type counts match
-            if (foundColors != 2 || foundScalars != 1)
+
+            if (!(values[0] is Color background && 
+                  values[1] is Color foreground &&
+                  values[2] is double scalar))
                 return null;
 
             // Lerp the colors
-            var newColor = colors[0].Lerp(colors[1], blendScalar);
+            var newColor = background.Lerp(foreground, scalar);
 
             // Return new color
             return newColor;

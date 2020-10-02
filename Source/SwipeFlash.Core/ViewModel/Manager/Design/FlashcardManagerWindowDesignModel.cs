@@ -17,15 +17,15 @@ namespace SwipeFlash.Core
 
         public FlashcardManagerWindowDesignModel()
         {
-            FlashcardFamilies = new ObservableCollection<FlashcardFamilyListElementViewModel>()
+            FlashcardFamilies = new AsyncObservableCollection<FlashcardFamilyListItemViewModel>()
             {
-                new FlashcardFamilyListElementViewModel()
+                new FlashcardFamilyListItemViewModel()
                 {
                    DisplayName = "Spanish to English",
                    CardCount = 4000,
                    IsFamilyEnabled = true,
                 },
-                new FlashcardFamilyListElementViewModel()
+                new FlashcardFamilyListItemViewModel()
                 {
                    DisplayName = "German to English",
                    CardCount = 5555,

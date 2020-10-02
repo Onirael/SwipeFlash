@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SwipeFlash.Core
@@ -11,7 +10,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The flashcard families to display in the scroll viewer
         /// </summary>
-        public ObservableCollection<FlashcardFamilyListElementViewModel> FlashcardFamilies { get; set;}
+        public AsyncObservableCollection<FlashcardFamilyListItemViewModel> FlashcardFamilies { get; set;}
 
         #endregion
 
@@ -42,7 +41,7 @@ namespace SwipeFlash.Core
             // Initializes the OK button command
             PressOKCommand = new RelayCommand(OnOKPressed);
 
-            FlashcardFamilies = new ObservableCollection<FlashcardFamilyListElementViewModel>();
+            FlashcardFamilies = new AsyncObservableCollection<FlashcardFamilyListItemViewModel>();
         }
 
         #endregion
@@ -82,7 +81,7 @@ namespace SwipeFlash.Core
                 var familiesData = IoC.Get<FlashcardManager>().FlashcardFamilies;
 
                 // For each family data struct, create a family view model
-                foreach (var familyData in familiesData) { FlashcardFamilies.Add(new FlashcardFamilyListElementViewModel(familyData)); }
+                foreach (var familyData in familiesData) { FlashcardFamilies.Add(new FlashcardFamilyListItemViewModel(familyData)); }
             });
         }
         

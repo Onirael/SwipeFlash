@@ -168,7 +168,7 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\MainWindow.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\MainWindow.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FlashcardManagerWindow.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FlashcardManagerWindow.baml
-D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardFamilyListElementControl.g.cs
-D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardFamilyListElementControl.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\AddFlashcardsWindow.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\AddFlashcardsWindow.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardFamilyListItemControl.g.cs
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardFamilyListItemControl.baml

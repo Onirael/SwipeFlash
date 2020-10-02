@@ -55,6 +55,7 @@
             
             <!--#region Buttons-->
 
+
             <StackPanel Grid.Row="1" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Center"

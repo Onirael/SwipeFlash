@@ -133,15 +133,17 @@
                         <Border.Background>
                             <SolidColorBrush>
                                 <SolidColorBrush.Color>
-                                    <MultiBinding Converter="{local:ColorLerpConverter}">
+                                    <MultiBinding>
+                                        <MultiBinding.Converter>
+                                            <local:ColorLerpConverter/>
+                                        </MultiBinding.Converter>
                                         <!-- Lerp colors -->
-                                        <Binding Path="{TemplateBinding Background}"/>
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Background"/>
                                         <Binding>
                                             <Binding.Source>
                                                 <StaticResource ResourceKey="ForegroundDark"/>
                                             </Binding.Source>
                                         </Binding>
-                                        <!-- Lerp scalar -->
                                         <Binding Path="Tag" ElementName="container"/>
                                     </MultiBinding>
                                 </SolidColorBrush.Color>
@@ -167,16 +169,18 @@
                                 <TextBlock.Foreground>
                                     <SolidColorBrush>
                                         <SolidColorBrush.Color>
-                                            <MultiBinding Converter="{local:ColorLerpConverter}">
+                                            <MultiBinding>
+                                                <MultiBinding.Converter>
+                                                    <local:ColorLerpConverter/>
+                                                </MultiBinding.Converter>
                                                 <!-- Lerp colors -->
-                                                <Binding Path="{TemplateBinding Foreground}"/>
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground"/>
                                                 <Binding>
                                                     <Binding.Source>
                                                         <StaticResource ResourceKey="ForegroundVeryDarkBrush"/>
                                                     </Binding.Source>
                                                 </Binding>
-                                                <!-- Lerp scalar -->
-                                                <Binding Path="Tag" ElementName="container"/>
+                                                <Binding Path="Tag" ElementName="contentPresenter"/>
                                             </MultiBinding>
                                         </SolidColorBrush.Color>
                                     </SolidColorBrush>
@@ -190,10 +194,10 @@
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="container" 
+                                    <DoubleAnimation Storyboard.TargetName="contentPresenter" 
                                                      Storyboard.TargetProperty="Tag" 
                                                      To="1" 
-                                                     Duration="0:0:0.05"/>
+                                                     Duration="0:0:0.1"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
@@ -201,10 +205,10 @@
                         <EventTrigger RoutedEvent="MouseLeave">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="container" 
+                                    <DoubleAnimation Storyboard.TargetName="contentPresenter" 
                                                      Storyboard.TargetProperty="Tag" 
                                                      To="0" 
-                                                     Duration="0:0:0.05"/>
+                                                     Duration="0:0:0.1"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
@@ -212,10 +216,10 @@
                         <EventTrigger RoutedEvent="PreviewMouseDown">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Tag"
-                                                     Storyboard.TargetName="contentPresenter"
+                                    <DoubleAnimation Storyboard.TargetName="container"
+                                                     Storyboard.TargetProperty="Tag"
                                                      To="1" 
-                                                     Duration="0:0:0.1"/>
+                                                     Duration="0:0:0.2"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
@@ -223,10 +227,10 @@
                         <EventTrigger RoutedEvent="PreviewMouseUp">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Tag" 
-                                                     Storyboard.TargetName="contentPresenter"
+                                    <DoubleAnimation Storyboard.TargetName="container"
+                                                     Storyboard.TargetProperty="Tag" 
                                                      To="0" 
-                                                     Duration="0:0:0.1"/>
+                                                     Duration="0:0:0.2"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
@@ -255,7 +259,6 @@
         <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Width" Value="30"/>
 
         <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarger}"/>

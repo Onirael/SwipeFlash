@@ -7,12 +7,16 @@
     {
       "name": "english",
       "icon": "🇬🇧"
+    },
+    {
+      "name": "german",
+      "icon": "🇩🇪"
     }
-    ],
+  ],
   "flashcards": [
     {
       "family": "spanishToEnglish",
-      "displayName":  "Spanish to English",
+      "displayName": "Spanish to English",
       "category1": "spanish",
       "category2": "english",
       "cards": [
@@ -51,6 +55,32 @@
           "side1Text": "to admit",
           "side2Text": "admitir",
           "hasIllustration": false
+        }
+      ]
+    },
+    {
+      "family": "germanToEnglish",
+      "displayName": "German to English",
+      "category1": "german",
+      "category2": "english",
+      "cards": [
+        {
+          "id": 0,
+          "side1Text": "The door",
+          "side2Text": "die Tür",
+          "hasIllustration": true
+        },
+        {
+          "id": 1,
+          "side1Text": "The cat",
+          "side2Text": "die Katze",
+          "hasIllustration": true
+        },
+        {
+          "id": 2,
+          "side1Text": "the man",
+          "side2Text": "Der Mann,\"er",
+          "hasIllustration": true
         }
       ]
     }

@@ -1,5 +1,5 @@
 ﻿<local:BaseWindow x:Class="SwipeFlash.FlashcardManagerWindow"
-                  x:TypeArguments="core:FlashcardManagerWindowDesignModel"
+                  x:TypeArguments="core:FlashcardManagerWindowViewModel"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -44,7 +44,7 @@
                     
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:FlashcardFamilyListElementControl/>
+                            <local:FlashcardFamilyListItemControl/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     

@@ -83,8 +83,8 @@ namespace SwipeFlash.Core
 
         #endregion
 
-        #region Private Helpers
-
+        #region Public Methods
+        
         /// <summary>
         /// Asynchronously initializes the JSON objects
         /// </summary>
@@ -116,8 +116,84 @@ namespace SwipeFlash.Core
 
             // Fill the card queue
             FillCardQueue();
-
         }
+
+        /// <summary>
+        /// Gets the next card in the queue
+        /// </summary>
+        public FlashcardData GetNext()
+        {
+            // If the queue is empty
+            if (CardQueue.Count == 0)
+                // Return an empty "End of stack" card
+                return new FlashcardData() { IsEndOfStackCard = true };
+
+            // Get first element
+            FlashcardData nextCard = CardQueue[0];
+
+            // Remove element from list
+            CardQueue.RemoveAt(0);
+
+            // Fills the card queue
+            FillCardQueue();
+
+            return nextCard;
+        }
+
+        /// <summary>
+        /// Deletes a card family
+        /// </summary>
+        /// <param name="familyName">The display name of the family</param>
+        public void DeleteFamily(string familyName)
+        {
+            // Gets the corresponding family
+            var foundFamily = FlashcardFamilies.Where(family => family.Name == familyName).First();
+
+            // Removes it from the flashcard families
+            FlashcardFamilies.Remove(foundFamily);
+
+            // Static Data
+
+            // Gets the flashcards enumerable
+            var jsonFamiliesStatic = StaticData["flashcards"].AsJEnumerable();
+
+            // Find the family in the JSON
+            var jsonFoundFamilyStatic = jsonFamiliesStatic.Where(result => result["displayName"].ToString() == familyName).First();
+
+            if (jsonFoundFamilyStatic != null)
+                // Removes the family
+                jsonFoundFamilyStatic.Remove();
+
+            // User Data
+
+            // Gets the flashcards enumerable
+            var jsonFamiliesUser = StaticData["flashcards"].AsJEnumerable();
+
+            // Find the family in the JSON
+            var jsonFoundFamilyUser = jsonFamiliesStatic.Where(result => result["displayName"].ToString() == familyName).First();
+
+            if (jsonFoundFamilyUser != null)
+                // Removes the family
+                jsonFoundFamilyUser.Remove();
+        }
+
+        /// <summary>
+        /// Sets whether the family is enabled or not
+        /// </summary>
+        /// <param name="familyName">The display name of the family</param>
+        /// <param name="isEnabled">Whether the family is now set to enabled</param>
+        public void SetFamilyEnabled(string familyName, bool isEnabled)
+        {
+            // Gets the corresponding family
+            var foundFamily = FlashcardFamilies.Where(family => family.Name == familyName).First();
+
+            // Sets the new enabled status of the family
+            foundFamily.IsEnabled = isEnabled;
+        }
+
+        #endregion
+
+        #region Private Helpers
 
         /// <summary>
         /// Finds all the flashcard families and stores them in the collection
@@ -169,28 +245,6 @@ namespace SwipeFlash.Core
                     OnQueueInitialized(this, null);
                 }
             });
-        }
-
-        /// <summary>
-        /// Gets the next card in the queue
-        /// </summary>
-        public FlashcardData GetNext()
-        {
-            // If the queue is empty
-            if (CardQueue.Count == 0)
-                // Return an empty "End of stack" card
-                return new FlashcardData() { IsEndOfStackCard = true };
-
-            // Get first element
-            FlashcardData nextCard = CardQueue[0];
-
-            // Remove element from list
-            CardQueue.RemoveAt(0);
-
-            // Fills the card queue
-            FillCardQueue();
-
-            return nextCard;
         }
 
         /// <summary>

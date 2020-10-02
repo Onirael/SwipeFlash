@@ -96,8 +96,8 @@
     <Compile Include="AttachedProperties\FlashcardAttachedProperties.cs" />
     <Compile Include="AttachedProperties\FrameworkElementAnimationsAttachedProperties.cs" />
     <Compile Include="AttachedProperties\UserControlAttachedProperties.cs" />
-    <Compile Include="Controls\FlashcardFamilyListElementControl.xaml.cs">
-      <DependentUpon>FlashcardFamilyListElementControl.xaml</DependentUpon>
+    <Compile Include="Controls\FlashcardFamilyListItemControl.xaml.cs">
+      <DependentUpon>FlashcardFamilyListItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SettingsMenuControl.xaml.cs">
       <DependentUpon>SettingsMenuControl.xaml</DependentUpon>
@@ -128,7 +128,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\FlashcardFamilyListElementControl.xaml">
+    <Page Include="Controls\FlashcardFamilyListItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

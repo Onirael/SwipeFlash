@@ -6,7 +6,7 @@ namespace SwipeFlash
     /// <summary>
     /// Interaction logic for FlashcardManagerWindow.xaml
     /// </summary>
-    public partial class FlashcardManagerWindow : BaseWindow<FlashcardManagerWindowDesignModel>
+    public partial class FlashcardManagerWindow : BaseWindow<FlashcardManagerWindowViewModel>
     {
         public FlashcardManagerWindow()
         {

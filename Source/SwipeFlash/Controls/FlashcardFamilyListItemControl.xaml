@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SwipeFlash.FlashcardFamilyListElementControl"
+﻿<UserControl x:Class="SwipeFlash.FlashcardFamilyListItemControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -29,7 +29,7 @@
                 Style="{StaticResource BorderlessIconButton}"
                 Content="{StaticResource FontAwesome_Trash}"
                 Margin="10"
-                Command="{Binding DeleteFamily}"/>
+                Command="{Binding DeleteFamilyCommand}"/>
 
     </Grid>
 </UserControl>
