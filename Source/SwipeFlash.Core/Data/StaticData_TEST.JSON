@@ -15,8 +15,7 @@
   ],
   "flashcards": [
     {
-      "family": "spanishToEnglish",
-      "displayName": "Spanish to English",
+      "family": "Spanish to English",
       "category1": "spanish",
       "category2": "english",
       "cards": [
@@ -59,8 +58,7 @@
       ]
     },
     {
-      "family": "germanToEnglish",
-      "displayName": "German to English",
+      "family": "German to English",
       "category1": "german",
       "category2": "english",
       "cards": [

@@ -198,6 +198,7 @@
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
     <Compile Include="Helpers\ExpressionHelpers.cs" />
+    <Compile Include="FileParser.cs" />
     <Compile Include="ViewModel\Flashcards\Design\FlashcardHostDesignModel.cs" />
     <Compile Include="ViewModel\Flashcards\Design\FlashcardDesignModel.cs" />
     <Compile Include="ViewModel\Flashcards\FlashcardHostViewModel.cs" />
@@ -206,7 +207,7 @@
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
     <Compile Include="ViewModel\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModel\Manager\AddFlashcards\AddFlashcardsWindowViewModel.cs" />
-    <Compile Include="ViewModel\Manager\Design\FlashcardFamilyListElementDesignModel.cs" />
+    <Compile Include="ViewModel\Manager\Design\FlashcardFamilyListItemDesignModel.cs" />
     <Compile Include="ViewModel\Manager\Design\FlashcardManagerWindowDesignModel.cs" />
     <Compile Include="ViewModel\Manager\FlashcardFamilyListItemViewModel.cs" />
     <Compile Include="ViewModel\Manager\FlashcardManagerWindowViewModel.cs" />

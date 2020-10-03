@@ -1,7 +1,7 @@
 ﻿{
   "flashcards": [
     {
-      "family": "spanishToEnglish",
+      "family": "Spanish to English",
       "isEnabled": true,
       "cards": [
         {
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "family": "germanToEnglish",
+      "family": "German to English",
       "isEnabled": true,
       "cards": [
         {

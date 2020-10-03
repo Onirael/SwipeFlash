@@ -10,13 +10,14 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The display name of the element
         /// </summary>
-        public string DisplayName { get; set; }
+        public string FamilyName { get; set; }
 
         /// <summary>
         /// The number of cards in the element family
         /// </summary>
         public int CardCount { get; set; }
 
+        private bool _isFirstLoad = true;
         private bool _isFamilyEnabled;
         /// <summary>
         /// Whether the card family is enabled
@@ -24,7 +25,7 @@ namespace SwipeFlash.Core
         public bool IsFamilyEnabled
         {
             get => _isFamilyEnabled;
-            set { _isFamilyEnabled = value; OnFamilyEnabledChanged(); }
+            set { _isFamilyEnabled = value; if (!_isFirstLoad) OnFamilyEnabledChanged(); }
         }
 
         #endregion
@@ -58,9 +59,13 @@ namespace SwipeFlash.Core
             // Initializes delete command
             DeleteFamilyCommand = new RelayCommand(OnDeleteFamily);
 
-            DisplayName = familyData.Name;
+            // Sets properties from data
+            FamilyName = familyData.Name;
             CardCount = familyData.CardCount;
             IsFamilyEnabled = familyData.IsEnabled;
+
+            // Sets the first load flag
+            _isFirstLoad = false;
         }
 
         #endregion
@@ -75,7 +80,7 @@ namespace SwipeFlash.Core
             // ADD A WARNING HERE !
 
             // Calls the Delete Family method from the Flashcard Manager
-            IoC.Get<FlashcardManager>().DeleteFamily(DisplayName);
+            IoC.Get<FlashcardManager>().DeleteFamily(FamilyName);
         }
 
         /// <summary>
@@ -84,7 +89,7 @@ namespace SwipeFlash.Core
         private void OnFamilyEnabledChanged()
         {
             // Calls the Set Family Enabled method from the Flashcard Manager
-            IoC.Get<FlashcardManager>().SetFamilyEnabled(DisplayName, IsFamilyEnabled);
+            IoC.Get<FlashcardManager>().SetFamilyEnabled(FamilyName, IsFamilyEnabled);
         }
 
         #endregion

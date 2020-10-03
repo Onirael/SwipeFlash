@@ -24,17 +24,12 @@ namespace SwipeFlash.Core
         /// <summary>
         /// A JSON object containing the cards' static data
         /// </summary>
-        JObject StaticData;
+        public JObject StaticData;
 
         /// <summary>
         /// A JSON object containing the cards' user data
         /// </summary>
-        JObject UserData;
-
-        /// <summary>
-        /// The random generator for this object
-        /// </summary>
-        Random Rand;
+        public JObject UserData;
 
         /// <summary>
         /// Whether the queue was initialized
@@ -48,6 +43,15 @@ namespace SwipeFlash.Core
 
         // DEVELOPMENT ONLY
         public int FlashcardID;
+
+        #endregion
+
+        #region Private Properties
+
+        /// <summary>
+        /// The random generator for this object
+        /// </summary>
+        Random Rand;
 
         #endregion
 
@@ -158,7 +162,7 @@ namespace SwipeFlash.Core
             var jsonFamiliesStatic = StaticData["flashcards"].AsJEnumerable();
 
             // Find the family in the JSON
-            var jsonFoundFamilyStatic = jsonFamiliesStatic.Where(result => result["displayName"].ToString() == familyName).First();
+            var jsonFoundFamilyStatic = jsonFamiliesStatic.Where(result => result["family"].ToString() == familyName).First();
 
             if (jsonFoundFamilyStatic != null)
                 // Removes the family
@@ -170,7 +174,7 @@ namespace SwipeFlash.Core
             var jsonFamiliesUser = StaticData["flashcards"].AsJEnumerable();
 
             // Find the family in the JSON
-            var jsonFoundFamilyUser = jsonFamiliesStatic.Where(result => result["displayName"].ToString() == familyName).First();
+            var jsonFoundFamilyUser = jsonFamiliesStatic.Where(result => result["family"].ToString() == familyName).First();
 
             if (jsonFoundFamilyUser != null)
                 // Removes the family
@@ -183,12 +187,29 @@ namespace SwipeFlash.Core
         /// <param name="familyName">The display name of the family</param>
         /// <param name="isEnabled">Whether the family is now set to enabled</param>
         public void SetFamilyEnabled(string familyName, bool isEnabled)
-        {
-            // Gets the corresponding family
-            var foundFamily = FlashcardFamilies.Where(family => family.Name == familyName).First();
+        {            
+            // Finds the index of the family
+            int familyIndex = FlashcardFamilies.FindIndex(family => family.Name == familyName);
 
-            // Sets the new enabled status of the family
-            foundFamily.IsEnabled = isEnabled;
+            // Copies the family
+            var familyData = FlashcardFamilies[familyIndex];
+
+            // Sets IsEnabled attributes
+            familyData.IsEnabled = isEnabled;
+
+            // Sets the collection element
+            FlashcardFamilies[familyIndex] = familyData;
+
+            // User Data
+
+            // Gets flashcard families enumerable
+            var jsonFamilies = UserData["flashcards"].AsJEnumerable();
+
+            // Find matching family
+            var jsonFoundFamily = jsonFamilies.Where(family => (string)family["family"] == familyName).First();
+
+            // Set JSON value
+            jsonFoundFamily["isEnabled"] = isEnabled;
         }
 
         #endregion
@@ -212,7 +233,7 @@ namespace SwipeFlash.Core
                     // Create a family data struct
                     var familyData = new FlashcardFamilyData()
                     {
-                        Name = (string)family["displayName"],
+                        Name = (string)family["family"],
                         CardCount = family["cards"].AsJEnumerable().Count(),
                         IsEnabled = (bool)UserData["flashcards"].Where(result => (string)result["family"] == (string)family["family"]).First()["isEnabled"],
                     };

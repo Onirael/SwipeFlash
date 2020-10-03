@@ -32,6 +32,9 @@ namespace SwipeFlash.Core
 
         public FlashcardManagerWindowViewModel()
         {
+            // Initializes the flashcard families
+            FlashcardFamilies = new AsyncObservableCollection<FlashcardFamilyListItemViewModel>();
+
             // Fills the FlashcardFamilies array
             GetFlashcardFamilies();
 
@@ -40,8 +43,6 @@ namespace SwipeFlash.Core
 
             // Initializes the OK button command
             PressOKCommand = new RelayCommand(OnOKPressed);
-
-            FlashcardFamilies = new AsyncObservableCollection<FlashcardFamilyListItemViewModel>();
         }
 
         #endregion
@@ -75,14 +76,11 @@ namespace SwipeFlash.Core
         /// </summary>
         private void GetFlashcardFamilies()
         {
-            Task.Run(() =>
-            {
-                // Get the families from the flashcard manager
-                var familiesData = IoC.Get<FlashcardManager>().FlashcardFamilies;
+            // Get the families from the flashcard manager
+            var familiesData = IoC.Get<FlashcardManager>().FlashcardFamilies;
 
-                // For each family data struct, create a family view model
-                foreach (var familyData in familiesData) { FlashcardFamilies.Add(new FlashcardFamilyListItemViewModel(familyData)); }
-            });
+            // For each family data struct, create a family view model
+            foreach (var familyData in familiesData) { FlashcardFamilies.Add(new FlashcardFamilyListItemViewModel(familyData)); }
         }
         
         #endregion

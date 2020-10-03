@@ -3,7 +3,7 @@
 namespace SwipeFlash
 {
     /// <summary>
-    /// Interaction logic for FlashcardFamilyListElementControl.xaml
+    /// Interaction logic for FlashcardFamilyListItemControl.xaml
     /// </summary>
     public partial class FlashcardFamilyListItemControl : UserControl
     {

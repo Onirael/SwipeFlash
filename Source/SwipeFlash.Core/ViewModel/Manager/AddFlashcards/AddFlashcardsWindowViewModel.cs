@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
+using Newtonsoft.Json.Linq;
 
 namespace SwipeFlash.Core
 {
@@ -56,6 +58,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public string LinePatternDescription { get; set; } = "";
 
+        /// <summary>
+        /// The existing categories
+        /// </summary>
+        public List<string> Categories { get; set; }
+
         #endregion
 
         #region Commands
@@ -90,6 +97,10 @@ namespace SwipeFlash.Core
             // Initializes the choose file button command
             SelectFileCommand = new RelayCommand(OnSelectFilePressed);
 
+            // Initializes the categories array
+            InitCategories();
+
+
             // DEVELOPMENT ONLY
 
             SelectedFilePath = "D:/Unreal/SwipeFlash/Source/Resources/SpanishToEnglish.txt";
@@ -112,6 +123,10 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnOKPressed()
         {
+            // CHECK INPUT INFORMATION  
+
+
+
             IoC.Get<WindowService>().DestroyWindow(WindowType.AddFlashcards);
         }
     
@@ -145,6 +160,25 @@ namespace SwipeFlash.Core
 
             // Creates the window
             IoC.Get<WindowService>().CreateWindow(WindowType.FileExplorer);
+        }
+
+        #endregion
+
+        #region Private Helpers
+
+        private void InitCategories()
+        {
+            // Initializes the array
+            Categories = new List<string>();
+
+            // Gets the static data from the Flashcard Manager
+            var staticData = IoC.Get<FlashcardManager>().StaticData;
+
+            // Gets the categories from the JSON file
+            var jsonCategories = staticData["categories"].AsJEnumerable();
+
+            // Add each category to the array
+            foreach(var category in jsonCategories) { Categories.Add((string)category["name"]); }
         }
 
         #endregion

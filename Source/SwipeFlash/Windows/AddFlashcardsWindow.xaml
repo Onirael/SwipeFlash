@@ -92,10 +92,26 @@
                                                FontSize="{StaticResource FontSizeLarge}"/>
 
                                     <TextBox Name="logo1"
-                                                       Padding="0 4"
-                                                       Width="50"
-                                                       HorizontalAlignment="Left"
-                                                       Text="{Binding Side1Logo}"/>
+                                             Padding="0 4"
+                                             Width="50"
+                                             HorizontalAlignment="Left"
+                                             Text="{Binding Side1Logo}"/>
+
+                                    <TextBlock Text="Side 1 category"
+                                               Margin="0 0 0 5"
+                                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                                    <ComboBox Padding="0 4"
+                                              Width="140"
+                                              HorizontalAlignment="Left"
+                                              ItemsSource="{Binding Categories}"
+                                              IsEditable="True">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
 
                                 </StackPanel>
                                 <!-- Side 2 logo input -->
@@ -107,8 +123,24 @@
                                     <TextBox Padding="0 4"
                                              Width="50"
                                              HorizontalAlignment="Left"
-                                             Text="{Binding Side2Logo}">
-                                    </TextBox>
+                                             Text="{Binding Side2Logo}"/>
+
+                                    <TextBlock Text="Side 2 category"
+                                               Margin="0 0 0 5"
+                                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                                    <ComboBox Padding="0 4"
+                                              Width="140"
+                                              HorizontalAlignment="Left"
+                                              ItemsSource="{Binding Categories}"
+                                              DisplayMemberPath=""
+                                              IsEditable="True">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                             </Grid>
 
@@ -160,8 +192,7 @@
                     HorizontalAlignment="Right"
                     Content="OK"
                     Command="{Binding PressOKCommand}"
-                    FontSize="{StaticResource FontSizeRegular}"
-                    IsDefault="True"/>
+                    FontSize="{StaticResource FontSizeRegular}"/>
         </StackPanel>
 
     </Grid>

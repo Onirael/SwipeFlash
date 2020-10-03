@@ -21,13 +21,13 @@ namespace SwipeFlash.Core
             {
                 new FlashcardFamilyListItemViewModel()
                 {
-                   DisplayName = "Spanish to English",
+                   FamilyName = "Spanish to English",
                    CardCount = 4000,
                    IsFamilyEnabled = true,
                 },
                 new FlashcardFamilyListItemViewModel()
                 {
-                   DisplayName = "German to English",
+                   FamilyName = "German to English",
                    CardCount = 5555,
                    IsFamilyEnabled = false,
                 },
