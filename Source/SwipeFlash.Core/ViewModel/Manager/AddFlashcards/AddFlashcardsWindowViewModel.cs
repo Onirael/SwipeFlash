@@ -63,6 +63,16 @@ namespace SwipeFlash.Core
         /// </summary>
         public List<string> Categories { get; set; }
 
+        /// <summary>
+        /// The category for side 1
+        /// </summary>
+        public string Category1 { get; set; }
+        
+        /// <summary>
+        /// The category for side 2
+        /// </summary>
+        public string Category2 { get; set; }
+
         #endregion
 
         #region Commands
@@ -103,7 +113,7 @@ namespace SwipeFlash.Core
 
             // DEVELOPMENT ONLY
 
-            SelectedFilePath = "D:/Unreal/SwipeFlash/Source/Resources/SpanishToEnglish.txt";
+            SelectedFilePath = "D:/Unreal/SwipeFlash/Source/Resources/Test_SpanishToEnglish.txt";
             FamilyName = "Test family";
             Side1Logo = "❤";
             Side2Logo = "🐸";
@@ -123,8 +133,24 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnOKPressed()
         {
-            // CHECK INPUT INFORMATION  
+            // CHECK INPUT INFORMATION
+            
+            // Create the family data struct with the trivial data
+            var familyData = new ParsedFlashcardFamilyData()
+            {
+                FamilyName = FamilyName,
+                Category1 = Category1,
+                Category2 = Category2,
+                Logo1 = Side1Logo,
+                Logo2 = Side2Logo,
+            };
 
+            // Parses the file to a data struct
+            var parsingSuccessful = FileParser.ParseFile(ref familyData,
+                                                         SelectedFilePath,
+                                                         IgnorePatternDescription,
+                                                         SeparatorsDescription,
+                                                         LinePatternDescription);
 
 
             IoC.Get<WindowService>().DestroyWindow(WindowType.AddFlashcards);
@@ -173,6 +199,9 @@ namespace SwipeFlash.Core
 
             // Gets the static data from the Flashcard Manager
             var staticData = IoC.Get<FlashcardManager>().StaticData;
+
+            if (staticData == null)
+                return;
 
             // Gets the categories from the JSON file
             var jsonCategories = staticData["categories"].AsJEnumerable();

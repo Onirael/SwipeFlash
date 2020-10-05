@@ -105,7 +105,8 @@
                                               Width="140"
                                               HorizontalAlignment="Left"
                                               ItemsSource="{Binding Categories}"
-                                              IsEditable="True">
+                                              IsEditable="True"
+                                              Text="{Binding Category1}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}"/>
@@ -134,7 +135,8 @@
                                               HorizontalAlignment="Left"
                                               ItemsSource="{Binding Categories}"
                                               DisplayMemberPath=""
-                                              IsEditable="True">
+                                              IsEditable="True"
+                                              Text="{Binding Category2}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}"/>

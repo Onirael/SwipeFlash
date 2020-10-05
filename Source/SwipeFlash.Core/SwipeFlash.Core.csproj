@@ -179,6 +179,7 @@
   <ItemGroup>
     <Compile Include="DataModels\ApplicationSettings.cs" />
     <Compile Include="DataModels\AsyncObservableCollection.cs" />
+    <Compile Include="DataModels\ParserData.cs" />
     <Compile Include="DataModels\FlashcardFamilyData.cs" />
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="ViewModel\Base\WindowService.cs" />

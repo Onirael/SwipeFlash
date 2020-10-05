@@ -1,4 +1,6 @@
-﻿namespace SwipeFlash.Core
+﻿using System.Collections.Generic;
+
+namespace SwipeFlash.Core
 {
     /// <summary>
     /// A struct storing the data for a flashcard family
@@ -11,7 +13,7 @@
         public bool IsEnabled;
 
         /// <summary>
-        /// The display name of the family
+        /// The name of the family
         /// </summary>
         public string Name;
 
