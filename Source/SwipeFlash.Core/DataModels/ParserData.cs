@@ -52,50 +52,26 @@ namespace SwipeFlash.Core
         /// The list of flashcards in the family
         /// </summary>
         public List<ParsedFlashcardData> Flashcards;
-
     }
 
     /// <summary>
-    /// A struct containing the data of a flashcard
+    /// A struct containing the data of a parser line variable
     /// </summary>
-    public struct ParserIgnoreRule
+    public struct ParserLineVariable
     {
-        #region Public Properties
+        /// <summary>
+        /// The name of the variable
+        /// </summary>
+        public string VariableName;
 
         /// <summary>
-        /// The character pattern of the beginning of the line
+        /// True if the variable was flagged as optional
         /// </summary>
-        public string LineStartChars;
+        public bool IsOptional;
 
         /// <summary>
-        /// The character pattern of the middle of the line
+        /// The instruction linked to this variable
         /// </summary>
-        public List<string> LineMidChars;
-
-        /// <summary>
-        /// The character pattern of the end of the line
-        /// </summary>
-        public string LineEndChars;
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Computes the total character length, excluding '*' symbols, of the rule
-        /// </summary>
-        /// <returns>The minimum characters required to apply the rule</returns>
-        public int GetRuleLength()
-        {
-            // Gets the start and end length
-            int length = LineStartChars.Length + LineEndChars.Length;
-
-            // Adds the length of the middle characters
-            LineMidChars.ForEach((t) => length += t.Length);
-
-            return length;
-        }
-
-        #endregion
+        public ParserVariableInstruction VariableInstruction;
     }
 }

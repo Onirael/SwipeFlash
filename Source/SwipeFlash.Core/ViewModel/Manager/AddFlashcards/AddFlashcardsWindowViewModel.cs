@@ -119,7 +119,7 @@ namespace SwipeFlash.Core
             Side2Logo = "🐸";
             IgnorePatternDescription = "#*";
             SeparatorsDescription = "";
-            LinePatternDescription = "{1},gender,{2}; gender=={\"m\":{1}=\"el \"+{1}, \"f\":{1}=\"la \"+{1}, \"m/f\":{1}=\"el \"+{1}}";
+            LinePatternDescription = "[1],gender?,[2]; gender=={\"m\":[1]=\"el \"+[1], \"f\":[1]=\"la \"+[1], \"m/f\":[1]=\"el \"+[1]}";
 
             //
         }

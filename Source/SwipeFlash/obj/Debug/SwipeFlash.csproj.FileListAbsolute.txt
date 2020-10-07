@@ -172,3 +172,4 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\AddFlashcardsWindow.g.c
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\AddFlashcardsWindow.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardFamilyListItemControl.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\FlashcardFamilyListItemControl.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Debug\System.ValueTuple.dll
