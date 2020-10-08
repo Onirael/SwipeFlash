@@ -60,7 +60,7 @@ namespace SwipeFlash.Core
 
             // Gets the line description part to retrieve the variables
             var lineDescription = splitPatternDescription[0];
-            lineDescription = Regex.Replace(lineDescription, " ", "");
+            lineDescription = lineDescription.Replace(" ", "");
 
             // Create line variables
             var lineVars = lineDescription.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -75,7 +75,7 @@ namespace SwipeFlash.Core
                 newLineVar.IsOptional = lineVariable.Last() == '?';
 
                 // Sets the variable name, stripping the optional flag
-                newLineVar.VariableName = Regex.Replace(lineVariable, "?", "");
+                newLineVar.VariableName = lineVariable.Replace("?", string.Empty); ;
 
                 // Adds the new line variable to the list
                 lineVarsList.Add(newLineVar);
@@ -119,6 +119,54 @@ namespace SwipeFlash.Core
             });
 
             #endregion
+
+            // TEST //
+
+            var testItems1 = new List<string>()
+            {
+                "the door",
+                "noun",
+                "die Tür",
+            };
+            var testVars = new List<ParserLineVariable>()
+            {
+                new ParserLineVariable()
+                {
+                    VariableName = "a",
+                    IsOptional = true,
+                    VariableInstruction = new ParserVariableInstruction("a=={\"test\":,}")
+                },
+                new ParserLineVariable()
+                {
+                    VariableName = "side1",
+                    IsOptional = false,
+                    VariableInstruction = new ParserVariableInstruction(""),
+                },
+                new ParserLineVariable()
+                {
+                    VariableName = "b",
+                    IsOptional = true,
+                    VariableInstruction = new ParserVariableInstruction("b=={\"m\":,\"f\":,}")
+                },
+                new ParserLineVariable()
+                {
+                    VariableName = "c",
+                    IsOptional = true,
+                    VariableInstruction = new ParserVariableInstruction("c=={\"noun\":,\"verb\":,}")
+                },
+                new ParserLineVariable()
+                {
+                    VariableName = "side2",
+                    IsOptional = false,
+                    VariableInstruction = new ParserVariableInstruction(""),
+                },
+            };
+
+            bool couldMatch = false;
+
+            if (testItems1.Count() < testVars.Count())
+                couldMatch = MatchItemsToVars(ref testItems1, testVars);
+
 
             #region Parse File
 
@@ -237,119 +285,85 @@ namespace SwipeFlash.Core
         /// <returns>True if the items could successfully be matched, false otherwise</returns>
         private static bool MatchItemsToVars(ref List<string> itemsList, List<ParserLineVariable> lineVarsList)
         {
-            // Counts the  amount of compulsory variables in the variable list
-            var compVarsLeft = lineVarsList.FindAll(variable => variable.IsOptional == false).Count();
-            
             // Creates a results array and populates it with dummy data
             var results = new List<string>(lineVarsList.Count());
             for (uint i = 0; i < lineVarsList.Count(); ++i) { results.Add(""); }
 
-            int firstOptional = -1;
-            int lastOptional = -1;
+            // Counts the  amount of compulsory variables in the variable list
+            var compVarsLeft = lineVarsList.FindAll(variable => variable.IsOptional == false).Count();
 
-            int firstComp = -1;
-            int lastComp = -1;
-
-            // Get all sequential compulsory variables starting from the beginning
-            int varIndex = 0;
-            // While the active variable is not optional
-            while (!lineVarsList[varIndex].IsOptional && varIndex < lineVarsList.Count())
+            int nextCompVar = -1;
+            int prevCompVar = -1;
+            int itemIndex = 0;
+            do
             {
-                // Set the variable value
-                results[varIndex] = itemsList[varIndex];
-                // Sets the index of the first found compulsory variable
-                firstComp = varIndex;
-                // Decrements the compulsory variables left counter
-                compVarsLeft--;
-                // Changes the active variable
-                varIndex++;
-            }
-            // Sets the index of the first optional variable
-            firstOptional = varIndex;
+                // Gets the next compulsory variable
+                nextCompVar = GetNextCompulsoryVariableIndex(ref lineVarsList, nextCompVar + 1);
 
-            // Get all sequential compulsory variables starting from the end
-            varIndex = lineVarsList.Count() - 1;
-            var itemIndex = itemsList.Count() - 1;
-            while(!lineVarsList[varIndex].IsOptional && varIndex > 0)
-            {
-                // Set the variable value
-                results[varIndex] = itemsList[itemIndex];
-                // Sets the index of the last found compulsory variable
-                lastComp = varIndex;
-                // Decrements the compulsory variables left counter
-                compVarsLeft--;
-                // Changes the active variable
-                varIndex--;
-                // Changes the active item
-                itemIndex--;
-            }
-            // Sets the index of the last optional variable
-            lastOptional = itemIndex;
-
-            // While there are more than one remaining optional variables 
-            // and all compulsory variables haven't been found
-            varIndex = firstOptional;
-            itemIndex = varIndex;
-            while (firstOptional != lastOptional && compVarsLeft != 0)
-            {
-                // Try to find a matching optional in the variable list
-                var optionalVarIndex = FindOptionalVariable(itemsList[itemIndex], 
-                                                            ref lineVarsList, 
-                                                            varIndex, 
-                                                            lastOptional);
-                // If a match was found
-                if (optionalVarIndex >= 0)
+                if (nextCompVar < 0) return false;
+                
+                // If there are optionals between the next and previous compulsory
+                if (nextCompVar - prevCompVar > 1)
                 {
-                    // Set the variable
-                    results[optionalVarIndex] = itemsList[itemIndex];
-                    // Change the active item
-                    itemIndex++;
-                    // Change the index of the variable to the matched index
-                    varIndex = optionalVarIndex;
-
-                    // If the next element is optional,
-                    if (lineVarsList[optionalVarIndex + 1].IsOptional)
-                        // Change the first optional
-                        firstOptional++;
-                    else
+                    // For each potential optional variable
+                    for (int i = Math.Max(prevCompVar, 0); i < nextCompVar; ++i)
                     {
-                        // Set the variable of the next non-optional item
-                        results[optionalVarIndex + 1] = itemsList[itemIndex];
-                        // Change the first compulsory item
-                        firstComp = optionalVarIndex + 1;
-                        // Decrements the compulsory variables left counter
-                        compVarsLeft--;
-                        // Change the first optional to the following character
-                        firstOptional = varIndex + 2;
-                        // Change the item index
-                        itemIndex++;
+                        // Try to find a match
+                        var optionalVarIndex = FindOptionalVariable(itemsList[itemIndex], ref lineVarsList, prevCompVar + 1, nextCompVar);
+                        // If a match was found
+                        if (optionalVarIndex >= 0)
+                        {
+                            // Set it in the results list
+                            results[optionalVarIndex] = itemsList[itemIndex];
+                            // Increment the item index
+                            itemIndex++;
+                        }
+                        // If the next item isn't optional, continue
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
-                else
+
+                // Store the next compulsory variable in the results list
+                results[nextCompVar] = itemsList[itemIndex];
+
+                // Update values
+                compVarsLeft--;
+                itemIndex++;
+
+                // Updates the previous compulsory variable value
+                prevCompVar = nextCompVar;
+            }
+            while (compVarsLeft > 0);
+
+            var remainingItems = itemsList.Count() - itemIndex + 1;
+
+            if (remainingItems == 0) return true;
+
+            // If the amount of remaining variables is equal to the amount of remaining items
+            if (remainingItems == lineVarsList.Count() - prevCompVar + 1)
+            {
+                // Add them to the items array
+                int j = prevCompVar + 1;
+                for (int i = itemIndex; i < itemsList.Count(); ++i, ++j) { results[j] = itemsList[itemIndex]; }
+            }
+
+            // For each remaining optional item
+            for (int i = itemIndex; i < itemsList.Count(); ++i)
+            {
+                // Try to find a match
+                var nextOptional = FindOptionalVariable(itemsList[itemIndex], ref lineVarsList, prevCompVar);
+                // If a match was found
+                if (nextOptional > 0)
                 {
-                    // Increment variables
-                    itemIndex++;
-                    varIndex++;
-                    firstOptional++;
+                    // Set it the results list
+                    results[nextOptional] = itemsList[itemIndex];
                 }
             }
 
-            // A list containing the remaining optional line variables
-            var remainingOptionals = lineVarsList.Skip(firstComp - 1).Take(lastComp - firstComp).ToList();
-
-            // If there are more than one remaining optionals
-            if (remainingOptionals.Count() > 1)
-            {
-                var optionalVarIndex = FindOptionalVariable(itemsList[itemIndex], ref lineVarsList, 0);
-                if (optionalVarIndex >= 0) results[optionalVarIndex + firstComp - 1] = itemsList[itemIndex];
-            }
-            // If there is only one optional left
-            else if (remainingOptionals.Count() == 1)
-            {
-                results[varIndex] = itemsList[itemIndex];
-            }
-
-            // Sets the items list to the results list
+            // Set the items list to the results
             itemsList = results;
 
             return true;
@@ -384,6 +398,17 @@ namespace SwipeFlash.Core
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Gets the index of the next compulsory variable in the line variables list
+        /// </summary>
+        /// <param name="lineVars">The variables for this line</param>
+        /// <param name="startIndex">The index after which to search</param>
+        /// <returns></returns>
+        private static int GetNextCompulsoryVariableIndex(ref List<ParserLineVariable> lineVars, int startIndex = 0)
+        {
+            return lineVars.FindIndex(startIndex, lineVar => lineVar.IsOptional == false);
         }
 
         #endregion

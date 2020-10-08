@@ -40,6 +40,10 @@ namespace SwipeFlash.Core
             // Initializes the dictionary
             ValueInstructions = new Dictionary<string, string>();
 
+            // Check if the instruction is empty
+            if (rawVariableInstruction.Length == 0)
+                return;
+
             // DEVELOPMENT
             // CHECK SYNTAX !!!!!!
 
@@ -51,8 +55,8 @@ namespace SwipeFlash.Core
             VariableName = splitInstruction[0];
 
             // Remove braces
-            Regex.Replace(splitInstruction[1], "{", "");
-            Regex.Replace(splitInstruction[1], "}", "");
+            splitInstruction[1] = splitInstruction[1].Replace("{", "");
+            splitInstruction[1] = splitInstruction[1].Replace("}", "");
 
             // Separate value instructions
             var splitValueInstructions = splitInstruction[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
