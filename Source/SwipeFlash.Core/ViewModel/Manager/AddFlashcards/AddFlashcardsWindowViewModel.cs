@@ -115,6 +115,8 @@ namespace SwipeFlash.Core
 
             SelectedFilePath = "D:/Unreal/SwipeFlash/Source/Resources/Test_SpanishToEnglish.txt";
             FamilyName = "Test family";
+            Category1 = "test1";
+            Category2 = "test2";
             Side1Logo = "❤";
             Side2Logo = "🐸";
             IgnorePatternDescription = "#*";
@@ -133,6 +135,7 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnOKPressed()
         {
+            // DEVELOPMENT
             // CHECK INPUT INFORMATION
             
             // Create the family data struct with the trivial data
@@ -152,6 +155,10 @@ namespace SwipeFlash.Core
                                                          SeparatorsDescription,
                                                          LinePatternDescription);
 
+            // If the flashcards could be successfully parsed
+            if (parsingSuccessful)
+                // Add the flashcard family to the JSON
+                JSONWriter.AddFamilyToJSON(familyData);
 
             IoC.Get<WindowService>().DestroyWindow(WindowType.AddFlashcards);
         }

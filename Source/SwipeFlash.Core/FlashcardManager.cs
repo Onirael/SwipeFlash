@@ -171,14 +171,17 @@ namespace SwipeFlash.Core
             // User Data
 
             // Gets the flashcards enumerable
-            var jsonFamiliesUser = StaticData["flashcards"].AsJEnumerable();
+            var jsonFamiliesUser = UserData["flashcards"].AsJEnumerable();
 
             // Find the family in the JSON
-            var jsonFoundFamilyUser = jsonFamiliesStatic.Where(result => result["family"].ToString() == familyName).First();
+            var jsonFoundFamilyUser = jsonFamiliesUser.Where(result => result["family"].ToString() == familyName).First();
 
             if (jsonFoundFamilyUser != null)
                 // Removes the family
                 jsonFoundFamilyUser.Remove();
+
+            // Updates the files
+            JSONWriter.UpdateJSONFiles();
         }
 
         /// <summary>
@@ -210,6 +213,9 @@ namespace SwipeFlash.Core
 
             // Set JSON value
             jsonFoundFamily["isEnabled"] = isEnabled;
+
+            // Updates the files
+            JSONWriter.UpdateJSONFiles();
         }
 
         #endregion
@@ -263,7 +269,7 @@ namespace SwipeFlash.Core
                     IsQueueInitialized = true;
 
                     // Fire the OnQueueInitialized event handler
-                    OnQueueInitialized(this, null);
+                    OnQueueInitialized?.Invoke(this, null);
                 }
             });
         }

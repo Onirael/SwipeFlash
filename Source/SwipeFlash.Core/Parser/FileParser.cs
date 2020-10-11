@@ -107,67 +107,21 @@ namespace SwipeFlash.Core
             patternRules.ForEach((t) => 
             {
                 // Create the instruction from the raw input
-                var varInstruction = new ParserVariableInstruction(t);
+                var varInstruction = new ParserVariableInstruction(t, ref lineVarsList);
 
                 // If the instruction is marked as valid
                 if (varInstruction.IsInstructionValid)
                 {
                     // Add it to its corresponding variable
-                    var matchingVariable = lineVarsList.Find(variable => variable.VariableName == varInstruction.VariableName);
-                    matchingVariable.VariableInstruction = varInstruction;
+                    var matchingVariable = lineVarsList.FindIndex(variable => variable.VariableName == varInstruction.VariableName);
+                    var matchingVariableValue = lineVarsList[matchingVariable];
+                    matchingVariableValue.VariableInstruction = varInstruction;
+                    lineVarsList[matchingVariable] = matchingVariableValue;
                 }
             });
 
             #endregion
-
-            // TEST //
-
-            var testItems1 = new List<string>()
-            {
-                "the door",
-                "noun",
-                "die Tür",
-            };
-            var testVars = new List<ParserLineVariable>()
-            {
-                new ParserLineVariable()
-                {
-                    VariableName = "a",
-                    IsOptional = true,
-                    VariableInstruction = new ParserVariableInstruction("a=={\"test\":,}")
-                },
-                new ParserLineVariable()
-                {
-                    VariableName = "side1",
-                    IsOptional = false,
-                    VariableInstruction = new ParserVariableInstruction(""),
-                },
-                new ParserLineVariable()
-                {
-                    VariableName = "b",
-                    IsOptional = true,
-                    VariableInstruction = new ParserVariableInstruction("b=={\"m\":,\"f\":,}")
-                },
-                new ParserLineVariable()
-                {
-                    VariableName = "c",
-                    IsOptional = true,
-                    VariableInstruction = new ParserVariableInstruction("c=={\"noun\":,\"verb\":,}")
-                },
-                new ParserLineVariable()
-                {
-                    VariableName = "side2",
-                    IsOptional = false,
-                    VariableInstruction = new ParserVariableInstruction(""),
-                },
-            };
-
-            bool couldMatch = false;
-
-            if (testItems1.Count() < testVars.Count())
-                couldMatch = MatchItemsToVars(ref testItems1, testVars);
-
-
+            
             #region Parse File
 
             // Create reader
@@ -222,14 +176,19 @@ namespace SwipeFlash.Core
                     continue;
 
                 // Applies the instructions for each item in the list
-                itemsList.ForEach((t) =>
+                for (int i = 0; i < itemsList.Count(); ++i)
                 {
                     // Gets the instruction
-                    var instruction = lineVarsList[itemsList.IndexOf(t)].VariableInstruction;
+                    var instruction = lineVarsList[i].VariableInstruction;
                     // If it is valid, applies it
-                    if (instruction.IsInstructionValid) instruction.ApplyInstruction(ref itemsList, lineVarsList);
-
-                });
+                    if (instruction != null && instruction.IsInstructionValid)
+                    {
+                        bool couldApplyInstruction = instruction.ApplyInstruction(ref itemsList, lineVarsList);
+                        // If the instruction could not be applied, return false
+                        if (!couldApplyInstruction)
+                            return false;
+                    }
+                }
 
                 // Creates a new flashcard with the index
                 parsedFlashcards.Add(new ParsedFlashcardData() { Side1Text = itemsList[side1VarIndex], Side2Text = itemsList[side2VarIndex] });
@@ -338,12 +297,17 @@ namespace SwipeFlash.Core
             }
             while (compVarsLeft > 0);
 
-            var remainingItems = itemsList.Count() - itemIndex + 1;
+            var remainingItems = itemsList.Count() - itemIndex;
 
-            if (remainingItems == 0) return true;
+            if (remainingItems == 0)
+            {
+                // Set the items list to the results
+                itemsList = results;
+                return true;
+            }
 
             // If the amount of remaining variables is equal to the amount of remaining items
-            if (remainingItems == lineVarsList.Count() - prevCompVar + 1)
+            if (remainingItems == lineVarsList.Count() - prevCompVar - 1)
             {
                 // Add them to the items array
                 int j = prevCompVar + 1;
@@ -354,7 +318,7 @@ namespace SwipeFlash.Core
             for (int i = itemIndex; i < itemsList.Count(); ++i)
             {
                 // Try to find a match
-                var nextOptional = FindOptionalVariable(itemsList[itemIndex], ref lineVarsList, prevCompVar);
+                var nextOptional = FindOptionalVariable(itemsList[itemIndex], ref lineVarsList, prevCompVar + 1);
                 // If a match was found
                 if (nextOptional > 0)
                 {
