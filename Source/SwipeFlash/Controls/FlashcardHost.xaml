@@ -59,7 +59,8 @@
             <StackPanel Grid.Row="1" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Center"
-                        Margin="0 35 0 0">
+                        Margin="0 35 0 0"
+                        Visibility="{Binding IsInEditMode, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
                 <Button Style="{StaticResource UndoButton}"
                         Command="{Binding UndoButtonCommand}"/>
 
@@ -72,6 +73,27 @@
                         Foreground="{StaticResource SwipeFlashYellowBrush}"
                         Command="{Binding EditCardCommand}"
                         Margin="20 0 0 0"/>
+            </StackPanel>
+
+            <StackPanel Name="editButtons"
+                        Grid.Row="1"
+                        Visibility="{Binding IsInEditMode, Converter={local:BooleanToVisibilityConverter}}"
+                        Margin="0 35 0 0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                
+                <Button Style="{StaticResource RoundIconButton}"
+                        Foreground="{StaticResource SwipeFlashOrangeBrush}"
+                        Content="{StaticResource FontAwesome_Close}"
+                        Height="{Binding ActualHeight, ElementName=editButtons}"
+                        Command="{Binding CancelEditCommand}"/>
+                <Button Style="{StaticResource RoundIconButton}"
+                        Foreground="Green"
+                        Margin="20 0 0 0"
+                        Content="{StaticResource FontAwesome_Check}"
+                        Height="{Binding ActualHeight, ElementName=editButtons}"
+                        Command="{Binding ConfirmEditCommand}"/>
+                
             </StackPanel>
 
             <!--#endregion-->

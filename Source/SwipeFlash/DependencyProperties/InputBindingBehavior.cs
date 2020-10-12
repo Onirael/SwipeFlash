@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 
 namespace SwipeFlash
 {
@@ -54,8 +52,6 @@ namespace SwipeFlash
             }
         }
 
-        #endregion
-
         /// <summary>
         /// Moves the input bindings to the container window
         /// </summary>
@@ -101,5 +97,7 @@ namespace SwipeFlash
                     window.InputBindings.RemoveAt(i);
             }
         }
+
+        #endregion
     }
 }

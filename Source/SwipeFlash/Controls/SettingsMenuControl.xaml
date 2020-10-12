@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:SwipeFlash"
              xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
              mc:Ignorable="d"
-             d:DesignWidth="500"
-             IsHitTestVisible="True">
+             d:DesignWidth="500">
 
     <UserControl.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
@@ -46,15 +45,14 @@
                                               IsChecked="{Binding IllustrationsEnabled}"/>
                                     </StackPanel>
 
-                                    <!-- Open file parser button -->
+                                    <!-- Open flashcard manager button -->
                                     <Button Content="Manage flashcards..." 
                                             HorizontalAlignment="Center"
                                             Command="{Binding OpenManageCardsCommand}"
                                             Margin="0 20 0 0"/>
                                 </StackPanel>
-                                
 
-
+                                <!-- Divider -->
                                 <Border Grid.Row="1" 
                                         Margin="50 20"
                                         Background="{StaticResource ForegroundMainBrush}"
@@ -70,6 +68,7 @@
                                     </Border.OpacityMask>
                                 </Border>
 
+                                <!-- Close button -->
                                 <Button Margin="0 0 0 20" 
                                         Grid.Row="2" 
                                         Style="{StaticResource RoundIconButton}"

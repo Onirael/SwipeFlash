@@ -248,6 +248,26 @@ namespace SwipeFlash
     }
 
     /// <summary>
+    /// Animates 
+    /// </summary>
+    public class AnimateContentSlideInFromTopProperty : AnimateBaseProperty<AnimateContentSlideInFromTopProperty>
+    {
+        // Initializes constants
+        public AnimateContentSlideInFromTopProperty() : base() { AnimDuration = 0.2f; }
+
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            // If the animation is run forward
+            if (value)
+                // Slide the element in from the top
+                await element.SlideFromTopAsync((int)element.ActualHeight, IsFirstLoad ? 0f : AnimDuration);
+            else
+                // Slide the element to the top
+                await element.SlideToTopAsync((int)element.ActualHeight, IsFirstLoad ? 0f : AnimDuration);
+        }
+    }
+
+    /// <summary>
     /// Animates a framework element, fading it in
     /// if the value is set to false, the animation is reversed
     /// </summary>
@@ -265,7 +285,6 @@ namespace SwipeFlash
 
         }
     }
-
 
     #endregion
 

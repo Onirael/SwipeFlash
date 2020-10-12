@@ -29,9 +29,9 @@
       "cards": [
         {
           "id": 0,
-          "side1Text": "The door",
-          "side2Text": "La puerta",
-          "hasIllustration": true
+          "side1Text": "La puerta",
+          "side2Text": "The door",
+          "hasIllustration": false
         },
         {
           "id": 1,

@@ -95,6 +95,7 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\FlashcardAttachedProperties.cs" />
     <Compile Include="AttachedProperties\FrameworkElementAnimationsAttachedProperties.cs" />
+    <Compile Include="AttachedProperties\TextBoxAttachedProperties.cs" />
     <Compile Include="AttachedProperties\UserControlAttachedProperties.cs" />
     <Compile Include="Controls\FlashcardFamilyListItemControl.xaml.cs">
       <DependentUpon>FlashcardFamilyListItemControl.xaml</DependentUpon>

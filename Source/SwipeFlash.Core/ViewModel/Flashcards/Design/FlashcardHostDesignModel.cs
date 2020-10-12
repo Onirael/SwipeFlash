@@ -33,6 +33,8 @@
                 GetNextFlashcard(),
                 GetNextFlashcard(),
             };
+
+            IsInEditMode = false;
         }
 
         #endregion

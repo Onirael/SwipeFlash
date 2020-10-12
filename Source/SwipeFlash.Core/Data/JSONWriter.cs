@@ -27,10 +27,8 @@ namespace SwipeFlash.Core
             if (categories == null) return;
 
             // Tries to find the categories in the JSON
-            var foundCategories1 = categories.Where(category => category["name"].ToString() == family.Category1);
-            var foundCategories2 = categories.Where(category => category["name"].ToString() == family.Category2);
-            var foundCategory1 = foundCategories1.Count() > 0 ? foundCategories1.First() : null;
-            var foundCategory2 = foundCategories2.Count() > 0 ? foundCategories2.First() : null;
+            var foundCategory1 = categories.FirstOrDefault(category => category["name"].ToString() == family.Category1);
+            var foundCategory2 = categories.FirstOrDefault(category => category["name"].ToString() == family.Category2);
 
             // If category 1 doesn't exist
             if (foundCategory1 == null)
@@ -62,10 +60,8 @@ namespace SwipeFlash.Core
             if (staticFlashcardFamilies == null || userFlashcardFamilies == null) return;
 
             // Tries to find the families in the JSON files
-            var foundActiveStaticFamilies = staticFlashcardFamilies.Where(existingFamily => existingFamily["family"].ToString() == family.FamilyName);
-            var foundActiveUserFamilies = userFlashcardFamilies.Where(existingFamily => existingFamily["family"].ToString() == family.FamilyName);
-            var activeStaticFamily = foundActiveStaticFamilies.Count() > 0 ? foundActiveStaticFamilies.First() : null;
-            var activeUserFamily = foundActiveUserFamilies.Count() > 0 ? foundActiveUserFamilies.First() : null;
+            var activeStaticFamily = staticFlashcardFamilies.FirstOrDefault(existingFamily => existingFamily["family"].ToString() == family.FamilyName);
+            var activeUserFamily = userFlashcardFamilies.FirstOrDefault(existingFamily => existingFamily["family"].ToString() == family.FamilyName);
 
             // This naively assumes that both the static and the user data are valid
 

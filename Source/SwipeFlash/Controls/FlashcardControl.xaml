@@ -11,9 +11,11 @@
              local:AnimateFlipProperty.Value="{Binding IsFlipped}"
              local:AnimateSwipeLeftProperty.Value="{Binding IsSwipedLeft}"
              local:AnimateSwipeRightProperty.Value="{Binding IsSwipedRight}"
-             local:InputBindingBehavior.PropagateInputBindingsToWindow="{Binding HasInput}"
+             local:IsInputBindingEnabledProperty.Value="{Binding IsInputEnabled}"
              local:IsPendingDestroyProperty.Value="{Binding IsPendingDestroy}"
              local:AnimateQueuePositionProperty.Value="{Binding CardQueuePosition}">
+
+    <local:StoredInputBindingsProperty.Value/>
 
     <UserControl.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
@@ -25,27 +27,37 @@
                                     Background="{StaticResource BackgroundLightBrush}"
                                     CornerRadius="20"
                                     BorderThickness="1"
-                                    BorderBrush="{StaticResource ForegroundDarkBrush}">
+                                    BorderBrush="{StaticResource ForegroundDarkBrush}"
+                                    ClipToBounds="True">
 
                                 <Border.Effect>
                                     <DropShadowEffect Opacity=".2" BlurRadius="20" ShadowDepth="0"/>
                                 </Border.Effect>
 
                                 <Grid>
+                                    <Border Background="#e8e8e8"
+                                            Height="200"
+                                            VerticalAlignment="Top"
+                                            CornerRadius="20"
+                                            local:AnimateContentSlideInFromTopProperty.Value="{Binding IsInEditMode}"
+                                            Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                            IsHitTestVisible="False">
+                                    </Border>
+
                                     <!-- Icon -->
                                     <emoji:TextBlock Text="{Binding Side1Icon}"
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Top"
                                                      FontSize="{StaticResource FontSizeLarger}"
                                                      Margin="30 30"
-                                                     Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}}"/>
+                                                     Visibility="{Binding IsSide1Visible, Converter={local:BooleanToVisibilityConverter}}"/>
 
                                     <emoji:TextBlock Text="{Binding Side2Icon}"
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Top"
                                                      FontSize="{StaticResource FontSizeLarger}"
                                                      Margin="30 30"
-                                                     Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                                                     Visibility="{Binding IsSide2Visible, Converter={local:BooleanToVisibilityConverter}}"/>
 
                                     <!-- Content -->
                                     <Grid Margin="50" Name="textContainer">
@@ -70,25 +82,71 @@
 
                                         <!-- Text -->
                                         <Viewbox Grid.Row="1">
-                                            <TextBlock Text="{Binding Side1Text}" 
-                                                       MaxWidth="{Binding ActualWidth, ElementName=textContainer}"
-                                                       VerticalAlignment="Center"
-                                                       TextAlignment="Center"
-                                                       FontSize="{StaticResource FontSizeVeryLarge}"
-                                                       TextWrapping="WrapWithOverflow"
-                                                       Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}}"/>
+                                            <Grid>
+                                                <!-- Side 1 text -->
+                                                <TextBlock Name="text1"
+                                                           Text="{Binding Side1Text}" 
+                                                           MaxWidth="{Binding ActualWidth, ElementName=textContainer}"
+                                                           VerticalAlignment="Center"
+                                                           TextAlignment="Center"
+                                                           FontSize="{StaticResource FontSizeVeryLarge}"
+                                                           TextWrapping="WrapWithOverflow"
+                                                           Visibility="{Binding IsSide1Visible, Converter={local:BooleanToVisibilityConverter}}"/>
+                                                
+                                                <!-- Edit mode side 1 input -->
+                                                <TextBox Text="{Binding Side1EditText}"
+                                                         MaxWidth="{Binding MaxWidth, ElementName=text1}"
+                                                         VerticalAlignment="Center"
+                                                         HorizontalAlignment="Center"
+                                                         TextAlignment="Center"
+                                                         FontSize="{Binding FontSize, ElementName=text1}"
+                                                         TextWrapping="WrapWithOverflow"
+                                                         Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Background="Transparent"
+                                                         Margin="0 -50 0 50"
+                                                         local:SelectAllTextOnFocusProperty.Value="True"/>
+                                            </Grid>
                                         </Viewbox>
 
                                         <Viewbox Grid.Row="1">
-                                            <TextBlock Text="{Binding Side2Text}" 
-                                                       MaxWidth="{Binding ActualWidth, ElementName=textContainer}"
-                                                       VerticalAlignment="Center"
-                                                       TextAlignment="Center"
-                                                       FontSize="{StaticResource FontSizeVeryLarge}"
-                                                       TextWrapping="WrapWithOverflow"
-                                                       Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                                            <Grid>
+                                                <!-- Side 2 text -->
+                                                <TextBlock Text="{Binding Side2Text}" 
+                                                           MaxWidth="{Binding ActualWidth, ElementName=textContainer}"
+                                                           VerticalAlignment="Center"
+                                                           TextAlignment="Center"
+                                                           FontSize="{StaticResource FontSizeVeryLarge}"
+                                                           TextWrapping="WrapWithOverflow"
+                                                           Visibility="{Binding IsSide2Visible, Converter={local:BooleanToVisibilityConverter}}"/>
+                                                
+                                                <!-- Edit mode side 2 input -->
+                                                <TextBox Text="{Binding Side2EditText}"
+                                                         MaxWidth="{Binding MaxWidth, ElementName=text1}"
+                                                         VerticalAlignment="Center"
+                                                         TextAlignment="Center"
+                                                         HorizontalAlignment="Center"
+                                                         FontSize="{Binding FontSize, ElementName=text1}"
+                                                         TextWrapping="WrapWithOverflow"
+                                                         Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Background="{StaticResource BackgroundLightBrush}"
+                                                         Margin="0 50 0 -50"
+                                                         local:SelectAllTextOnFocusProperty.Value="True"/>
+                                            </Grid>
                                         </Viewbox>
                                     </Grid>
+
+                                    <!-- Enable card illustration input -->
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Right"
+                                                Margin="20"
+                                                Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}">
+                                        <TextBlock Text="Enable card illustration"
+                                                   VerticalAlignment="Center"/>
+                                        <CheckBox Height="20" 
+                                                  Margin="5 3 0 0"
+                                                  IsChecked="{Binding HasIllustrationEdit}"/>
+                                    </StackPanel>
 
                                     <!-- Image credit -->
                                     <TextBlock HorizontalAlignment="Right"
@@ -97,8 +155,7 @@
                                                FontSize="{StaticResource FontSizeSmaller}"
                                                Foreground="{StaticResource ForegroundDarkBrush}"
                                                Visibility="{Binding IsImageVisible, Converter={local:BooleanToVisibilityConverter}}"
-                                               Text="{Binding ImageCreditText}">
-                                    </TextBlock>
+                                               Text="{Binding ImageCreditText}"/>
 
                                 </Grid>
                             </Border>

@@ -25,9 +25,19 @@ namespace SwipeFlash.Core
         public string Side1Icon { get; set; }
 
         /// <summary>
+        /// The side 1 text typed in by the user in edit mode
+        /// </summary>
+        public string Side1EditText { get; set; }
+
+        /// <summary>
         /// The text on the B side of the card
         /// </summary>
         public string Side2Text { get; set; }
+
+        /// <summary>
+        /// The side 2 text typed in by the user in edit mode
+        /// </summary>
+        public string Side2EditText { get; set; }
 
         /// <summary>
         /// The text on the B side of the card
@@ -43,6 +53,11 @@ namespace SwipeFlash.Core
         /// Whether the card takes in the input by the user
         /// </summary>
         public bool HasInput { get; set; } = false;
+
+        /// <summary>
+        /// Whether the input is currently enabled for this card
+        /// </summary>
+        public bool IsInputEnabled => HasInput && !IsEditContentVisible;
 
         /// <summary>
         /// Whether the card was swiped left by the user
@@ -95,11 +110,16 @@ namespace SwipeFlash.Core
         /// </summary>
         public bool HasIllustration { get; set; } = false;
 
+        /// <summary>
+        /// The <see cref="HasIllustration"/> value set by the user in edit mode
+        /// </summary>
+        public bool HasIllustrationEdit { get; set; }
+
         private bool _appIllustrationsEnabled { get; set; } = Properties.Settings.Default.IllustrationsEnabled;
         /// <summary>
         /// Whether the image is currently visible on this side of the card
         /// </summary>
-        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded && _appIllustrationsEnabled;
+        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded && _appIllustrationsEnabled && !IsInEditMode;
 
         private Photo _illustrationData;
         /// <summary>
@@ -139,15 +159,53 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The image credit display text
         /// </summary>
-        public string ImageCreditText => 
-            IllustrationData != null ? 
-            $"Image credit:\n{IllustrationData.User.FirstName} {IllustrationData.User.LastName} on Unsplash" : 
+        public string ImageCreditText =>
+            IllustrationData != null ?
+            $"Image credit:\n{IllustrationData.User.FirstName} {IllustrationData.User.LastName} on Unsplash" :
             "No illustration data";
 
         /// <summary>
         /// Whether this card indicates the end of the card stack
         /// </summary>
         public bool IsEndOfStackCard { get; set; }
+
+        private bool _isInEditMode = false;
+        /// <summary>
+        /// Whether the card is currently in edit mode
+        /// </summary>
+        public bool IsInEditMode
+        {
+            get => _isInEditMode;
+            set
+            {
+                if (_isInEditMode != value) OnEditModeChanged(value);
+                _isInEditMode = value;
+            }
+        }
+        /// <summary>
+        /// Whether the edit card content is currently visible
+        /// </summary>
+        public bool IsEditContentVisible { get; private set; }
+
+        /// <summary>
+        /// Whether the side 1 is currently visible
+        /// </summary>
+        public bool IsSide1Visible => IsOnSide1 && !IsEditContentVisible;
+
+        /// <summary>
+        /// Whether the side 2 is currently visible
+        /// </summary>
+        public bool IsSide2Visible => !IsOnSide1 && !IsEditContentVisible;
+
+        /// <summary>
+        /// The unique ID of the card within its family
+        /// </summary>
+        public int CardID { get; set; }
+
+        /// <summary>
+        /// The name of the flashcard's family
+        /// </summary>
+        public string CardFamily { get; set; }
 
         #endregion
 
@@ -223,7 +281,7 @@ namespace SwipeFlash.Core
         private void FlipCard()
         {
             // Quit if this card is the end of stack card
-            if (IsEndOfStackCard) return;
+            if (IsEndOfStackCard || IsInEditMode) return;
 
             // Get application view model
             var appVM = IoC.Get<ApplicationViewModel>();
@@ -294,7 +352,40 @@ namespace SwipeFlash.Core
 
         #endregion
 
-        #region Helper Methods
+        #region Public Methods
+
+        /// <summary>
+        /// Called when the card edit is cancelled by the host
+        /// </summary>
+        public void CancelEdit()
+        {
+            // Disables edit mode
+            IsInEditMode = false;
+
+            // Resets the textbox texts
+            Side1EditText = Side1Text;
+            Side2EditText = Side2Text;
+            HasIllustrationEdit = HasIllustration;
+        }
+
+        /// <summary>
+        /// Called when the card edit is confirmed by the host
+        /// </summary>
+        public void ConfirmEdit()
+        {
+            // Disables edit mode
+            IsInEditMode = false;
+
+            bool couldEditCard = IoC.Get<FlashcardManager>().EditFlashcardData(CardID, CardFamily, Side1EditText, Side2EditText, HasIllustrationEdit);
+
+            if (!couldEditCard)
+                return;
+
+            // Sets the card text to the textbox texts
+            Side1Text = Side1EditText;
+            Side2Text = Side2EditText;
+            HasIllustration = HasIllustrationEdit;
+        }
 
         /// <summary>
         /// Initializes the card with a card data container
@@ -315,10 +406,17 @@ namespace SwipeFlash.Core
             Side1Icon = cardData.Side1Icon;
             Side2Icon = cardData.Side2Icon;
             IsInverted = cardData.IsInverted;
+            CardID = cardData.FlashcardID;
+            CardFamily = cardData.FamilyName;
+
+            // Sets the edit mode values to the default text
+            Side1EditText = Side1Text;
+            Side2EditText = Side2Text;
 
             // Enable illustration
             if (cardData.HasIllustration) EnableIllustration();
 
+            HasIllustrationEdit = HasIllustration;
         }
 
         /// <summary>
@@ -342,6 +440,23 @@ namespace SwipeFlash.Core
         }
 
         /// <summary>
+        /// Enables the illustration on this card
+        /// </summary>
+        public void EnableIllustration()
+        {
+            HasIllustration = true;
+
+            // If this card should have an illustration, call the API
+            if (Properties.Settings.Default.IllustrationsEnabled)
+                FindIllustrationAsync();
+
+        }
+
+        #endregion
+
+        #region Private Helpers
+
+        /// <summary>
         /// Update the <see cref="IsOnSide1"/> bool after a delay,
         /// used when running the flip animation
         /// </summary>
@@ -354,19 +469,6 @@ namespace SwipeFlash.Core
                 // Update the value
                 IsOnSide1 = IsFlipped == IsInverted;
             });
-        }
-
-        /// <summary>
-        /// Enables the illustration on this card
-        /// </summary>
-        public void EnableIllustration()
-        {
-            HasIllustration = true;
-
-            // If this card should have an illustration, call the API
-            if (Properties.Settings.Default.IllustrationsEnabled)
-                FindIllustrationAsync();
-
         }
 
         /// <summary>
@@ -400,7 +502,7 @@ namespace SwipeFlash.Core
 
             // If no photos were found, quit
             if (foundPhotos.Count == 0) return;
-            
+
             // Get a random photo from the 10 first results
             IllustrationData = foundPhotos[rand.Next(Math.Min(foundPhotos.Count, 10))];
         }
@@ -409,7 +511,7 @@ namespace SwipeFlash.Core
         /// Downloads the illustration
         /// </summary>
         /// <returns></returns>
-        public void SetIllustrationUri(string illustrationUri)
+        private void SetIllustrationUri(string illustrationUri)
         {
             if (Illustration == null)
                 Illustration = new BitmapImage();
@@ -433,6 +535,17 @@ namespace SwipeFlash.Core
             if (isPropertyIllustrationsEnabled && _appIllustrationsEnabled && IllustrationData == null)
                 // Fire the FindIllustration method
                 FindIllustrationAsync();
+        }
+
+        /// <summary>
+        /// Called when <see cref="IsInEditMode"/> has been changed
+        /// </summary>
+        private void OnEditModeChanged(bool newValue)
+        {
+            if (newValue)
+                IsEditContentVisible = true;
+            else
+                Task.Delay(200).ContinueWith((t) => { IsEditContentVisible = false; });
         }
 
         #endregion

@@ -26,7 +26,8 @@ namespace SwipeFlash.Core
             Side2Icon = "🇪🇸";
             IsFlipped = false;
             IsInverted = false;
-            IsOnSide1 = true;
+            IsOnSide1 = false;
+            IsInEditMode = false;
 
             EnableIllustration();
         }

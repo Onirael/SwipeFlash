@@ -68,7 +68,7 @@
         </Border>
 
         <!--#endregion-->
-
+        
         <Grid local:AnimateContentFadeInProperty.Value="{Binding ApplicationViewModel.IsContentVisible, 
                                                          Source={x:Static local:ViewModelLocator.Instance}}">
 
@@ -91,7 +91,16 @@
 
         </Grid>
 
-        <!--#region Settings-->
+
+        <!-- Splash screen -->
+        <Image Source="/Images/SwipeFlashIcon.ico"
+               Margin="50"
+               local:AnimateScaleAndFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
+                                                           Source={x:Static local:ViewModelLocator.Instance},
+                                                           Converter={local:InvertBooleanConverter}}"
+               IsHitTestVisible="False"/>
+
+        <!--#region Settings Menu-->
 
         <!-- Settings menu backdrop -->
         <Border Background="#80000000"
@@ -102,19 +111,12 @@
 
         <!-- Settings menu control -->
         <local:SettingsMenuControl VerticalAlignment="Top"
-                                   Margin="0 -10 0 0" 
-                                   IsHitTestVisible="True"
+                                   Margin="0 -10 0 0"
                                    Width="500"
                                    local:AnimateSettingsSlideInProperty.Value="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                                                                Source={x:Static local:ViewModelLocator.Instance}}"/>
-        
-        <!--#endregion-->
 
-        <Image Source="/Images/SwipeFlashIcon.ico"
-               Margin="50"
-               local:AnimateScaleAndFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
-                                                           Source={x:Static local:ViewModelLocator.Instance},
-                                                           Converter={local:InvertBooleanConverter}}"/>
+        <!--#endregion-->
 
     </Grid>
 </local:BaseWindow>

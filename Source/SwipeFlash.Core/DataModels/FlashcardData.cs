@@ -39,5 +39,15 @@
         /// Whether the card is the end of stack card
         /// </summary>
         public bool IsEndOfStackCard;
+
+        /// <summary>
+        /// The unique ID of the flashcard within its family
+        /// </summary>
+        public int FlashcardID;
+
+        /// <summary>
+        /// The name of the flashcard's family
+        /// </summary>
+        public string FamilyName;
     }
 }

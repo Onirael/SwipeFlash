@@ -38,6 +38,11 @@ namespace SwipeFlash.Core
         public double CardChangeInputDelay { get; set; } = 0.15;
 
         /// <summary>
+        /// Whether the host is currently in flashcard edit mode
+        /// </summary>
+        public bool IsInEditMode { get; set; } = false;
+
+        /// <summary>
         /// DEVELOPMENT
         /// </summary>
         private int FlashcardID { get; set; } = 0;
@@ -61,6 +66,16 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand EditCardCommand { get; set; }
 
+        /// <summary>
+        /// The command triggered by the cancel edit card button
+        /// </summary>
+        public ICommand CancelEditCommand { get; set; }
+
+        /// <summary>
+        /// The command triggered by the confirm edit card button
+        /// </summary>
+        public ICommand ConfirmEditCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -82,6 +97,12 @@ namespace SwipeFlash.Core
             // Initializes the edit card button command
             EditCardCommand = new RelayCommand(OnEditCardButtonPressed);
 
+            // Initializes the cancel edit card button command
+            CancelEditCommand = new RelayCommand(OnCancelEditButtonPressed);
+
+            // Initializes the confirm edit card button command
+            ConfirmEditCommand = new RelayCommand(OnConfirmEditButtonPressed);
+
             // Hooks the initlaize flashcard list function to the OnQueueInitialized event
             IoC.Get<FlashcardManager>().OnQueueInitialized += InitializeFlashcardList;
 
@@ -89,7 +110,7 @@ namespace SwipeFlash.Core
             // This must be done after InitializeFlashcardList has been hooked
             IoC.Get<FlashcardManager>().InitJSONData();
         }
-
+        
         #endregion
 
         #region Private Helpers
@@ -150,7 +171,41 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnEditCardButtonPressed()
         {
-            throw new NotImplementedException();
+            var lastFlashcard = Flashcards[Flashcards.Count - 1];
+
+            // If the active flashcard if the end of stack card, quit
+            if (lastFlashcard.IsEndOfStackCard)
+                return;
+
+            // Enables the edit mode
+            IsInEditMode = true;
+
+            // Enables the flashcard's edit mode
+            lastFlashcard.IsInEditMode = true;
+        }
+        
+        /// <summary>
+        /// Called when the confirm edit card button is pressed
+        /// </summary>
+        private void OnConfirmEditButtonPressed()
+        {
+            // Disables the edit mode
+            IsInEditMode = false;
+
+            // Disables the flashcard's edit mode
+            Flashcards[Flashcards.Count - 1].ConfirmEdit();
+        }
+
+        /// <summary>
+        /// Called when the cancel edit card button is pressed
+        /// </summary>
+        private void OnCancelEditButtonPressed()
+        {
+            // Disables the edit mode
+            IsInEditMode = false;
+
+            // Signals to the card that the edit has been cancelled
+            Flashcards[Flashcards.Count - 1].CancelEdit();
         }
 
         /// <summary>
