@@ -145,6 +145,41 @@ namespace SwipeFlash.Core
         }
 
         /// <summary>
+        /// Gets the data of a given family
+        /// </summary>
+        /// <param name="familyName">The name of the family</param>
+        /// <returns>The family data</returns>
+        public FlashcardFamilyData GetFamilyData(string familyName)
+        {
+            // Creates a new family data container
+            var familyData = new FlashcardFamilyData();
+
+            // Gets the family with the corresponding name
+            var foundFamily = StaticData["flashcards"].AsJEnumerable()
+                                                      .FirstOrDefault(family => (string)family["family"] == familyName);
+            // If a family was found
+            if (foundFamily != null)
+            {
+                // Gets the family data from the JSON
+                familyData.Name = familyName;
+                familyData.Category1 = (string)foundFamily["category1"];
+                familyData.Category2 = (string)foundFamily["category2"];
+                familyData.CardCount = foundFamily["cards"].AsJEnumerable().Count();
+
+                // Finds the categories in the JSON
+                var foundCategory1 = StaticData["categories"].AsJEnumerable()
+                                                             .FirstOrDefault(category => (string)category["name"] == familyData.Category1);
+                var foundCategory2 = StaticData["categories"].AsJEnumerable()
+                                                             .FirstOrDefault(category => (string)category["name"] == familyData.Category2);
+                // Gets the logos
+                familyData.Logo1 = (string)foundCategory1?["icon"];
+                familyData.Logo2 = (string)foundCategory2?["icon"];
+            }
+
+            return familyData;
+        }
+
+        /// <summary>
         /// Deletes a card family
         /// </summary>
         /// <param name="familyName">The display name of the family</param>
@@ -221,18 +256,14 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Modifies the flashcard data
         /// </summary>
-        /// <param name="flashcardID">The unique index of the flashcard in its family</param>
-        /// <param name="familyName">The name of the flashcard family</param>
-        /// <param name="newSide1Text">The new side 1 text</param>
-        /// <param name="newSide2Text">The new side 2 text</param>
-        /// <param name="newHasIllustration">The new has illustration value</param>
-        /// <returns></returns>
-        public bool EditFlashcardData(int flashcardID, string familyName, string newSide1Text, string newSide2Text, bool newHasIllustration)
+        /// <param name="newFlashcardData">The edited data of the flashcard</param>
+        /// <returns>True if the operation was successful</returns>
+        public bool EditFlashcardData(FlashcardData newFlashcardData)
         {
             // Gets the JToken with the matching family name
             var familyObject = StaticData["flashcards"].AsJEnumerable()
                                                        .FirstOrDefault(family => family["family"]
-                                                       .ToString() == familyName);
+                                                       .ToString() == newFlashcardData.FamilyName);
 
             // If the family wasn't found, quit
             if (familyObject == null)
@@ -241,20 +272,101 @@ namespace SwipeFlash.Core
             // Gets the flashcard with the matching ID
             var flashcard = familyObject["cards"].AsJEnumerable()
                                                  .FirstOrDefault(card => card["id"]
-                                                 .Value<int>() == flashcardID);
+                                                 .Value<int>() == newFlashcardData.FlashcardID);
 
             // If the flashcard wasn't found, quit
             if (flashcard == null)
                 return false;
 
             // Changes the text values
-            flashcard["side1Text"] = newSide1Text;
-            flashcard["side2Text"] = newSide2Text;
-            flashcard["hasIllustration"] = newHasIllustration;
+            flashcard["side1Text"] = newFlashcardData.Side1Text;
+            flashcard["side2Text"] = newFlashcardData.Side2Text;
+            flashcard["hasIllustration"] = newFlashcardData.HasIllustration;
 
             // Updates the JSON files
             JSONWriter.UpdateJSONFiles();
             
+            return true;
+        }
+
+        /// <summary>
+        /// Modifies the family data
+        /// </summary>
+        /// <param name="newFamilyData">The modified data of the flashcard family</param>
+        /// <param name="oldFamilyData">The base data of the flashcard family</param>
+        /// <returns></returns>
+        public bool EditFamilyData(FlashcardFamilyData newFamilyData, FlashcardFamilyData oldFamilyData)
+        {
+            // Gets the static data JToken with the matching family name
+            var familyStaticObject = StaticData["flashcards"].AsJEnumerable()
+                                                             .FirstOrDefault(family => family["family"]
+                                                             .ToString() == oldFamilyData.Name);
+            // Gets the user data JToken with the matching family name
+            var familyUserObject = UserData["flashcards"].AsJEnumerable()
+                                                         .FirstOrDefault(family => family["family"]
+                                                         .ToString() == oldFamilyData.Name);
+
+            familyStaticObject["family"] = newFamilyData.Name;
+            familyUserObject["family"] = newFamilyData.Name;
+
+            // If the category or the logo has been changed
+            if (oldFamilyData.Category1 != newFamilyData.Category1 || 
+                oldFamilyData.Logo1 != newFamilyData.Logo1)
+            {
+                // Gets the category object
+                var category1Object = StaticData["categories"].AsJEnumerable()
+                                                              .FirstOrDefault(category => category["name"]
+                                                              .ToString() == newFamilyData.Category1);
+                // If the category exists
+                if (category1Object != null)
+                {
+                    // Set the icon
+                    category1Object["icon"] = newFamilyData.Logo1;
+                }
+                else
+                {
+                    // Creates a new category
+                    var newCategory = new JObject();
+                    newCategory["name"] = newFamilyData.Category2;
+                    newCategory["icon"] = newFamilyData.Logo1;
+
+                    // Adds it to the categories array
+                    (StaticData["categories"] as JArray).Add(newCategory);
+                }
+            }
+
+            // If the category or the logo has been changed
+            if (oldFamilyData.Category2 != newFamilyData.Category2 ||
+                oldFamilyData.Logo2 != newFamilyData.Logo2)
+            {
+                // Gets the category object
+                var category2Object = StaticData["categories"].AsJEnumerable()
+                                                              .FirstOrDefault(category => category["name"]
+                                                              .ToString() == newFamilyData.Category2);
+                // If the category exists
+                if (category2Object != null)
+                {
+                    // Set the icon
+                    category2Object["icon"] = newFamilyData.Logo2;
+                }
+                else
+                {
+                    // Creates a new category
+                    var newCategory = new JObject();
+                    newCategory["name"] = newFamilyData.Category2;
+                    newCategory["icon"] = newFamilyData.Logo2;
+
+                    // Adds it to the categories array
+                    (StaticData["categories"] as JArray).Add(newCategory);
+                }
+            }
+            
+            // DEVELOPMENT
+            // CLEAN EMPTY CATEGORIES
+
+            // Updates the JSON files
+            JSONWriter.UpdateJSONFiles();
+
             return true;
         }
 
@@ -282,6 +394,8 @@ namespace SwipeFlash.Core
                         Name = (string)family["family"],
                         CardCount = family["cards"].AsJEnumerable().Count(),
                         IsEnabled = (bool)UserData["flashcards"].FirstOrDefault(result => (string)result["family"] == (string)family["family"])["isEnabled"],
+                        Category1 = (string)family["category1"],
+                        Category2 = (string)family["category2"],
                     };
 
                     // Store it in FlashcardFamilies

@@ -181,6 +181,7 @@
     <Compile Include="DataModels\AsyncObservableCollection.cs" />
     <Compile Include="DataModels\ParserData.cs" />
     <Compile Include="DataModels\FlashcardFamilyData.cs" />
+    <Compile Include="DataModels\WindowArgs.cs" />
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="Data\JSONPacketManager.cs" />
     <Compile Include="Data\JSONWriter.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="ViewModel\Manager\AddFlashcards\AddFlashcardsWindowViewModel.cs" />
     <Compile Include="ViewModel\Manager\Design\FlashcardFamilyListItemDesignModel.cs" />
     <Compile Include="ViewModel\Manager\Design\FlashcardManagerWindowDesignModel.cs" />
+    <Compile Include="ViewModel\Manager\FamilyInfoViewModel.cs" />
     <Compile Include="ViewModel\Manager\FlashcardFamilyListItemViewModel.cs" />
     <Compile Include="ViewModel\Manager\FlashcardManagerWindowViewModel.cs" />
     <Compile Include="ViewModel\Window\SettingsMenuViewModel.cs" />

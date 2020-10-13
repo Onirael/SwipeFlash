@@ -121,6 +121,9 @@
     <Compile Include="Windows\AddFlashcardsWindow.xaml.cs">
       <DependentUpon>AddFlashcardsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FamilyInfoWindow.xaml.cs">
+      <DependentUpon>FamilyInfoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FlashcardManagerWindow.xaml.cs">
       <DependentUpon>FlashcardManagerWindow.xaml</DependentUpon>
     </Compile>
@@ -144,6 +147,10 @@
     <Page Include="Windows\AddFlashcardsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\FamilyInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\FlashcardManagerWindow.xaml">
       <SubType>Designer</SubType>

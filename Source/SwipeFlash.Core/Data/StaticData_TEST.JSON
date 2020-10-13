@@ -31,7 +31,7 @@
           "id": 0,
           "side1Text": "La puerta",
           "side2Text": "The door",
-          "hasIllustration": false
+          "hasIllustration": true
         },
         {
           "id": 1,
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "family": "Test family",
+      "family": "Basic family",
       "category1": "test1",
       "category2": "test2",
       "cards": [

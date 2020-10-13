@@ -172,3 +172,5 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.csproj.CoreCompileIn
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.csproj.CopyComplete
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.exe
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.pdb
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FamilyInfoWindow.g.cs
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FamilyInfoWindow.baml

@@ -7,9 +7,9 @@ namespace SwipeFlash.Core
     /// </summary>
     public interface IWindowService
     {
-        void CreateWindow(WindowType windowType);
+        void CreateWindow(WindowArgs args);
 
-        void DestroyWindow(WindowType windowType);
+        void DestroyWindow(WindowArgs args);
     }
 
     /// <summary>
@@ -22,12 +22,12 @@ namespace SwipeFlash.Core
         /// <summary>
         /// An event handler fired when a window is being created
         /// </summary>
-        public EventHandler<WindowType> OnCreateWindow { get; set; }
+        public EventHandler<WindowArgs> OnCreateWindow { get; set; }
 
         /// <summary>
         /// An event handler fired when a window is being destroyed
         /// </summary>
-        public EventHandler<WindowType> OnDestroyWindow { get; set; }
+        public EventHandler<WindowArgs> OnDestroyWindow { get; set; }
 
         #endregion
 
@@ -37,18 +37,18 @@ namespace SwipeFlash.Core
         /// Creates a new instance of a window
         /// </summary>
         /// <param name="viewModel">The view model of the new window</param>
-        public void CreateWindow(WindowType windowType)
+        public void CreateWindow(WindowArgs args)
         {
-            OnCreateWindow?.Invoke(this, windowType);
+            OnCreateWindow?.Invoke(this, args);
         }
 
         /// <summary>
         /// Destroys an instance of a window
         /// </summary>
-        public void DestroyWindow(WindowType windowType)
+        public void DestroyWindow(WindowArgs args)
         {
             // If the event handler is not null, invoke it
-            OnDestroyWindow?.Invoke(this, windowType);
+            OnDestroyWindow?.Invoke(this, args);
         }
 
         #endregion

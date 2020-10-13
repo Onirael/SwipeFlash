@@ -24,6 +24,22 @@
         /// <summary>
         /// The Windows file explorer
         /// </summary>
-        FileExplorer = 4,
+        OpenFileExplorer = 4,
+        /// <summary>
+        /// The Windows save file explorer
+        /// </summary>
+        SaveFileExplorer = 5,
+        /// <summary>
+        /// Warning popup
+        /// </summary>
+        Warning = 6,
+        /// <summary>
+        /// Confirmation popup
+        /// </summary>
+        Confirmation = 7,
+        /// <summary>
+        /// The information window of a given family
+        /// </summary>
+        FamilyInfo = 8,
     }
 }

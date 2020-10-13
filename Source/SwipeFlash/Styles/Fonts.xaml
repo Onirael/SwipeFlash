@@ -48,5 +48,6 @@
     <System:String x:Key="FontAwesome_Check">&#xf00c;</System:String>
     <System:String x:Key="FontAwesome_Edit">&#xf303;</System:String>
     <System:String x:Key="FontAwesome_Trash">&#xf1f8;</System:String>
+    <System:String x:Key="FontAwesome_Eye">&#xf06e;</System:String>
 
 </ResourceDictionary>

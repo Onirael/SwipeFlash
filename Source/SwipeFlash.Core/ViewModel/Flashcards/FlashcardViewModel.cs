@@ -376,7 +376,17 @@ namespace SwipeFlash.Core
             // Disables edit mode
             IsInEditMode = false;
 
-            bool couldEditCard = IoC.Get<FlashcardManager>().EditFlashcardData(CardID, CardFamily, Side1EditText, Side2EditText, HasIllustrationEdit);
+            // Creates the modified flashcard data
+            var flashcardData = new FlashcardData()
+            {
+                FlashcardID = CardID,
+                FamilyName = CardFamily,
+                Side1Text = Side1EditText,
+                Side2Text = Side2EditText,
+                HasIllustration = HasIllustrationEdit,
+            };
+            
+            bool couldEditCard = IoC.Get<FlashcardManager>().EditFlashcardData(flashcardData);
 
             if (!couldEditCard)
                 return;

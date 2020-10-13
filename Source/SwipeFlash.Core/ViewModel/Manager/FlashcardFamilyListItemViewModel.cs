@@ -37,6 +37,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand DeleteFamilyCommand { get; set; }
 
+        /// <summary>
+        /// A command called by the see family button
+        /// </summary>
+        public ICommand OpenFamilyInfoCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -56,8 +61,11 @@ namespace SwipeFlash.Core
         /// <param name="familyData">The family data struct</param>
         public FlashcardFamilyListItemViewModel(FlashcardFamilyData familyData)
         {
-            // Initializes delete command
+            // Initializes the delete command
             DeleteFamilyCommand = new RelayCommand(OnDeleteFamily);
+
+            // Initializes the open family info command
+            OpenFamilyInfoCommand = new RelayCommand(OnOpenFamilyInfo);
 
             // Sets properties from data
             FamilyName = familyData.Name;
@@ -77,10 +85,49 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnDeleteFamily()
         {
-            // ADD A WARNING HERE !
+            // Gets the application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
 
-            // Calls the Delete Family method from the Flashcard Manager
-            IoC.Get<FlashcardManager>().DeleteFamily(FamilyName);
+            // Adds a listener to the confirmation event
+            ListenerDelegate listener = OnDeleteFamilyConfirmed;
+            appVM.ListenForEvent(appVM.OnConfirmation, listener);
+
+            // Creates the window args
+            var confirmWindowArgs = new WindowArgs()
+            {
+                Message = $"Delete the all flashcards in {FamilyName} ?",
+                TargetType = WindowType.Confirmation,
+            };
+
+            // Creates the window
+            IoC.Get<WindowService>().CreateWindow(confirmWindowArgs);
+        }
+
+        /// <summary>
+        /// Called when the user has confirmed or cancelled the deletion of the family
+        /// </summary>
+        /// <param name="isConfirmed"></param>
+        private void OnDeleteFamilyConfirmed(object isConfirmed)
+        {
+            // If the user confirmed the deletion
+            if ((bool)isConfirmed)
+                IoC.Get<FlashcardManager>().DeleteFamily(FamilyName);
+        }
+
+        /// <summary>
+        /// Called when the show family info button is pressed 
+        /// </summary>
+        private void OnOpenFamilyInfo()
+        {
+            // Creates the window args
+            var familyInfoWindowArgs = new WindowArgs()
+            {
+                Message = FamilyName,
+                TargetType = WindowType.FamilyInfo,
+            };
+
+            // Creates the window
+            IoC.Get<WindowService>().CreateWindow(familyInfoWindowArgs);
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace SwipeFlash.Core
         private void OnOKPressed()
         {
             // Sends the message to the window service to destroy the window
-            IoC.Get<WindowService>().DestroyWindow(WindowType.FlashcardManager);
+            IoC.Get<WindowService>().DestroyWindow(new WindowArgs() { TargetType = WindowType.FlashcardManager });
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SwipeFlash.Core
         private void OnAddFlashcardsPressed()
         {
             // Creates the add flashcards window from the window service
-            IoC.Get<WindowService>().CreateWindow(WindowType.AddFlashcards);
+            IoC.Get<WindowService>().CreateWindow(new WindowArgs() { TargetType = WindowType.FlashcardManager });
         }
 
         #endregion

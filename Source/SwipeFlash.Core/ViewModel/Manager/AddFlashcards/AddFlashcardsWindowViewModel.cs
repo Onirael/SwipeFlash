@@ -160,7 +160,7 @@ namespace SwipeFlash.Core
                 // Add the flashcard family to the JSON
                 JSONWriter.AddFamilyToJSON(familyData);
 
-            IoC.Get<WindowService>().DestroyWindow(WindowType.AddFlashcards);
+            IoC.Get<WindowService>().DestroyWindow(new WindowArgs() { TargetType = WindowType.AddFlashcards });
         }
     
         /// <summary>
@@ -168,7 +168,7 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnCancelPressed()
         {
-            IoC.Get<WindowService>().DestroyWindow(WindowType.AddFlashcards);
+            IoC.Get<WindowService>().DestroyWindow(new WindowArgs() { TargetType = WindowType.AddFlashcards });
         }
 
         /// <summary>
@@ -176,23 +176,24 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnSelectFilePressed()
         {
-            // Create a single self-unhookable event
-            // hooked to the application's file selected event handler
-            EventHandler<string> onFileSelected = null;
-            onFileSelected = (sender, fileName) =>
-            {
-                // Unhook the event
-                IoC.Get<ApplicationViewModel>().OnFileSelected -= onFileSelected;
-
-                // Run the animation
-                SelectedFilePath = fileName;
-            };
-
-            // Hooks the event to the application view model
-            IoC.Get<ApplicationViewModel>().OnFileSelected += onFileSelected;
+            // Gets the application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+            
+            ListenerDelegate listener = OnFileSelected;
+            appVM.ListenForEvent(appVM.OnFileSelected, listener);
 
             // Creates the window
-            IoC.Get<WindowService>().CreateWindow(WindowType.FileExplorer);
+            IoC.Get<WindowService>().CreateWindow(new WindowArgs() { TargetType = WindowType.AddFlashcards });
+        }
+
+        /// <summary>
+        /// Called when the user has chosen a file
+        /// </summary>
+        /// <param name="fileName"></param>
+        private void OnFileSelected(object fileName)
+        {
+            // Sets the path of the selected file
+            SelectedFilePath = (string)fileName;
         }
 
         #endregion

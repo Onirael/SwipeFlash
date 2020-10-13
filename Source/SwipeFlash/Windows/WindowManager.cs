@@ -1,5 +1,4 @@
 ﻿using SwipeFlash.Core;
-using System;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -32,14 +31,14 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="sender">The window service</param>
         /// <param name="e">The type of the new window</param>
-        private void CreateWindow(object sender, WindowType e)
+        private void CreateWindow(object sender, WindowArgs e)
         {
             object newWindow = null;
 
             // Gets the currently open windows
             var openWindows = System.Windows.Application.Current.Windows;
 
-            switch(e)
+            switch(e.TargetType)
             {
                 // Flashcard manager window
                 case WindowType.FlashcardManager:
@@ -56,13 +55,58 @@ namespace SwipeFlash
                     break;
 
                 // File explorer window
-                case WindowType.FileExplorer:
-                    // Checks if an OpenFileDialog is open
-                    foreach (var openWindow in openWindows) { if (openWindow is OpenFileDialog) return; }
-                    var dialog = new OpenFileDialog();
-                    // Gets the file name from the file dialog
-                    var appVM = IoC.Get<ApplicationViewModel>();
-                    if (dialog.ShowDialog() == DialogResult.OK) { appVM.OnFileSelected?.Invoke(this, dialog.FileName); }
+                case WindowType.OpenFileExplorer:
+                    {
+                        // Checks if an OpenFileDialog is open
+                        foreach (var openWindow in openWindows) { if (openWindow is OpenFileDialog) return; }
+                        var dialog = new OpenFileDialog();
+                        // Gets the file name from the file dialog
+                        var appVM = IoC.Get<ApplicationViewModel>();
+                        if (dialog.ShowDialog() == DialogResult.OK) { appVM.OnFileSelected?.Invoke(this, dialog.FileName); }
+                        break;
+                    }
+
+                // Save file explorer window
+                case WindowType.SaveFileExplorer:
+                    {
+                        // Checks if an OpenFileDialog is open
+                        foreach (var openWindow in openWindows) { if (openWindow is SaveFileDialog) return; }
+                        var dialog = new SaveFileDialog();
+                        // Gets the file name from the file dialog
+                        var appVM = IoC.Get<ApplicationViewModel>();
+                        if (dialog.ShowDialog() == DialogResult.OK) { appVM.OnFileSaved?.Invoke(this, dialog.FileName); }
+                        break;
+                    }
+                // Warning popup
+                case WindowType.Warning:
+                    {
+                        // Checks if a warning wndow is already open
+                        foreach (var openWindow in openWindows) { if (openWindow is System.Windows.Forms.MessageBox) return; }
+                        System.Windows.Forms.MessageBox.Show(e.Message, 
+                                                             "Warning", 
+                                                             MessageBoxButtons.OK);
+                        break;
+                    }
+
+                // Confirmation popup
+                case WindowType.Confirmation:
+                    {
+                        // Checks if a warning wndow is already open
+                        foreach (var openWindow in openWindows) { if (openWindow is System.Windows.Forms.MessageBox) return; }
+                        var dialogResult = System.Windows.Forms.MessageBox.Show(e.Message,
+                                                                                "Confirmation",
+                                                                                MessageBoxButtons.OKCancel);
+                        // Gets the user input from the dialog
+                        var appVM = IoC.Get<ApplicationViewModel>();
+                        appVM.OnConfirmation?.Invoke(this, dialogResult == DialogResult.OK);
+                        break;
+                    }
+
+                // Family info window
+                case WindowType.FamilyInfo:
+                    // Checks if a FamilyInfoWindow is already open
+                    foreach (var openWindow in openWindows) { if (openWindow is FamilyInfoWindow) return; }
+                    newWindow = new FamilyInfoWindow(e.Message);
                     break;
 
                 // Should not be hit
@@ -85,7 +129,7 @@ namespace SwipeFlash
         /// </summary>
         /// <param name="sender">The window service</param>
         /// <param name="e">The type of the window to destroy</param>
-        private void DestroyWindow(object sender, WindowType e)
+        private void DestroyWindow(object sender, WindowArgs e)
         {
             // Gets the currently open windows
             var openWindows = System.Windows.Application.Current.Windows;
@@ -94,7 +138,7 @@ namespace SwipeFlash
             foreach (var openWindow in openWindows)
             {
                 // If the window is of the given type
-                if (openWindow is BaseWindow baseWindow && baseWindow.BaseWindowType == e)
+                if (openWindow is BaseWindow baseWindow && baseWindow.BaseWindowType == e.TargetType)
                     // Destroy it
                     baseWindow.Close();
             }

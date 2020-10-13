@@ -1,0 +1,129 @@
+﻿<local:BaseWindow x:Class="SwipeFlash.FamilyInfoWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:SwipeFlash"
+                  WindowStartupLocation="CenterOwner"
+                  mc:Ignorable="d"
+                  WindowStyle="ToolWindow"
+                  Title="Flashcard family"
+                  SizeToContent="WidthAndHeight">
+
+    <Border Padding="10">
+        <StackPanel>
+            <!-- Flashcard family name input -->
+            <TextBlock Text="Flashcard family name:"
+                       Margin="0 0 0 5"
+                       FontSize="{StaticResource FontSizeLarge}"/>
+            <TextBox FontSize="{StaticResource FontSizeLarge}"
+                     Text="{Binding FamilyName}"/>
+
+            <!-- Logo input -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Side 1 logo input -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Side 1 logo:"
+                           Margin="0 0 0 5"
+                           FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <TextBox Name="logo1"
+                             Padding="0 4"
+                             Width="50"
+                             HorizontalAlignment="Left"
+                             Text="{Binding FamilyLogo1}"/>
+
+                    <TextBlock Text="Side 1 category"
+                               Margin="0 0 0 5"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <ComboBox Padding="0 4"
+                          Width="140"
+                          HorizontalAlignment="Left"
+                          ItemsSource="{Binding Categories}"
+                          IsEditable="True"
+                          Text="{Binding FamilyCategory1}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <!-- Side 2 logo input -->
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                    <TextBlock Text="Side 2 logo:"
+                               Margin="0 0 0 5"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <TextBox Padding="0 4"
+                             Width="50"
+                             HorizontalAlignment="Left"
+                             Text="{Binding FamilyLogo2}"/>
+
+                    <TextBlock Text="Side 2 category"
+                               Margin="0 0 0 5"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <ComboBox Padding="0 4"
+                              Width="140"
+                              HorizontalAlignment="Left"
+                              ItemsSource="{Binding Categories}"
+                              DisplayMemberPath=""
+                              IsEditable="True"
+                              Text="{Binding FamilyCategory2}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                
+                
+            </Grid>
+
+            <Grid Margin="0 10">
+                <TextBlock Text="{Binding CardCountDisplayText, FallbackValue=4000 cards}"
+                           Margin="5 0 0 0"
+                           VerticalAlignment="Center"
+                           FontSize="{StaticResource FontSizeLarge}"/>
+
+                <Button Content="Export Flashcards..."
+                        HorizontalAlignment="Right"
+                        Width="150"
+                        Height="40"
+                        Padding="7"
+                        FontSize="{StaticResource FontSizeRegular}"
+                        Command="{Binding ExportFamilyCommand}"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Height="40">
+                <Button Content="Cancel"
+                        Margin="0"
+                        FontSize="{StaticResource FontSizeRegular}"
+                        Padding="0"
+                        Width="120"
+                        Command="{Binding CancelButtonCommand}"/>
+                <Button Content="OK"
+                        Margin="10 0 0 0"
+                        IsDefault="True"
+                        Padding="0"
+                        Width="120"
+                        FontSize="{StaticResource FontSizeRegular}"
+                        Command="{Binding OKButtonCommand}"/>
+            </StackPanel>
+            
+
+        </StackPanel>
+    </Border>
+
+</local:BaseWindow>

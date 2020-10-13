@@ -62,7 +62,7 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnManageCardsPressed()
         {
-            IoC.Get<WindowService>().CreateWindow(WindowType.FlashcardManager);
+            IoC.Get<WindowService>().CreateWindow(new WindowArgs() { TargetType = WindowType.FlashcardManager });
         }
 
         #endregion

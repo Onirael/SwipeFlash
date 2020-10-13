@@ -25,11 +25,19 @@
             </StackPanel>
         </StackPanel>
 
-        <Button Grid.Column="2" 
-                Style="{StaticResource BorderlessIconButton}"
-                Content="{StaticResource FontAwesome_Trash}"
-                Margin="10"
-                Command="{Binding DeleteFamilyCommand}"/>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" >
+            <!-- Show family info button -->
+            <Button Style="{StaticResource BorderlessIconButton}"
+                    Content="{StaticResource FontAwesome_Eye}"
+                    Command="{Binding OpenFamilyInfoCommand}"/>
+            <!-- Delete family button -->
+            <Button Style="{StaticResource BorderlessIconButton}"
+                    Content="{StaticResource FontAwesome_Trash}"
+                    Margin="10"
+                    Command="{Binding DeleteFamilyCommand}"/>
+        </StackPanel>
+        
 
     </Grid>
 </UserControl>
