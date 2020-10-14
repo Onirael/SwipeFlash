@@ -67,6 +67,16 @@ namespace SwipeFlash.Core
         /// </summary>
         public EventHandler OnQueueInitialized;
 
+        /// <summary>
+        /// Fires when the static data has been modified
+        /// </summary>
+        public EventHandler OnStaticDataUpdated;
+
+        /// <summary>
+        /// Fires when the families List has been updated
+        /// </summary>
+        public EventHandler OnFamiliesUpdated;
+
         #endregion
 
         #region Constructor
@@ -83,6 +93,9 @@ namespace SwipeFlash.Core
 
             // Finds flashcard families as soon as the JSON has been parsed
             OnJSONLoaded += FindFlashcardFamilies;
+
+            // Finds flashcard families whenever the static data is updated
+            OnStaticDataUpdated += FindFlashcardFamilies;
         }
 
         #endregion
@@ -215,6 +228,12 @@ namespace SwipeFlash.Core
                 // Removes the family
                 jsonFoundFamilyUser.Remove();
 
+            // Delete all the unused categories
+            DeleteUnusedCategories();
+
+            // Fires the data updated event
+            OnStaticDataUpdated?.Invoke(this, null);
+
             // Updates the files
             JSONWriter.UpdateJSONFiles();
         }
@@ -282,6 +301,9 @@ namespace SwipeFlash.Core
             flashcard["side1Text"] = newFlashcardData.Side1Text;
             flashcard["side2Text"] = newFlashcardData.Side2Text;
             flashcard["hasIllustration"] = newFlashcardData.HasIllustration;
+            
+            // Fires the data updated event
+            OnStaticDataUpdated?.Invoke(this, null);
 
             // Updates the JSON files
             JSONWriter.UpdateJSONFiles();
@@ -327,12 +349,15 @@ namespace SwipeFlash.Core
                 {
                     // Creates a new category
                     var newCategory = new JObject();
-                    newCategory["name"] = newFamilyData.Category2;
+                    newCategory["name"] = newFamilyData.Category1;
                     newCategory["icon"] = newFamilyData.Logo1;
 
                     // Adds it to the categories array
                     (StaticData["categories"] as JArray).Add(newCategory);
                 }
+
+                // Changes the category of the static family
+                familyStaticObject["category1"] = newFamilyData.Category1;
             }
 
             // If the category or the logo has been changed
@@ -359,10 +384,16 @@ namespace SwipeFlash.Core
                     // Adds it to the categories array
                     (StaticData["categories"] as JArray).Add(newCategory);
                 }
+
+                // Changes the category of the static family
+                familyStaticObject["category2"] = newFamilyData.Category2;
             }
-            
-            // DEVELOPMENT
-            // CLEAN EMPTY CATEGORIES
+
+            // Deletes all the unused categories
+            DeleteUnusedCategories();
+
+            // Fires the data updated event
+            OnStaticDataUpdated?.Invoke(this, null);
 
             // Updates the JSON files
             JSONWriter.UpdateJSONFiles();
@@ -373,12 +404,52 @@ namespace SwipeFlash.Core
         #endregion
 
         #region Private Helpers
+        
+        /// <summary>
+        /// Removes any unused category from the static JSON data
+        /// </summary>
+        /// <returns>The unused categories count</returns>
+        private int DeleteUnusedCategories()
+        {
+            int unusedCategoriesCount = 0;
+
+            // Gets all categories
+            var categories = StaticData["categories"].AsJEnumerable();
+            // Gets all families
+            var families = StaticData["flashcards"].AsJEnumerable();
+
+            var removeCategories = new List<JToken>();
+            // For each category
+            foreach (var category in categories)
+            {
+                string categoryName = (string)category["name"];
+
+                // If the category is used as either category1 or category 2
+                var isUsed = families.Any(family => (string)family["category1"] == categoryName ||
+                                                    (string)family["category2"] == categoryName);
+                // If it isn't used anywhere
+                if (!isUsed)
+                    // Add it to the remove list
+                    removeCategories.Add(category);
+            }
+
+            // Set the count of unused categories
+            unusedCategoriesCount = removeCategories.Count;
+
+            // Removes all found categories
+            removeCategories.ForEach((category) => category.Remove());
+
+            return unusedCategoriesCount;
+        }
 
         /// <summary>
         /// Finds all the flashcard families and stores them in the collection
         /// </summary>
         private void FindFlashcardFamilies(object sender, EventArgs e)
         {
+            // Empties the Flashcard families List
+            FlashcardFamilies.Clear();
+
             // If the data is valid
             if (StaticData != null && UserData != null)
             {
@@ -402,6 +473,8 @@ namespace SwipeFlash.Core
                     FlashcardFamilies.Add(familyData);
                 }
             }
+
+            OnFamiliesUpdated?.Invoke(this, null);
         }
 
         /// <summary>

@@ -102,6 +102,13 @@ namespace SwipeFlash.Core
             // For each flashcard
             foreach (var flashcard in family.Flashcards)
             {
+                // Whether the card already exists
+                bool isDuplicate = staticCards.Any(card => (string)card["side1Text"] == flashcard.Side1Text && 
+                                                           (string)card["side2Text"] == flashcard.Side2Text);
+                // If it is a duplicate, skip
+                if (isDuplicate)
+                    continue;
+
                 // Creates the flashcard JObject
                 var newStaticCard = new JObject();
                 newStaticCard["side1Text"] = flashcard.Side1Text;

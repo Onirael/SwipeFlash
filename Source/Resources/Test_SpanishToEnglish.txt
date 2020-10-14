@@ -10,5 +10,6 @@ abandonar	 	abandon
 abdomen	m	abdomen
 abdominales	m	abdominal muscles
 abierto	 	open
+ábaco	m	abacus
 abogado	m	lawyer
 abonado	m	member
