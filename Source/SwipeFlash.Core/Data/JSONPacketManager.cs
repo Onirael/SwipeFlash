@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace SwipeFlash.Core
@@ -25,8 +27,8 @@ namespace SwipeFlash.Core
             var families = familyPacket["flashcards"].AsJEnumerable();
             var removeFamilies = families.Where(family => family["family"].ToString() != familyName);
             // Remove them from the JSON
-            foreach (var family in removeFamilies)
-                family.Remove();
+            for (int i = 0; i < removeFamilies.Count(); ++i)
+                removeFamilies.ElementAt(i).Remove();
             
             // If there isn't a single family remaining, quit
             if (families.Count() != 1)
@@ -41,8 +43,8 @@ namespace SwipeFlash.Core
             var categories = familyPacket["categories"].AsJEnumerable();
             var removeCategories = categories.Where(category => !validCategories.Contains(category["name"].ToString()));
             // Remove them from the JSON
-            foreach (var category in removeCategories)
-                category.Remove();
+            for (int i = 0; i < removeCategories.Count(); ++i)
+                removeCategories.ElementAt(i).Remove();
 
             // Returns the family JObject
             return familyPacket;
@@ -90,6 +92,36 @@ namespace SwipeFlash.Core
             JSONWriter.UpdateJSONFiles();
 
             return true;
+        }
+
+        /// <summary>
+        /// Whether a file is available to write on in the main thread
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool IsFileReady(string fileName)
+        {
+            // If the file can be opened for exclusive access it means that the file
+            // is no longer locked by another process.
+            try
+            {
+                using (Stream stream = new FileStream(fileName, FileMode.Open))
+                {
+                    if (stream != null)
+                    {
+                        stream.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

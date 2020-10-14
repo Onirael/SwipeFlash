@@ -90,7 +90,7 @@ namespace SwipeFlash.Core
 
             // Adds a listener to the confirmation event
             ListenerDelegate listener = OnDeleteFamilyConfirmed;
-            appVM.ListenForEvent(appVM.OnConfirmation, listener);
+            appVM.ListenForEvent(ref appVM.OnConfirmation, listener);
 
             // Creates the window args
             var confirmWindowArgs = new WindowArgs()

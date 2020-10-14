@@ -72,6 +72,7 @@ namespace SwipeFlash
                         // Checks if an OpenFileDialog is open
                         foreach (var openWindow in openWindows) { if (openWindow is SaveFileDialog) return; }
                         var dialog = new SaveFileDialog();
+                        dialog.Filter = e.Message;
                         // Gets the file name from the file dialog
                         var appVM = IoC.Get<ApplicationViewModel>();
                         if (dialog.ShowDialog() == DialogResult.OK) { appVM.OnFileSaved?.Invoke(this, dialog.FileName); }

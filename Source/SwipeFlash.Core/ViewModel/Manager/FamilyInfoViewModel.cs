@@ -1,5 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SwipeFlash.Core
@@ -131,16 +135,51 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnExportFamilyPressed()
         {
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Creates a listener delegate
+            ListenerDelegate listener = OnFileSaved;
+
+            // Listens for the feedback event
+            appVM.ListenForEvent(ref appVM.OnFileSaved, listener);
+
             // Creates the window args
             var saveFileWindowArgs = new WindowArgs()
             {
                 TargetType = WindowType.SaveFileExplorer,
+                Message = "SwipeFlash Family File (*.sff)|*.sff",
             };
 
             // Creates the window
             IoC.Get<WindowService>().CreateWindow(saveFileWindowArgs);
         }
-        
+
+        /// <summary>
+        /// Called when the user has specified a save file name for the exported file
+        /// </summary>
+        /// <param name="parameter"></param>
+        private void OnFileSaved(object parameter)
+        {
+            // Gets the file path
+            string filePath = parameter as string;
+            if (string.IsNullOrEmpty(filePath))
+                return;
+
+            // Creates data packet
+            var filePacket = JSONPacketManager.CreateFamilyPacket(FamilyName);
+
+            // Converts to string
+            var fileText = JsonConvert.SerializeObject(filePacket, Formatting.Indented);
+
+            // Writes to file
+            File.Create(filePath);
+            Task.Run(() =>
+            {
+                while (!JSONPacketManager.IsFileReady(filePath)) { }
+                File.WriteAllText(filePath, fileText);
+            });
+        }
+
         /// <summary>
         /// Called when the cancel button is pressed
         /// </summary>
@@ -155,6 +194,7 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnOKPressed()
         {
+            // Creates the edited family data
             var newFamilyData = new FlashcardFamilyData()
             {
                 Name = FamilyName,
@@ -164,10 +204,20 @@ namespace SwipeFlash.Core
                 Category2 = FamilyCategory2,
             };
 
+            // Gets the validity of the family data
+            var isFamilyDataValid = DataChecker.IsFamilyDataValid(newFamilyData);
+
+            // If the family data isn't valid, quit
+            if (!isFamilyDataValid)
+                return;
+
+            // Attempts to edit the family data
             bool couldEditData = IoC.Get<FlashcardManager>().EditFamilyData(newFamilyData, DefaultData);
 
+            // If the edit was unsuccessful
             if (!couldEditData)
             {
+                // Create a warning
                 IoC.Get<WindowService>().CreateWindow(new WindowArgs()
                 {
                     TargetType = WindowType.Warning,

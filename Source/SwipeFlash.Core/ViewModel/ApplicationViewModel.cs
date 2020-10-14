@@ -83,20 +83,20 @@ namespace SwipeFlash.Core
         /// when a dialog is open, the sender should hook to this event to listen for the result, 
         /// passes the resulting file as a parameter
         /// </summary>
-        public EventHandler<string> OnFileSelected { get; set; }
+        public EventHandler<string> OnFileSelected;
 
         /// <summary>
         /// Fired when a file is saved from any SaveFileDialog, 
         /// when a dialog is open, the sender should hook to this event to listen for the result, 
         /// passes the resulting file as a parameter
         /// </summary>
-        public EventHandler<string> OnFileSaved { get; set; }
+        public EventHandler<string> OnFileSaved;
 
         /// <summary>
         /// Fired when the user has selected OK or cancel in a 
         /// confirmation window
         /// </summary>
-        public EventHandler<bool> OnConfirmation { get; set; }
+        public EventHandler<bool> OnConfirmation;
 
         #endregion
 
@@ -108,7 +108,7 @@ namespace SwipeFlash.Core
         /// <typeparam name="T">The type of the event's output</typeparam>
         /// <param name="awaitedEvent">The event to listen for</param>
         /// <param name="listenerFunction">The function to run when the event fires</param>
-        public void ListenForEvent<T>(EventHandler<T> awaitedEvent, ListenerDelegate listener)
+        public void ListenForEvent<T>(ref EventHandler<T> awaitedEvent, ListenerDelegate listener)
         {
             // Create a single self-unhookable event
             // hooked to the application's file selected event handler
@@ -116,7 +116,7 @@ namespace SwipeFlash.Core
             listenerEvent = (sender, output) =>
             {
                 // Unhook the event
-                awaitedEvent -= listenerEvent;
+                //awaitedEvent -= listenerEvent;
 
                 // Run the input function
                 listener(output);

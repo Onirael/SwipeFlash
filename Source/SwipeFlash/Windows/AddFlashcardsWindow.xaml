@@ -95,7 +95,8 @@
                                              Padding="0 4"
                                              Width="50"
                                              HorizontalAlignment="Left"
-                                             Text="{Binding Side1Logo}"/>
+                                             Text="{Binding Side1Logo}"
+                                             IsEnabled="{Binding IsLogo1InputEnabled}"/>
 
                                     <TextBlock Text="Side 1 category"
                                                Margin="0 0 0 5"
@@ -124,7 +125,8 @@
                                     <TextBox Padding="0 4"
                                              Width="50"
                                              HorizontalAlignment="Left"
-                                             Text="{Binding Side2Logo}"/>
+                                             Text="{Binding Side2Logo}"
+                                             IsEnabled="{Binding IsLogo2InputEnabled}"/>
 
                                     <TextBlock Text="Side 2 category"
                                                Margin="0 0 0 5"

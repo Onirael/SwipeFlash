@@ -185,6 +185,7 @@
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="Data\JSONPacketManager.cs" />
     <Compile Include="Data\JSONWriter.cs" />
+    <Compile Include="Parser\DataChecker.cs" />
     <Compile Include="Parser\ParserIgnoreRule.cs" />
     <Compile Include="Parser\ParserVariableInstruction.cs" />
     <Compile Include="ViewModel\Base\WindowService.cs" />
