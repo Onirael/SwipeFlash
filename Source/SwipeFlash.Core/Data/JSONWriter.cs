@@ -97,7 +97,8 @@ namespace SwipeFlash.Core
             userCards = activeUserFamily["cards"] as JArray;
 
             // Gets the first card ID
-            int cardID = staticCards.Count();
+            int cardsMaxID = staticCards.Max(card => (int)card["id"]);
+            int cardID = staticCards.Count > 0 ? cardsMaxID + 1 : 0;
 
             // For each flashcard
             foreach (var flashcard in family.Flashcards)
@@ -129,6 +130,8 @@ namespace SwipeFlash.Core
                 cardID++;
             }
 
+            IoC.Get<FlashcardManager>().OnStaticDataUpdated?.Invoke(null, null);
+
             // Update the files
             UpdateJSONFiles();
         }
@@ -156,6 +159,74 @@ namespace SwipeFlash.Core
                 File.WriteAllText(staticFile, newStaticData);
                 File.WriteAllText(userFile, newUserData);
             });
+        }
+
+        /// <summary>
+        /// Creates the user data from a static family JSON token
+        /// </summary>
+        /// <param name="staticFamily">The static data flashcard family</param>
+        /// <returns>True if the operation was successful, false otherwise</returns>
+        public static void CreateUserData(JToken staticFamily)
+        {
+            // Gets the user data
+            var userData = IoC.Get<FlashcardManager>().UserData;
+
+            // Tries to find the family
+            var userFamily = userData["flashcards"].AsJEnumerable()
+                                                   .FirstOrDefault(family => (string)family["family"] == (string)staticFamily["family"]);
+
+            // Gets the static cards enumerable
+            var staticCards = staticFamily["cards"].AsJEnumerable();
+
+            // If the family exists
+            if (userFamily != null)
+            {
+                // Gets the cards array
+                var userCardsArray = userFamily["cards"] as JArray;
+
+                // For each static data card
+                foreach (var staticCard in staticCards)
+                {
+                    // If this ID isn't already in the user array
+                    if (!userCardsArray.Any(card => (int)card["id"] == (int)staticCard["id"]))
+                    {
+                        // Creates a new user card
+                        var newUserCard = new JObject();
+                        newUserCard["id"] = (int)staticCard["id"];
+                        newUserCard["category"] = 0;
+                        newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
+
+                        // Adds it to the array
+                        userCardsArray.Add(newUserCard);
+                    }
+                }
+            }
+            // Otherwise
+            else
+            {
+                // Creates the new user family
+                userFamily = new JObject();
+                var userCardsArray = new JArray();
+                userFamily["family"] = (string)staticFamily["family"];
+                userFamily["cards"] = userCardsArray;
+                userFamily["isEnabled"] = true;
+
+                // Adds the family to the user data
+                (userData["flashcards"] as JArray).Add(userFamily);
+
+                // For each static data card
+                foreach (var staticCard in staticCards)
+                {
+                    // Creates a new user card
+                    var newUserCard = new JObject();
+                    newUserCard["id"] = (int)staticCard["id"];
+                    newUserCard["category"] = 0;
+                    newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
+
+                    // Adds it to the array
+                    userCardsArray.Add(newUserCard);
+                }
+            }
         }
     }
 }

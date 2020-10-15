@@ -319,6 +319,10 @@ namespace SwipeFlash.Core
         /// <returns></returns>
         public bool EditFamilyData(FlashcardFamilyData newFamilyData, FlashcardFamilyData oldFamilyData)
         {
+            // If both are the same, return true
+            if (newFamilyData.Equals(oldFamilyData))
+                return true;
+
             // Gets the static data JToken with the matching family name
             var familyStaticObject = StaticData["flashcards"].AsJEnumerable()
                                                              .FirstOrDefault(family => family["family"]

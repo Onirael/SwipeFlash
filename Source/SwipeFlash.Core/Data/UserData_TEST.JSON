@@ -64,7 +64,6 @@
     },
     {
       "family": "Test family",
-      "isEnabled": true,
       "cards": [
         {
           "id": 0,
@@ -126,7 +125,8 @@
           "category": 0,
           "lastSeen": "01.01.0001 00:00:00 +00:00"
         }
-      ]
+      ],
+      "isEnabled": true
     }
   ]
 }

@@ -11,6 +11,14 @@
     {
       "name": "german",
       "icon": "🇩🇪"
+    },
+    {
+      "name": "test1",
+      "icon": "❤"
+    },
+    {
+      "name": "test2",
+      "icon": "🐸"
     }
   ],
   "flashcards": [
@@ -78,6 +86,85 @@
           "id": 2,
           "side1Text": "the man",
           "side2Text": "Der Mann,\"er",
+          "hasIllustration": true
+        }
+      ]
+    },
+    {
+      "family": "Test family",
+      "category1": "test1",
+      "category2": "test2",
+      "cards": [
+        {
+          "side1Text": "¡anda!",
+          "side2Text": "come on!",
+          "id": 0,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "¿a qué hora?",
+          "side2Text": "when? what time?",
+          "id": 1,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "a causa de",
+          "side2Text": "because of",
+          "id": 2,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "a continuación",
+          "side2Text": "next",
+          "id": 3,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "el ábaco",
+          "side2Text": "abacus",
+          "id": 4,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "abajo",
+          "side2Text": "downstairs, down",
+          "id": 5,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "abandonar",
+          "side2Text": "abandon",
+          "id": 6,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "el abdomen",
+          "side2Text": "abdomen",
+          "id": 7,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "el abdominales",
+          "side2Text": "abdominal muscles",
+          "id": 8,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "abierto",
+          "side2Text": "open",
+          "id": 9,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "el abogado",
+          "side2Text": "lawyer",
+          "id": 10,
+          "hasIllustration": true
+        },
+        {
+          "side1Text": "el abonado",
+          "side2Text": "member",
+          "id": 11,
           "hasIllustration": true
         }
       ]

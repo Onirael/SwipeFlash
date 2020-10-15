@@ -24,11 +24,11 @@ namespace SwipeFlash.Core
             var familyPacket = (JObject)staticData.DeepClone();
 
             // Get all unrelated families
-            var families = familyPacket["flashcards"].AsJEnumerable();
-            var removeFamilies = families.Where(family => family["family"].ToString() != familyName);
+            var families = familyPacket["flashcards"] as JArray;
+            var removeFamilies = families.Where(family => family["family"].ToString() != familyName).ToArray();
             // Remove them from the JSON
-            for (int i = 0; i < removeFamilies.Count(); ++i)
-                removeFamilies.ElementAt(i).Remove();
+            foreach (var family in removeFamilies)
+                families.Remove(family);
             
             // If there isn't a single family remaining, quit
             if (families.Count() != 1)
@@ -40,14 +40,54 @@ namespace SwipeFlash.Core
             var validCategories = new string[] { category1, category2 };
 
             // Get all unrelated categories
-            var categories = familyPacket["categories"].AsJEnumerable();
-            var removeCategories = categories.Where(category => !validCategories.Contains(category["name"].ToString()));
+            var categories = familyPacket["categories"] as JArray;
+            var removeCategories = categories.Where(category => !validCategories.Contains(category["name"].ToString())).ToArray();
             // Remove them from the JSON
-            for (int i = 0; i < removeCategories.Count(); ++i)
-                removeCategories.ElementAt(i).Remove();
+            foreach (var category in removeCategories)
+                categories.Remove(category);
 
             // Returns the family JObject
             return familyPacket;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FlashcardFamilyData"/> of the packet family
+        /// </summary>
+        /// <param name="familyPacket"></param>
+        /// <returns></returns>
+        public static FlashcardFamilyData GetFamilyPacketData(JObject familyPacket)
+        {
+            // Creates a new family data container
+            var familyData = new FlashcardFamilyData();
+
+            // Gets the families and categories enumerables contained in the packet
+            var packetFamilies = familyPacket["flashcards"].AsJEnumerable();
+            var packetCategories = familyPacket["categories"].AsJEnumerable();
+
+            // If the packet contains no families or categories, quit
+            if (packetFamilies == null || packetCategories == null ||
+                packetFamilies.Count() == 0 || packetCategories.Count() == 0)
+                return familyData;
+
+            // Gets the first family
+            var foundFamily = packetFamilies.FirstOrDefault();
+            var foundCategory1 = packetCategories.FirstOrDefault(category => (string)category["name"] == (string)foundFamily["category1"]);
+            var foundCategory2 = packetCategories.FirstOrDefault(category => (string)category["name"] == (string)foundFamily["category2"]);
+
+            // If either of the categories isn't contained in the packet, quit
+            if (foundCategory1 == null || foundCategory2 == null)
+                return familyData;
+
+            // Writes the family data
+            familyData.Name = (string)foundFamily["family"];
+            familyData.Category1 = (string)foundFamily["category1"];
+            familyData.Category2 = (string)foundFamily["category2"];
+
+            // Writes the category data
+            familyData.Logo1 = (string)foundCategory1["icon"];
+            familyData.Logo2 = (string)foundCategory2["icon"];
+
+            return familyData;
         }
 
         /// <summary>
@@ -85,8 +125,54 @@ namespace SwipeFlash.Core
 
             // If the packet family is valid
             if (packetFamily != null)
-                // Add it to the static data families
-                staticDataFamilies.Add(packetFamily);
+            {
+                // Tries to get a family with the same name in the static data
+                var staticFamily = staticDataFamilies.FirstOrDefault(family => (string)family["family"] == (string)packetFamily["family"]);
+
+                // If the family already exists
+                if (staticFamily != null)
+                {
+                    // Gets the static family cards
+                    var staticFamilyCards = staticFamily["cards"] as JArray;
+
+                    int maxCardID = staticFamilyCards.Max(card => (int)card["id"]);
+                    int cardID = staticFamilyCards.Count > 0 ? maxCardID + 1 : 0;
+
+                    // The cards contained in the packet family
+                    var packetCards = packetFamily["cards"].AsJEnumerable();
+
+                    // For each card in the packet
+                    foreach (var card in packetCards)
+                    {
+                        // Whether the card already exists
+                        bool cardExists = staticFamilyCards.Any(staticCard => (string)staticCard["side1Text"] == (string)card["side1Text"] &&
+                                                                              (string)staticCard["side2Text"] == (string)card["side2Text"]);
+                        // If the card already exists, skip it
+                        if (cardExists)
+                            continue;
+
+                        // Sets the card ID
+                        card["id"] = cardID;
+
+                        // Increments the ID
+                        cardID++;
+
+                        // Add the card to the static cards array
+                        staticFamilyCards.Add(card);
+                    }
+                }
+                else
+                {
+                    // Add it to the static data families
+                    staticDataFamilies.Add(packetFamily);
+                }
+            }
+
+            // Creates the user data family from the static family
+            JSONWriter.CreateUserData(packetFamily);
+
+            // Calls the family updated event
+            IoC.Get<FlashcardManager>().OnStaticDataUpdated?.Invoke(null, null);
 
             // Update the local JSON files
             JSONWriter.UpdateJSONFiles();

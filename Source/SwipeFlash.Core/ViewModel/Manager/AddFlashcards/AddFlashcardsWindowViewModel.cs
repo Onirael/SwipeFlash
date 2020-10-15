@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Newtonsoft.Json.Linq;
 
@@ -17,6 +19,45 @@ namespace SwipeFlash.Core
         /// The path of the selected file
         /// </summary>
         public string SelectedFilePath { get; set; } = "";
+
+        /// <summary>
+        /// Whether a vaild file was selected
+        /// </summary>
+        public bool IsFileSelected => !string.IsNullOrEmpty(SelectedFilePath);
+
+        /// <summary>
+        /// The type of the selected file
+        /// </summary>
+        public string SelectedFileType => Path.GetExtension(SelectedFilePath);
+
+        /// <summary>
+        /// Whether the selected file is a TXT file
+        /// </summary>
+        public bool IsFileTXT => SelectedFileType == ".txt";
+
+        /// <summary>
+        /// Whether the selected file is a SFF file
+        /// </summary>
+        public bool IsFileSFF => SelectedFileType == ".sff";
+
+        private JObject _sFFData = null;
+        /// <summary>
+        /// The data contained in an imported SFF file
+        /// </summary>
+        public JObject SFFData
+        {
+            get => _sFFData;
+            set
+            {
+                _sFFData = value;
+                OnSFFDataUpdated();
+            }
+        }
+
+        /// <summary>
+        /// Whether the family data input can be modified
+        /// </summary>
+        public bool IsFamilyDataInputEnabled => !IsFileSFF;
 
         /// <summary>
         /// The name of the selected file
@@ -38,20 +79,30 @@ namespace SwipeFlash.Core
         /// </summary>
         public string Side1Logo { get; set; } = "";
 
+        private bool _isLogo1InputEnabled = true;
         /// <summary>
         /// Whether the logo 1 text input is enabled
         /// </summary>
-        public bool IsLogo1InputEnabled { get; set; } = true;
+        public bool IsLogo1InputEnabled
+        {
+            get => _isLogo1InputEnabled && IsFamilyDataInputEnabled;
+            set => _isLogo1InputEnabled = value;
+        }
 
         /// <summary>
         /// The emoji logo for side 2
         /// </summary>
         public string Side2Logo { get; set; } = "";
 
+        private bool _isLogo2InputEnabled = true;
         /// <summary>
         /// Whether the logo 2 text input is enabled
         /// </summary>
-        public bool IsLogo2InputEnabled { get; set; } = true;
+        public bool IsLogo2InputEnabled
+        {
+            get => _isLogo2InputEnabled && IsFamilyDataInputEnabled;
+            set => _isLogo2InputEnabled = value;
+        }
 
         /// <summary>
         /// The user-defined line ignore pattern 
@@ -88,6 +139,7 @@ namespace SwipeFlash.Core
         }
 
         private string _category2;
+
         /// <summary>
         /// The category for side 2
         /// </summary>
@@ -141,7 +193,6 @@ namespace SwipeFlash.Core
 
             // DEVELOPMENT ONLY
 
-            SelectedFilePath = "D:/Unreal/SwipeFlash/Source/Resources/Test_SpanishToEnglish.txt";
             FamilyName = "Test family";
             Category1 = "test1";
             Category2 = "test2";
@@ -163,38 +214,89 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnOKPressed()
         {
-            // Creates a family data struct
-            var baseFamilyData = new FlashcardFamilyData()
+            // If no file was selected
+            if (!IsFileSelected)
             {
-                Name = FamilyName,
-                Category1 = Category1,
-                Category2 = Category2,
-                Logo1 = Side1Logo,
-                Logo2 = Side2Logo,
-            };
+                IoC.Get<WindowService>().CreateWindow(new WindowArgs()
+                {
+                    Message = "No file was selected",
+                    TargetType = WindowType.Warning,
+                });
 
-            // Gets the validity of the family data
-            var isFamilyDataValid = DataChecker.IsFamilyDataValid(baseFamilyData);
-
-            // If it isn't valid, quit
-            if (!isFamilyDataValid)
                 return;
+            }
 
-            // Create the family data struct with the trivial data
-            var familyData = new ParsedFlashcardFamilyData(baseFamilyData);
+            switch (SelectedFileType)
+            {
+                case ".txt":
+                    {
+                        // Creates a family data struct
+                        var baseFamilyData = new FlashcardFamilyData()
+                        {
+                            Name = FamilyName,
+                            Category1 = Category1,
+                            Category2 = Category2,
+                            Logo1 = Side1Logo,
+                            Logo2 = Side2Logo,
+                        };
 
-            // Parses the file to a data struct
-            var parsingSuccessful = FileParser.ParseFile(ref familyData,
-                                                         SelectedFilePath,
-                                                         IgnorePatternDescription,
-                                                         SeparatorsDescription,
-                                                         LinePatternDescription);
+                        // Gets the validity of the family data
+                        var isFamilyDataValid = DataChecker.IsFamilyDataValid(baseFamilyData);
 
-            // If the flashcards could be successfully parsed
-            if (parsingSuccessful)
-                // Add the flashcard family to the JSON
-                JSONWriter.AddFamilyToJSON(familyData);
+                        // If it isn't valid, quit
+                        if (!isFamilyDataValid)
+                            return;
 
+                        // Create the family data struct with the trivial data
+                        var familyData = new ParsedFlashcardFamilyData(baseFamilyData);
+
+                        // Parses the file to a data struct
+                        var parsingSuccessful = FileParser.ParseFile(ref familyData,
+                                                                     SelectedFilePath,
+                                                                     IgnorePatternDescription,
+                                                                     SeparatorsDescription,
+                                                                     LinePatternDescription);
+
+                        // If the flashcards could be successfully parsed
+                        if (parsingSuccessful)
+                        {
+                            // Add the flashcard family to the JSON
+                            JSONWriter.AddFamilyToJSON(familyData);
+                            // Continue to close the window
+                            break;
+                        }
+                        // Otherwise, quit
+                        else
+                            return;
+                    }
+
+                case ".sff":
+                    {
+                        // Attempt to add the family to the data
+                        bool couldAddFamily = JSONPacketManager.AddFamily(SFFData);
+
+                        // If the family could be added to the data
+                        if (couldAddFamily)
+                            // Continue to close the window
+                            break;
+                        // Otherwise, quit
+                        else
+                            return;
+                    }
+
+                default:
+                    {
+                        IoC.Get<WindowService>().CreateWindow(new WindowArgs()
+                        {
+                            Message = "This type of file is not currently handled",
+                            TargetType = WindowType.Warning,
+                        });
+
+                        return;
+                    }
+            }
+
+            // Close the window
             IoC.Get<WindowService>().DestroyWindow(new WindowArgs() { TargetType = WindowType.AddFlashcards });
         }
 
@@ -229,6 +331,25 @@ namespace SwipeFlash.Core
         {
             // Sets the path of the selected file
             SelectedFilePath = (string)fileName;
+
+            // If the file is a SFF file
+            if (IsFileSFF)
+            {
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        // Creates the SFF data from the file
+                        SFFData = JObject.Parse(File.ReadAllText(SelectedFilePath));
+                    }
+                    catch (Exception) { SFFData = null; }
+                });
+            }
+            else
+            {
+                // Resets the SFF data object
+                SFFData = null;
+            }
         }
 
         #endregion
@@ -328,6 +449,25 @@ namespace SwipeFlash.Core
 
             // Returns the category logo
             return (string)foundCategory["icon"];
+        }
+
+        /// <summary>
+        /// Called when SFF data has been received
+        /// </summary>
+        private void OnSFFDataUpdated()
+        {
+            if (SFFData != null)
+            {
+                // Gets the family data
+                var familyData = JSONPacketManager.GetFamilyPacketData(SFFData);
+
+                // Saves the variables
+                FamilyName = familyData.Name;
+                Category1 = familyData.Category1;
+                Category2 = familyData.Category2;
+                Side1Logo = familyData.Logo1;
+                Side2Logo = familyData.Logo2;
+            }
         }
 
         #endregion

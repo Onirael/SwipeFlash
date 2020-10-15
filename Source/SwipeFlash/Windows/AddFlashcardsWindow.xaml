@@ -11,7 +11,8 @@
                   WindowStyle="ToolWindow"
                   WindowStartupLocation="CenterOwner"
                   MinWidth="400" MinHeight="500"
-                  Width="400" Height="500"
+                  SizeToContent="Height"
+                  Width="400"
                   Title="Add flashcards">
 
 
@@ -19,7 +20,11 @@
         <Grid.RowDefinitions>
             <!-- Header -->
             <RowDefinition Height="Auto"/>
+            <!-- Family data -->
+            <RowDefinition Height="Auto"/>
             <!-- From file -->
+            <RowDefinition Height="Auto"/>
+            <!-- Spacer -->
             <RowDefinition Height="*"/>
             <!-- Window control buttons -->
             <RowDefinition Height="Auto"/>
@@ -32,8 +37,100 @@
                    Margin="20"
                    FontSize="{StaticResource FontSizeLarger}"/>
 
-        <!-- From file -->
+        <!-- Family data -->
         <Border Grid.Row="1"
+                BorderBrush="{StaticResource ForegroundDarkBrush}" 
+                BorderThickness="1"
+                CornerRadius="10"
+                Background="{StaticResource BackgroundLightBrush}"
+                Margin="10 0 10 20"
+                Padding="10">
+            <StackPanel>
+                <!-- Flashcard family name input -->
+                <TextBlock Text="Flashcard family name:"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+                <TextBox FontSize="{StaticResource FontSizeLarge}"
+                         Text="{Binding FamilyName}"
+                         IsEnabled="{Binding IsFamilyDataInputEnabled}"/>
+
+                <!-- Logo input -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Side 1 logo input -->
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Side 1 logo:"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <TextBox Name="logo1"
+                                 Padding="0 4"
+                                 Width="50"
+                                 HorizontalAlignment="Left"
+                                 Text="{Binding Side1Logo}"
+                                 IsEnabled="{Binding IsLogo1InputEnabled}"/>
+
+                        <TextBlock Text="Side 1 category"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <ComboBox Padding="0 4"
+                                  Width="140"
+                                  HorizontalAlignment="Left"
+                                  ItemsSource="{Binding Categories}"
+                                  IsEditable="True"
+                                  Text="{Binding Category1}"
+                                  IsEnabled="{Binding IsFamilyDataInputEnabled}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                    </StackPanel>
+                    <!-- Side 2 logo input -->
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Side 2 logo:"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <TextBox Padding="0 4"
+                                 Width="50"
+                                 HorizontalAlignment="Left"
+                                 Text="{Binding Side2Logo}"
+                                 IsEnabled="{Binding IsLogo2InputEnabled}"/>
+
+                        <TextBlock Text="Side 2 category"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <ComboBox Padding="0 4"
+                                  Width="140"
+                                  HorizontalAlignment="Left"
+                                  ItemsSource="{Binding Categories}"
+                                  DisplayMemberPath=""
+                                  IsEditable="True"
+                                  Text="{Binding Category2}"
+                                  IsEnabled="{Binding IsFamilyDataInputEnabled}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- From file -->
+        <Border Grid.Row="2"
                 BorderBrush="{StaticResource ForegroundDarkBrush}" 
                 BorderThickness="1"
                 CornerRadius="10"
@@ -41,6 +138,7 @@
                 Margin="10 0 10 20">
             <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10">
                 <StackPanel>
+                    <!-- File selection -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                         <!-- Section header -->
                         <TextBlock Text="From file: "
@@ -57,97 +155,24 @@
                                 FontSize="{StaticResource FontSizeRegular}"/>
                     </StackPanel>
 
-                    <!-- Section content -->
-                    <StackPanel Grid.Row="1">
-                        <Viewbox MaxHeight="{StaticResource FontSizeLarge}"
+
+                    <Viewbox MaxHeight="{StaticResource FontSizeLarge}"
+                             Margin="0 10"
                              HorizontalAlignment="Left"
-                             Margin="0 5 0 10">
-                            <TextBlock Text="{Binding SelectedFileDisplayName}"
-                                   Foreground="{StaticResource ForegroundDarkBrush}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   TextTrimming="CharacterEllipsis"/>
-                        </Viewbox>
+                             Visibility="{Binding IsFileSelected, Converter={local:BooleanToCollapsedVisibilityConverter}}">
+                        <TextBlock Text="{Binding SelectedFileDisplayName, FallbackValue=No file selected}"
+                                       Foreground="{StaticResource ForegroundDarkBrush}"
+                                       FontSize="{StaticResource FontSizeLarger}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       TextTrimming="CharacterEllipsis"/>
+                    </Viewbox>
+
+                    <!-- TXT file parameters input -->
+                    <StackPanel Grid.Row="1"
+                                Visibility="{Binding IsFileTXT, Converter={local:BooleanToCollapsedVisibilityConverter}}">
                         <!-- User input -->
                         <StackPanel>
-                            <!-- Flashcard family name input -->
-                            <TextBlock Text="Flashcard family name:"
-                                   Margin="0 0 0 5"
-                                   FontSize="{StaticResource FontSizeLarge}"/>
-                            <TextBox FontSize="{StaticResource FontSizeLarge}"
-                                 Text="{Binding FamilyName}"/>
-
-                            <!-- Logo input -->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                
-                                <!-- Side 1 logo input -->
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Side 1 logo:"
-                                               Margin="0 0 0 5"
-                                               FontSize="{StaticResource FontSizeLarge}"/>
-
-                                    <TextBox Name="logo1"
-                                             Padding="0 4"
-                                             Width="50"
-                                             HorizontalAlignment="Left"
-                                             Text="{Binding Side1Logo}"
-                                             IsEnabled="{Binding IsLogo1InputEnabled}"/>
-
-                                    <TextBlock Text="Side 1 category"
-                                               Margin="0 0 0 5"
-                                               FontSize="{StaticResource FontSizeLarge}"/>
-
-                                    <ComboBox Padding="0 4"
-                                              Width="140"
-                                              HorizontalAlignment="Left"
-                                              ItemsSource="{Binding Categories}"
-                                              IsEditable="True"
-                                              Text="{Binding Category1}">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-
-                                </StackPanel>
-                                <!-- Side 2 logo input -->
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Side 2 logo:"
-                                               Margin="0 0 0 5"
-                                               FontSize="{StaticResource FontSizeLarge}"/>
-
-                                    <TextBox Padding="0 4"
-                                             Width="50"
-                                             HorizontalAlignment="Left"
-                                             Text="{Binding Side2Logo}"
-                                             IsEnabled="{Binding IsLogo2InputEnabled}"/>
-
-                                    <TextBlock Text="Side 2 category"
-                                               Margin="0 0 0 5"
-                                               FontSize="{StaticResource FontSizeLarge}"/>
-
-                                    <ComboBox Padding="0 4"
-                                              Width="140"
-                                              HorizontalAlignment="Left"
-                                              ItemsSource="{Binding Categories}"
-                                              DisplayMemberPath=""
-                                              IsEditable="True"
-                                              Text="{Binding Category2}">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
-                            </Grid>
-
                             <!-- Ignore lines input -->
                             <TextBlock Text="Ignore lines with pattern:"
                                        Margin="0 0 0 5"
@@ -177,7 +202,7 @@
         </Border>
         
         <!-- Window control buttons -->
-        <StackPanel Grid.Row="3"
+        <StackPanel Grid.Row="4"
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right" 
                     Margin="0 0 10 10">

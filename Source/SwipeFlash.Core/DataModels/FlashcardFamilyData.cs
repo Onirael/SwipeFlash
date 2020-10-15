@@ -39,5 +39,20 @@
         /// The logo of the family's side 2
         /// </summary>
         public string Logo2;
+
+        public override bool Equals(object obj)
+        {
+            // Type checks the object
+            if (!(obj is FlashcardFamilyData familyData))
+                return false;
+
+            // Gets whether the static data is equal
+            bool isEqual = familyData.Category1 == Category1 &&
+                           familyData.Category2 == Category2 &&
+                           familyData.Name == Name &&
+                           familyData.Logo1 == Logo1 &&
+                           familyData.Logo2 == Logo2;
+            return isEqual;
+        }
     }
 }

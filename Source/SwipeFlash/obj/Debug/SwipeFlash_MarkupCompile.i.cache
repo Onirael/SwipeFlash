@@ -16,5 +16,5 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\App.xaml
 22-1211513735
 Controls\FlashcardControl.xaml;Controls\FlashcardFamilyListItemControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;Windows\AddFlashcardsWindow.xaml;Windows\FamilyInfoWindow.xaml;Windows\FlashcardManagerWindow.xaml;Windows\MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
 
-False
+True
 

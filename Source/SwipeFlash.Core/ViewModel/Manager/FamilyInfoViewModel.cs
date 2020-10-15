@@ -202,12 +202,14 @@ namespace SwipeFlash.Core
                 Logo2 = FamilyLogo2,
                 Category1 = FamilyCategory1,
                 Category2 = FamilyCategory2,
+                IsEnabled = DefaultData.IsEnabled,
+                CardCount = DefaultData.CardCount,
             };
 
             // Gets the validity of the family data
             var isFamilyDataValid = DataChecker.IsFamilyDataValid(newFamilyData);
 
-            // If the family data isn't valid, quit
+            // If the family data isn't valid or is equal, quit
             if (!isFamilyDataValid)
                 return;
 

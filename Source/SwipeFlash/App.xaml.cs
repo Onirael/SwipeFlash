@@ -27,10 +27,6 @@ namespace SwipeFlash
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
-
-            //IoC.Get<FlashcardManager>().InitJSONData();
-            //Current.MainWindow = new AddFlashcardsWindow();
-            //Current.MainWindow.Show();
         }
     }
 }

@@ -250,6 +250,10 @@ namespace SwipeFlash.Core
             // Counts the  amount of compulsory variables in the variable list
             var compVarsLeft = lineVarsList.FindAll(variable => variable.IsOptional == false).Count();
 
+            // If the amount of items doesn't allow the variables to match, quit
+            if (itemsList.Count < compVarsLeft)
+                return false;
+
             int nextCompVar = -1;
             int prevCompVar = -1;
             int itemIndex = 0;
