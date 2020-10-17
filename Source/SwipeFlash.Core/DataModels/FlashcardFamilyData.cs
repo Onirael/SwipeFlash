@@ -54,5 +54,10 @@
                            familyData.Logo2 == Logo2;
             return isEqual;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

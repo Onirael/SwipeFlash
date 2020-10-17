@@ -86,7 +86,10 @@ namespace SwipeFlash.Core
             int side2VarIndex = lineVarsList.FindIndex(variable => variable.VariableName=="[2]");
 
             if (side1VarIndex < 0 || side2VarIndex < 0)
+            {
+                IoC.Get<WindowService>().CreateWarning("The line pattern definition must contain [1] and [2] variables");
                 return false;
+            }
 
             // Create rules list
             var patternRules = new List<string>();
@@ -185,7 +188,10 @@ namespace SwipeFlash.Core
                         bool couldApplyInstruction = instruction.ApplyInstruction(ref itemsList, lineVarsList);
                         // If the instruction could not be applied, return false
                         if (!couldApplyInstruction)
+                        {
+                            IoC.Get<WindowService>().CreateWarning("The line pattern instruction could not be applied");
                             return false;
+                        }
                     }
                 }
 

@@ -10,7 +10,7 @@
                   mc:Ignorable="d"
                   WindowStyle="ToolWindow"
                   WindowStartupLocation="CenterOwner"
-                  MinWidth="400" MinHeight="500"
+                  MinWidth="400" MaxHeight="670"
                   SizeToContent="Height"
                   Width="400"
                   Title="Add flashcards">
@@ -23,8 +23,6 @@
             <!-- Family data -->
             <RowDefinition Height="Auto"/>
             <!-- From file -->
-            <RowDefinition Height="Auto"/>
-            <!-- Spacer -->
             <RowDefinition Height="*"/>
             <!-- Window control buttons -->
             <RowDefinition Height="Auto"/>
@@ -48,11 +46,12 @@
             <StackPanel>
                 <!-- Flashcard family name input -->
                 <TextBlock Text="Flashcard family name:"
-                                   Margin="0 0 0 5"
-                                   FontSize="{StaticResource FontSizeLarge}"/>
+                           Margin="0 0 0 5"
+                           FontSize="{StaticResource FontSizeLarge}"/>
                 <TextBox FontSize="{StaticResource FontSizeLarge}"
                          Text="{Binding FamilyName}"
-                         IsEnabled="{Binding IsFamilyDataInputEnabled}"/>
+                         IsEnabled="{Binding IsFamilyDataInputEnabled}"
+                         Tag="Enter a name..."/>
 
                 <!-- Logo input -->
                 <Grid>
@@ -69,22 +68,24 @@
                                    FontSize="{StaticResource FontSizeLarge}"/>
 
                         <TextBox Name="logo1"
-                                 Padding="0 4"
-                                 Width="50"
                                  HorizontalAlignment="Left"
+                                 MaxWidth="100"
                                  Text="{Binding Side1Logo}"
-                                 IsEnabled="{Binding IsLogo1InputEnabled}"/>
+                                 FontSize="{StaticResource FontSizeLarge}"
+                                 IsEnabled="{Binding IsLogo1InputEnabled}"
+                                 Tag="(emoji)"/>
 
                         <TextBlock Text="Side 1 category"
                                    Margin="0 0 0 5"
                                    FontSize="{StaticResource FontSizeLarge}"/>
 
-                        <ComboBox Padding="0 4"
+                        <ComboBox Padding="4 2"
                                   Width="140"
                                   HorizontalAlignment="Left"
                                   ItemsSource="{Binding Categories}"
                                   IsEditable="True"
                                   Text="{Binding Category1}"
+                                  FontSize="{StaticResource FontSizeLarge}"
                                   IsEnabled="{Binding IsFamilyDataInputEnabled}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -100,22 +101,24 @@
                                    Margin="0 0 0 5"
                                    FontSize="{StaticResource FontSizeLarge}"/>
 
-                        <TextBox Padding="0 4"
-                                 Width="50"
-                                 HorizontalAlignment="Left"
+                        <TextBox HorizontalAlignment="Left"
                                  Text="{Binding Side2Logo}"
-                                 IsEnabled="{Binding IsLogo2InputEnabled}"/>
+                                 MaxWidth="100"
+                                 FontSize="{StaticResource FontSizeLarge}"
+                                 IsEnabled="{Binding IsLogo2InputEnabled}"
+                                 Tag="(emoji)"/>
 
                         <TextBlock Text="Side 2 category"
                                    Margin="0 0 0 5"
                                    FontSize="{StaticResource FontSizeLarge}"/>
 
-                        <ComboBox Padding="0 4"
+                        <ComboBox Padding="4 2"
                                   Width="140"
                                   HorizontalAlignment="Left"
                                   ItemsSource="{Binding Categories}"
                                   DisplayMemberPath=""
                                   IsEditable="True"
+                                  FontSize="{StaticResource FontSizeLarge}"
                                   Text="{Binding Category2}"
                                   IsEnabled="{Binding IsFamilyDataInputEnabled}">
                             <ComboBox.ItemTemplate>
@@ -178,7 +181,8 @@
                                        Margin="0 0 0 5"
                                        FontSize="{StaticResource FontSizeLarge}"/>
                             <TextBox FontSize="{StaticResource FontSizeLarge}"
-                                     Text="{Binding IgnorePatternDescription}"/>
+                                     Text="{Binding IgnorePatternDescription}"
+                                     Tag="ex: #*,*;"/>
 
                             <!-- Separators input -->
                             <TextBlock Text="Separators (tab by default):"
@@ -186,15 +190,19 @@
                                        FontSize="{StaticResource FontSizeLarge}"/>
                             <TextBox FontSize="{StaticResource FontSizeLarge}"
                                      AcceptsTab="True"
-                                     Text="{Binding SeparatorsDescription}"/>
+                                     Text="{Binding SeparatorsDescription}"
+                                     Tag="/,;,+"/>
 
                             <!-- Line pattern input -->
                             <TextBlock Text="Line pattern:"
-                                   Margin="0 0 0 5"
-                                   FontSize="{StaticResource FontSizeLarge}"/>
+                                       Margin="0 0 0 5"
+                                       FontSize="{StaticResource FontSizeLarge}"/>
                             <TextBox TextWrapping="Wrap"
-                                 Padding="0 4"
-                                 Text="{Binding LinePatternDescription}"/>
+                                     Text="{Binding LinePatternDescription}">
+                                <TextBox.Tag>
+                                    ex: [1],[gender],[2]; + commands
+                                </TextBox.Tag>
+                            </TextBox>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -202,7 +210,7 @@
         </Border>
         
         <!-- Window control buttons -->
-        <StackPanel Grid.Row="4"
+        <StackPanel Grid.Row="3"
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right" 
                     Margin="0 0 10 10">

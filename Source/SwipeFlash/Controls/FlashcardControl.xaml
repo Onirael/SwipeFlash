@@ -23,25 +23,66 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <Grid>
+                            <Grid.Effect>
+                                <DropShadowEffect Opacity=".2" BlurRadius="20" ShadowDepth="0"/>
+                            </Grid.Effect>
+
                             <Border Name="cardContainer"
                                     Background="{StaticResource BackgroundLightBrush}"
                                     CornerRadius="20"
                                     BorderThickness="1"
-                                    BorderBrush="{StaticResource ForegroundDarkBrush}"
-                                    ClipToBounds="True">
-
-                                <Border.Effect>
-                                    <DropShadowEffect Opacity=".2" BlurRadius="20" ShadowDepth="0"/>
-                                </Border.Effect>
+                                    BorderBrush="{StaticResource ForegroundDarkBrush}">
 
                                 <Grid>
+                                    <!-- Clipping mask -->
+                                    <Grid.Clip>
+                                        <RectangleGeometry RadiusX="{Binding CornerRadius, ElementName=cardContainer, Converter={local:CornerRadiusToDoubleConverter}}" 
+                                                           RadiusY="{Binding CornerRadius, ElementName=cardContainer, Converter={local:CornerRadiusToDoubleConverter}}">
+                                            <RectangleGeometry.Rect>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <local:MultiToRectConverter/>
+                                                    </MultiBinding.Converter>
+                                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Border}"/>
+                                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Border}"/>
+                                                </MultiBinding>
+                                            </RectangleGeometry.Rect>
+                                        </RectangleGeometry>
+                                    </Grid.Clip>
+
+                                    <!-- Edit mode sliding border -->
                                     <Border Background="#e8e8e8"
                                             Height="200"
                                             VerticalAlignment="Top"
                                             CornerRadius="20"
-                                            local:AnimateContentSlideInFromTopProperty.Value="{Binding IsInEditMode}"
-                                            Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}"
-                                            IsHitTestVisible="False">
+                                            local:AnimateContentSlideDownProperty.Value="{Binding IsInEditMode}"
+                                            Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}">
+                                        <Viewbox Margin="50">
+                                            <Grid>
+                                                <!-- Edit mode side 1 input -->
+                                                <TextBox Text="{Binding Side1EditText}"
+                                                         MaxWidth="{Binding MaxWidth, ElementName=text1}"
+                                                         VerticalAlignment="Center"
+                                                         HorizontalAlignment="Center"
+                                                         TextAlignment="Center"
+                                                         FontSize="{Binding FontSize, ElementName=text1}"
+                                                         TextWrapping="WrapWithOverflow"
+                                                         Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                                         Background="Transparent"
+                                                         local:SelectAllTextOnFocusProperty.Value="True"/>
+                                                <!-- Edit mode side 2 input -->
+                                                <TextBox Text="{Binding Side2EditText}"
+                                                         MaxWidth="{Binding MaxWidth, ElementName=text1}"
+                                                         VerticalAlignment="Center"
+                                                         TextAlignment="Center"
+                                                         HorizontalAlignment="Center"
+                                                         FontSize="{Binding FontSize, ElementName=text1}"
+                                                         TextWrapping="WrapWithOverflow"
+                                                         Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Background="Transparent"
+                                                         local:SelectAllTextOnFocusProperty.Value="True"/>
+                                            </Grid>
+                                        </Viewbox>
                                     </Border>
 
                                     <!-- Icon -->
@@ -101,9 +142,9 @@
                                                          TextAlignment="Center"
                                                          FontSize="{Binding FontSize, ElementName=text1}"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Visibility="{Binding IsOnSide1Edit, Converter={local:BooleanToVisibilityConverter}}"
                                                          Background="Transparent"
-                                                         Margin="0 -50 0 50"
+                                                         local:AnimateTextInputSlideDownProperty.Value="{Binding IsInEditMode}"
                                                          local:SelectAllTextOnFocusProperty.Value="True"/>
                                             </Grid>
                                         </Viewbox>
@@ -127,9 +168,9 @@
                                                          HorizontalAlignment="Center"
                                                          FontSize="{Binding FontSize, ElementName=text1}"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Visibility="{Binding IsOnSide2Edit, Converter={local:BooleanToVisibilityConverter}}"
                                                          Background="{StaticResource BackgroundLightBrush}"
-                                                         Margin="0 50 0 -50"
+                                                         local:AnimateTextInputSlideDownProperty.Value="{Binding IsInEditMode}"
                                                          local:SelectAllTextOnFocusProperty.Value="True"/>
                                             </Grid>
                                         </Viewbox>
@@ -175,7 +216,7 @@
                                                FontSize="{StaticResource FontSizeHuge}"/>
                                 </Viewbox>
                             </Border>
-                            
+
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>

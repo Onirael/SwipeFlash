@@ -174,3 +174,5 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.exe
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\SwipeFlash.pdb
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FamilyInfoWindow.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FamilyInfoWindow.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Images.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\TextBoxes.baml

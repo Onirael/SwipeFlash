@@ -117,7 +117,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The user-defined pattern of the line
         /// </summary>
-        public string LinePatternDescription { get; set; } = "";
+        public string LinePatternDescription { get; set; } = "[1],[2];";
 
         /// <summary>
         /// The existing categories
@@ -245,7 +245,10 @@ namespace SwipeFlash.Core
 
                         // If it isn't valid, quit
                         if (!isFamilyDataValid)
+                        {
+                            IoC.Get<WindowService>().CreateWarning("Invalid family data entered");
                             return;
+                        }
 
                         // Create the family data struct with the trivial data
                         var familyData = new ParsedFlashcardFamilyData(baseFamilyData);
@@ -317,7 +320,7 @@ namespace SwipeFlash.Core
             var appVM = IoC.Get<ApplicationViewModel>();
 
             ListenerDelegate listener = OnFileSelected;
-            appVM.ListenForEvent(ref appVM.OnFileSelected, listener);
+            appVM.ListenForEvent<string>(WindowReturnEvent.FileSelected, listener);
 
             // Creates the window
             IoC.Get<WindowService>().CreateWindow(new WindowArgs() { TargetType = WindowType.OpenFileExplorer });
@@ -435,13 +438,11 @@ namespace SwipeFlash.Core
         private string GetCategoryLogo(string categoryName)
         {
             // Gets the static data from the Flashcard Manager
-            var staticData = IoC.Get<FlashcardManager>().StaticData;
-
-            // Gets the categories from the JSON file
-            var jsonCategories = staticData["categories"].AsJEnumerable();
-
+            var fm = IoC.Get<FlashcardManager>();
+            var staticData = fm.StaticData;
+            
             // Gets the category JToken
-            var foundCategory = jsonCategories.FirstOrDefault(category => (string)category["name"] == categoryName);
+            var foundCategory = fm.FindCategory(categoryName);
 
             // If a category was found
             if (foundCategory == null)

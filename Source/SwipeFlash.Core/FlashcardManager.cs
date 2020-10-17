@@ -168,8 +168,8 @@ namespace SwipeFlash.Core
             var familyData = new FlashcardFamilyData();
 
             // Gets the family with the corresponding name
-            var foundFamily = StaticData["flashcards"].AsJEnumerable()
-                                                      .FirstOrDefault(family => (string)family["family"] == familyName);
+            var foundFamily = FindStaticFamily(familyName);
+
             // If a family was found
             if (foundFamily != null)
             {
@@ -180,10 +180,9 @@ namespace SwipeFlash.Core
                 familyData.CardCount = foundFamily["cards"].AsJEnumerable().Count();
 
                 // Finds the categories in the JSON
-                var foundCategory1 = StaticData["categories"].AsJEnumerable()
-                                                             .FirstOrDefault(category => (string)category["name"] == familyData.Category1);
-                var foundCategory2 = StaticData["categories"].AsJEnumerable()
-                                                             .FirstOrDefault(category => (string)category["name"] == familyData.Category2);
+                var foundCategory1 = FindCategory(familyData.Category1);
+                var foundCategory2 = FindCategory(familyData.Category2);
+
                 // Gets the logos
                 familyData.Logo1 = (string)foundCategory1?["icon"];
                 familyData.Logo2 = (string)foundCategory2?["icon"];
@@ -198,6 +197,8 @@ namespace SwipeFlash.Core
         /// <param name="familyName">The display name of the family</param>
         public void DeleteFamily(string familyName)
         {
+            // Families Collection 
+
             // Gets the corresponding family
             var foundFamily = FlashcardFamilies.FirstOrDefault(family => family.Name == familyName);
 
@@ -206,15 +207,12 @@ namespace SwipeFlash.Core
 
             // Static Data
 
-            // Gets the flashcards enumerable
-            var jsonFamiliesStatic = StaticData["flashcards"].AsJEnumerable();
-
             // Find the family in the JSON
-            var jsonFoundFamilyStatic = jsonFamiliesStatic.FirstOrDefault(result => result["family"].ToString() == familyName);
+            var staticFamily = FindStaticFamily(familyName);
 
-            if (jsonFoundFamilyStatic != null)
-                // Removes the family
-                jsonFoundFamilyStatic.Remove();
+            // If it exists, remove it
+            if (staticFamily != null)
+                staticFamily.Remove();
 
             // User Data
 
@@ -222,11 +220,11 @@ namespace SwipeFlash.Core
             var jsonFamiliesUser = UserData["flashcards"].AsJEnumerable();
 
             // Find the family in the JSON
-            var jsonFoundFamilyUser = jsonFamiliesUser.FirstOrDefault(result => result["family"].ToString() == familyName);
+            var userFamily = FindUserFamily(familyName);
 
-            if (jsonFoundFamilyUser != null)
-                // Removes the family
-                jsonFoundFamilyUser.Remove();
+            // If it exists, remove it
+            if (userFamily != null)
+                userFamily.Remove();
 
             // Delete all the unused categories
             DeleteUnusedCategories();
@@ -244,7 +242,17 @@ namespace SwipeFlash.Core
         /// <param name="familyName">The display name of the family</param>
         /// <param name="isEnabled">Whether the family is now set to enabled</param>
         public void SetFamilyEnabled(string familyName, bool isEnabled)
-        {            
+        {
+            // Find user family
+            var userFamily = FindUserFamily(familyName);
+
+            // If the family wasn't found in the data, quit
+            if (userFamily == null)
+                return;
+
+            // Set JSON value
+            userFamily["isEnabled"] = isEnabled;
+
             // Finds the index of the family
             int familyIndex = FlashcardFamilies.FindIndex(family => family.Name == familyName);
 
@@ -254,19 +262,8 @@ namespace SwipeFlash.Core
             // Sets IsEnabled attributes
             familyData.IsEnabled = isEnabled;
 
-            // Sets the collection element
+            // Sets the collection element back
             FlashcardFamilies[familyIndex] = familyData;
-
-            // User Data
-
-            // Gets flashcard families enumerable
-            var jsonFamilies = UserData["flashcards"].AsJEnumerable();
-
-            // Find matching family
-            var jsonFoundFamily = jsonFamilies.FirstOrDefault(family => (string)family["family"] == familyName);
-
-            // Set JSON value
-            jsonFoundFamily["isEnabled"] = isEnabled;
 
             // Updates the files
             JSONWriter.UpdateJSONFiles();
@@ -280,18 +277,15 @@ namespace SwipeFlash.Core
         public bool EditFlashcardData(FlashcardData newFlashcardData)
         {
             // Gets the JToken with the matching family name
-            var familyObject = StaticData["flashcards"].AsJEnumerable()
-                                                       .FirstOrDefault(family => family["family"]
-                                                       .ToString() == newFlashcardData.FamilyName);
+            var familyObject = FindStaticFamily(newFlashcardData.FamilyName);
 
             // If the family wasn't found, quit
             if (familyObject == null)
                 return false;
 
             // Gets the flashcard with the matching ID
-            var flashcard = familyObject["cards"].AsJEnumerable()
-                                                 .FirstOrDefault(card => card["id"]
-                                                 .Value<int>() == newFlashcardData.FlashcardID);
+            var flashcard = GetFlashcard(newFlashcardData.FlashcardID, 
+                                         familyObject);
 
             // If the flashcard wasn't found, quit
             if (flashcard == null)
@@ -324,14 +318,16 @@ namespace SwipeFlash.Core
                 return true;
 
             // Gets the static data JToken with the matching family name
-            var familyStaticObject = StaticData["flashcards"].AsJEnumerable()
-                                                             .FirstOrDefault(family => family["family"]
-                                                             .ToString() == oldFamilyData.Name);
-            // Gets the user data JToken with the matching family name
-            var familyUserObject = UserData["flashcards"].AsJEnumerable()
-                                                         .FirstOrDefault(family => family["family"]
-                                                         .ToString() == oldFamilyData.Name);
+            var familyStaticObject = FindStaticFamily(oldFamilyData.Name);
 
+            // Gets the user data JToken with the matching family name
+            var familyUserObject = FindUserFamily(oldFamilyData.Name);
+
+            // If any of the family objects are null, quit
+            if (familyStaticObject == null || familyUserObject == null)
+                return false;
+
+            // Sets the family names
             familyStaticObject["family"] = newFamilyData.Name;
             familyUserObject["family"] = newFamilyData.Name;
 
@@ -339,26 +335,8 @@ namespace SwipeFlash.Core
             if (oldFamilyData.Category1 != newFamilyData.Category1 || 
                 oldFamilyData.Logo1 != newFamilyData.Logo1)
             {
-                // Gets the category object
-                var category1Object = StaticData["categories"].AsJEnumerable()
-                                                              .FirstOrDefault(category => category["name"]
-                                                              .ToString() == newFamilyData.Category1);
-                // If the category exists
-                if (category1Object != null)
-                {
-                    // Set the icon
-                    category1Object["icon"] = newFamilyData.Logo1;
-                }
-                else
-                {
-                    // Creates a new category
-                    var newCategory = new JObject();
-                    newCategory["name"] = newFamilyData.Category1;
-                    newCategory["icon"] = newFamilyData.Logo1;
-
-                    // Adds it to the categories array
-                    (StaticData["categories"] as JArray).Add(newCategory);
-                }
+                // Edits the category or creates a new one with the new data
+                EditCategory(newFamilyData.Category1, newFamilyData.Logo1);
 
                 // Changes the category of the static family
                 familyStaticObject["category1"] = newFamilyData.Category1;
@@ -368,28 +346,10 @@ namespace SwipeFlash.Core
             if (oldFamilyData.Category2 != newFamilyData.Category2 ||
                 oldFamilyData.Logo2 != newFamilyData.Logo2)
             {
-                // Gets the category object
-                var category2Object = StaticData["categories"].AsJEnumerable()
-                                                              .FirstOrDefault(category => category["name"]
-                                                              .ToString() == newFamilyData.Category2);
-                // If the category exists
-                if (category2Object != null)
-                {
-                    // Set the icon
-                    category2Object["icon"] = newFamilyData.Logo2;
-                }
-                else
-                {
-                    // Creates a new category
-                    var newCategory = new JObject();
-                    newCategory["name"] = newFamilyData.Category2;
-                    newCategory["icon"] = newFamilyData.Logo2;
+                // Edits the category or create a new one with the new data
+                EditCategory(newFamilyData.Category2, newFamilyData.Logo2);
 
-                    // Adds it to the categories array
-                    (StaticData["categories"] as JArray).Add(newCategory);
-                }
-
-                // Changes the category of the static family
+                // Updates the category of the static family
                 familyStaticObject["category2"] = newFamilyData.Category2;
             }
 
@@ -405,10 +365,86 @@ namespace SwipeFlash.Core
             return true;
         }
 
+        /// <summary>
+        /// Edits a category, if the category doesn't exist, creates it
+        /// </summary>
+        /// <param name="categoryName">The name of the category</param>
+        /// <param name="logo">The logo of the category</param>
+        public void EditCategory(string categoryName, string logo)
+        {
+            // Gets the category object
+            var category2Object = FindCategory(categoryName);
+
+            // If the category exists
+            if (category2Object != null)
+            {
+                // Set the icon
+                category2Object["icon"] = logo;
+            }
+            else
+            {
+                // Creates a new category
+                var newCategory = new JObject();
+                newCategory["name"] = categoryName;
+                newCategory["icon"] = logo;
+
+                // Adds it to the categories array
+                (StaticData["categories"] as JArray).Add(newCategory);
+            }
+        }
+
+        /// <summary>
+        /// Finds a family token by name in the static data
+        /// </summary>
+        /// <param name="familyName">The name of the family</param>
+        /// <returns>The token of the family</returns>
+        public JToken FindStaticFamily(string familyName)
+        {
+            // Gets the family in the static data
+            return StaticData["flashcards"].AsJEnumerable()
+                                           .FirstOrDefault(family => (string)family["family"] == familyName);
+        }
+
+        /// <summary>
+        /// Finds a family token by name in the user data
+        /// </summary>
+        /// <param name="familyName">The name of the family</param>
+        /// <returns>The token of the family</returns>
+        public JToken FindUserFamily(string familyName)
+        {
+            // Gets the family in the static data
+            return UserData["flashcards"].AsJEnumerable()
+                                         .FirstOrDefault(family => (string)family["family"] == familyName);
+        }
+
+        /// <summary>
+        /// Gets a specified flashcard token
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="family"></param>
+        /// <returns>The token of the flashcard</returns>
+        public JToken GetFlashcard(int id, JToken family)
+        {
+            // Gets the flashcard in the family
+            return family["cards"].AsJEnumerable()
+                                  .FirstOrDefault(card => (int)card["id"] == id);
+        }
+
+        /// <summary>
+        /// Finds a category token by name
+        /// </summary>
+        /// <param name="categoryName">The name of the category</param>
+        /// <returns>The token of the category</returns>
+        public JToken FindCategory(string categoryName)
+        {
+            return StaticData["categories"].AsJEnumerable()
+                                           .FirstOrDefault(category => (string)category["name"] == categoryName);
+        }
+
         #endregion
 
         #region Private Helpers
-        
+
         /// <summary>
         /// Removes any unused category from the static JSON data
         /// </summary>
@@ -419,6 +455,7 @@ namespace SwipeFlash.Core
 
             // Gets all categories
             var categories = StaticData["categories"].AsJEnumerable();
+
             // Gets all families
             var families = StaticData["flashcards"].AsJEnumerable();
 
@@ -468,7 +505,7 @@ namespace SwipeFlash.Core
                     {
                         Name = (string)family["family"],
                         CardCount = family["cards"].AsJEnumerable().Count(),
-                        IsEnabled = (bool)UserData["flashcards"].FirstOrDefault(result => (string)result["family"] == (string)family["family"])["isEnabled"],
+                        IsEnabled = (bool)FindUserFamily((string)family["family"])["isEnabled"],
                         Category1 = (string)family["category1"],
                         Category2 = (string)family["category2"],
                     };

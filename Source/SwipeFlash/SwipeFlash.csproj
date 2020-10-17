@@ -111,6 +111,8 @@
     <Compile Include="Animations\IFlippableElement.cs" />
     <Compile Include="DependencyProperties\InputBindingBehavior.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\CornerRadiusToDoubleConverter.cs" />
+    <Compile Include="ValueConverters\MultiToRectConverter.cs" />
     <Compile Include="ValueConverters\ColorLerpConverter.cs" />
     <Compile Include="ValueConverters\BooleanToCollapsedVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
@@ -141,6 +143,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SettingsMenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Images.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBoxes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

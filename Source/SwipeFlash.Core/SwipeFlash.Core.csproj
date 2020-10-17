@@ -185,6 +185,7 @@
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="Data\JSONPacketManager.cs" />
     <Compile Include="Data\JSONWriter.cs" />
+    <Compile Include="Helpers\EventHandlerHelpers.cs" />
     <Compile Include="Parser\DataChecker.cs" />
     <Compile Include="Parser\ParserIgnoreRule.cs" />
     <Compile Include="Parser\ParserVariableInstruction.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="ViewModel\Manager\FlashcardManagerWindowViewModel.cs" />
     <Compile Include="ViewModel\Window\SettingsMenuViewModel.cs" />
     <Compile Include="ViewModel\Window\Design\WindowDesignModel.cs" />
+    <Compile Include="ViewModel\Window\WindowReturn.cs" />
     <Compile Include="ViewModel\Window\WindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

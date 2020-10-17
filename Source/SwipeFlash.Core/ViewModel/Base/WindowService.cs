@@ -51,6 +51,19 @@ namespace SwipeFlash.Core
             OnDestroyWindow?.Invoke(this, args);
         }
 
+        /// <summary>
+        /// Creates a warning message box
+        /// </summary>
+        /// <param name="message">The message to show to the user</param>
+        public void CreateWarning(string message)
+        {
+            CreateWindow(new WindowArgs()
+            {
+                TargetType = WindowType.Warning,
+                Message = message,
+            });
+        }
+
         #endregion
     }
 }

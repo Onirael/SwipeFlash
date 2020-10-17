@@ -19,16 +19,17 @@ namespace SwipeFlash.Core
         public static void AddFamilyToJSON(ParsedFlashcardFamilyData family)
         {
             // Gets the JSON objects
-            var staticJSON = IoC.Get<FlashcardManager>().StaticData;
-            var userJSON = IoC.Get<FlashcardManager>().UserData;
+            var fm = IoC.Get<FlashcardManager>();
+            var staticJSON = fm.StaticData;
+            var userJSON = fm.UserData;
 
-            // Gets the categories array from the JObject
+            // Gets the categories array from the static data
             var categories = staticJSON["categories"] as JArray;
             if (categories == null) return;
 
             // Tries to find the categories in the JSON
-            var foundCategory1 = categories.FirstOrDefault(category => category["name"].ToString() == family.Category1);
-            var foundCategory2 = categories.FirstOrDefault(category => category["name"].ToString() == family.Category2);
+            var foundCategory1 = fm.FindCategory(family.Category1);
+            var foundCategory2 = fm.FindCategory(family.Category2);
 
             // If category 1 doesn't exist
             if (foundCategory1 == null)
@@ -54,14 +55,14 @@ namespace SwipeFlash.Core
                 categories.Add(category2);
             }
 
-            // Gets the flashcard family in the JSON
+            // Gets the flashcard families in the JSON
             var staticFlashcardFamilies = staticJSON["flashcards"] as JArray;
             var userFlashcardFamilies = userJSON["flashcards"] as JArray;
             if (staticFlashcardFamilies == null || userFlashcardFamilies == null) return;
 
             // Tries to find the families in the JSON files
-            var activeStaticFamily = staticFlashcardFamilies.FirstOrDefault(existingFamily => existingFamily["family"].ToString() == family.FamilyName);
-            var activeUserFamily = userFlashcardFamilies.FirstOrDefault(existingFamily => existingFamily["family"].ToString() == family.FamilyName);
+            var activeStaticFamily = fm.FindStaticFamily(family.FamilyName);
+            var activeUserFamily = fm.FindUserFamily(family.FamilyName);
 
             // This naively assumes that both the static and the user data are valid
 
@@ -169,11 +170,11 @@ namespace SwipeFlash.Core
         public static void CreateUserData(JToken staticFamily)
         {
             // Gets the user data
+            var fm = IoC.Get<FlashcardManager>();
             var userData = IoC.Get<FlashcardManager>().UserData;
 
             // Tries to find the family
-            var userFamily = userData["flashcards"].AsJEnumerable()
-                                                   .FirstOrDefault(family => (string)family["family"] == (string)staticFamily["family"]);
+            var userFamily = fm.FindUserFamily((string)staticFamily["family"]);
 
             // Gets the static cards enumerable
             var staticCards = staticFamily["cards"].AsJEnumerable();

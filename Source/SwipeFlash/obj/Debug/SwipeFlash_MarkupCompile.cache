@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Unreal\SwipeFlash\Source\SwipeFlash\App.xaml
-129418702
+14-925749962
 
-33744261741
+351846897111
 75-1583452808
-Controls\FlashcardControl.xaml;Controls\FlashcardFamilyListItemControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;Windows\AddFlashcardsWindow.xaml;Windows\FamilyInfoWindow.xaml;Windows\FlashcardManagerWindow.xaml;Windows\MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
+Controls\FlashcardControl.xaml;Controls\FlashcardFamilyListItemControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;Styles\Images.xaml;Styles\TextBoxes.xaml;Windows\AddFlashcardsWindow.xaml;Windows\FamilyInfoWindow.xaml;Windows\FlashcardManagerWindow.xaml;Windows\MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;
 
 False
 

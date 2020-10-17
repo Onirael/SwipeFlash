@@ -188,6 +188,16 @@ namespace SwipeFlash.Core
         public bool IsEditContentVisible { get; private set; }
 
         /// <summary>
+        /// Whether the card is in edit mode on side 1
+        /// </summary>
+        public bool IsOnSide1Edit => IsOnSide1 && IsEditContentVisible;
+
+        /// <summary>
+        /// Whether the card is in edit mdoe on side 2
+        /// </summary>
+        public bool IsOnSide2Edit => !IsOnSide1 && IsEditContentVisible;
+
+        /// <summary>
         /// Whether the side 1 is currently visible
         /// </summary>
         public bool IsSide1Visible => IsOnSide1 && !IsEditContentVisible;

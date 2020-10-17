@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.IO;
 using System.Linq;
 
@@ -98,13 +97,23 @@ namespace SwipeFlash.Core
         public static bool AddFamily(JObject familyPacket)
         {
             // Get static data object
-            var staticData = IoC.Get<FlashcardManager>().StaticData;
+            var fm = IoC.Get<FlashcardManager>();
+            var staticData = fm.StaticData;
 
             var staticDataCategories = staticData["categories"].AsJEnumerable();
             var categoriesArray = staticDataCategories as JArray;
+
             // Gets the packet categories
             var packetCategories = familyPacket["categories"].AsJEnumerable();
 
+            // Checks if the packet categories are valid
+            if (packetCategories == null)
+            {
+                IoC.Get<WindowService>().CreateWarning("SFF file data is invalid");
+                return false;
+            }
+
+            // For each category in the packet
             foreach (var category in packetCategories)
             {
                 // Gets whether the category already exists
@@ -127,7 +136,7 @@ namespace SwipeFlash.Core
             if (packetFamily != null)
             {
                 // Tries to get a family with the same name in the static data
-                var staticFamily = staticDataFamilies.FirstOrDefault(family => (string)family["family"] == (string)packetFamily["family"]);
+                var staticFamily = fm.FindStaticFamily((string)packetFamily["family"]);
 
                 // If the family already exists
                 if (staticFamily != null)
@@ -166,6 +175,11 @@ namespace SwipeFlash.Core
                     // Add it to the static data families
                     staticDataFamilies.Add(packetFamily);
                 }
+            }
+            else
+            {
+                IoC.Get<WindowService>().CreateWarning("SFF file data is invalid");
+                return false;
             }
 
             // Creates the user data family from the static family

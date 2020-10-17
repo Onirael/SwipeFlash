@@ -173,6 +173,8 @@ namespace SwipeFlash
     /// </summary>
     public class AnimateSlideInFromTopProperty : AnimateBaseProperty<AnimateSlideInFromTopProperty>
     {
+        protected int SlideDistance = (int)(Application.Current.MainWindow.Width * 1.2);
+
         // Initializes constants
         public AnimateSlideInFromTopProperty() : base() { AnimDuration = 0.4f; }
 
@@ -181,10 +183,10 @@ namespace SwipeFlash
             // If the animation is run forward
             if (value)
                 // Slide the element in from the top
-                await element.SlideFromTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
+                await element.SlideFromTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
             else
                 // Slide the element to the top
-                await element.SlideToTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
+                await element.SlideToTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
         }
     }
 
@@ -232,6 +234,8 @@ namespace SwipeFlash
     /// </summary>
     public class AnimateSettingsSlideInProperty : AnimateBaseProperty<AnimateSettingsSlideInProperty>
     {
+        protected int SlideDistance = (int)(Application.Current.MainWindow.Width * 1.2);
+
         // Initializes constants
         public AnimateSettingsSlideInProperty() : base() { AnimDuration = 0.4f; }
 
@@ -240,23 +244,28 @@ namespace SwipeFlash
             // If the animation is run forward
             if (value)
                 // Slide the element in from the top
-                await element.SlideFromTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
+                await element.SlideFromTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
             else
                 // Slide the element to the top
-                await element.SlideToTopAsync((int)(Application.Current.MainWindow.Width * 1.2), IsFirstLoad ? 0f : AnimDuration);
+                await element.SlideToTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
         }
     }
 
     /// <summary>
-    /// Animates 
+    /// Animates a content element sliding down
     /// </summary>
-    public class AnimateContentSlideInFromTopProperty : AnimateBaseProperty<AnimateContentSlideInFromTopProperty>
+    public class AnimateContentSlideDownProperty : AnimateBaseProperty<AnimateContentSlideDownProperty>
     {
+        protected int SlideDistance = 0;
+
         // Initializes constants
-        public AnimateContentSlideInFromTopProperty() : base() { AnimDuration = 0.2f; }
+        public AnimateContentSlideDownProperty() : base() { AnimDuration = 0.2f; }
 
         protected async override void RunAnimation(FrameworkElement element, bool value)
         {
+            // Sets the slide distance
+            SlideDistance = (int)element.ActualHeight;
+
             // If the animation is run forward
             if (value)
                 // Slide the element in from the top
@@ -264,6 +273,53 @@ namespace SwipeFlash
             else
                 // Slide the element to the top
                 await element.SlideToTopAsync((int)element.ActualHeight, IsFirstLoad ? 0f : AnimDuration);
+        }
+    }
+
+    /// <summary>
+    /// Animates a content element sliding up
+    /// </summary>
+    public class AnimateContentSlideUpProperty : AnimateBaseProperty<AnimateContentSlideUpProperty>
+    {
+        protected int SlideDistance = 0;
+
+        // Initializes constants
+        public AnimateContentSlideUpProperty() : base() { AnimDuration = 0.2f; }
+
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            // Sets the slide distance
+            SlideDistance = (int)element.ActualHeight;
+
+            // If the animation is run forward
+            if (value)
+                // Slide the element in from the top
+                await element.SlideToTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
+            else
+                // Slide the element to the top
+                await element.SlideFromTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
+        }
+    }
+
+    /// <summary>
+    /// Animates a card edit input text, sliding it down
+    /// </summary>
+    public class AnimateTextInputSlideDownProperty : AnimateBaseProperty<AnimateTextInputSlideDownProperty>
+    {
+        protected int SlideDistance = -50;
+
+        // Initializes constants
+        public AnimateTextInputSlideDownProperty() : base() { AnimDuration = 0.2f; }
+
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            // If the animation is run forward
+            if (value)
+                // Slide the element in from the top
+                await element.SlideToTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
+            else
+                // Slide the element to the top
+                await element.SlideFromTopAsync(SlideDistance, IsFirstLoad ? 0f : AnimDuration);
         }
     }
 

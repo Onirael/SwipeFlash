@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -107,78 +106,7 @@ namespace SwipeFlash.Core
 
         #endregion
 
-        #region Private Helpers
-
-        /// <summary>
-        /// Gets the categories from the JSON data
-        /// </summary>
-        private void InitCategories()
-        {
-            // Initializes the array
-            Categories = new List<string>();
-
-            // Gets the static data from the Flashcard Manager
-            var staticData = IoC.Get<FlashcardManager>().StaticData;
-
-            if (staticData == null)
-                return;
-
-            // Gets the categories from the JSON file
-            var jsonCategories = staticData["categories"].AsJEnumerable();
-
-            // Add each category to the array
-            foreach (var category in jsonCategories) { Categories.Add((string)category["name"]); }
-        }
-        
-        /// <summary>
-        /// Called when the user pressed the Export family... button
-        /// </summary>
-        private void OnExportFamilyPressed()
-        {
-            var appVM = IoC.Get<ApplicationViewModel>();
-
-            // Creates a listener delegate
-            ListenerDelegate listener = OnFileSaved;
-
-            // Listens for the feedback event
-            appVM.ListenForEvent(ref appVM.OnFileSaved, listener);
-
-            // Creates the window args
-            var saveFileWindowArgs = new WindowArgs()
-            {
-                TargetType = WindowType.SaveFileExplorer,
-                Message = "SwipeFlash Family File (*.sff)|*.sff",
-            };
-
-            // Creates the window
-            IoC.Get<WindowService>().CreateWindow(saveFileWindowArgs);
-        }
-
-        /// <summary>
-        /// Called when the user has specified a save file name for the exported file
-        /// </summary>
-        /// <param name="parameter"></param>
-        private void OnFileSaved(object parameter)
-        {
-            // Gets the file path
-            string filePath = parameter as string;
-            if (string.IsNullOrEmpty(filePath))
-                return;
-
-            // Creates data packet
-            var filePacket = JSONPacketManager.CreateFamilyPacket(FamilyName);
-
-            // Converts to string
-            var fileText = JsonConvert.SerializeObject(filePacket, Formatting.Indented);
-
-            // Writes to file
-            File.Create(filePath);
-            Task.Run(() =>
-            {
-                while (!JSONPacketManager.IsFileReady(filePath)) { }
-                File.WriteAllText(filePath, fileText);
-            });
-        }
+        #region Command Methods
 
         /// <summary>
         /// Called when the cancel button is pressed
@@ -232,6 +160,83 @@ namespace SwipeFlash.Core
             // Destroys the window
             IoC.Get<WindowService>().DestroyWindow(new WindowArgs() { TargetType = WindowType.FamilyInfo });
         }
+
+        /// <summary>
+        /// Called when the user pressed the Export family... button
+        /// </summary>
+        private void OnExportFamilyPressed()
+        {
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Creates a listener delegate
+            ListenerDelegate listener = OnFileSaved;
+
+            // Listens for the feedback event
+            appVM.ListenForEvent<string>(WindowReturnEvent.FileSaved, listener);
+
+            // Creates the window args
+            var saveFileWindowArgs = new WindowArgs()
+            {
+                TargetType = WindowType.SaveFileExplorer,
+                Message = "SwipeFlash Family File (*.sff)|*.sff",
+            };
+
+            // Creates the window
+            IoC.Get<WindowService>().CreateWindow(saveFileWindowArgs);
+        }
+
+        #endregion
+
+        #region Private Helpers
+
+        /// <summary>
+        /// Gets the categories from the JSON data
+        /// </summary>
+        private void InitCategories()
+        {
+            // Initializes the array
+            Categories = new List<string>();
+
+            // Gets the static data from the Flashcard Manager
+            var staticData = IoC.Get<FlashcardManager>().StaticData;
+
+            if (staticData == null)
+                return;
+
+            // Gets the categories from the JSON file
+            var jsonCategories = staticData["categories"].AsJEnumerable();
+
+            // Add each category to the array
+            foreach (var category in jsonCategories) { Categories.Add((string)category["name"]); }
+        }
+        
+
+        /// <summary>
+        /// Called when the user has specified a save file name for the exported file
+        /// </summary>
+        /// <param name="parameter"></param>
+        private void OnFileSaved(object parameter)
+        {
+            // Gets the file path
+            string filePath = parameter as string;
+            if (string.IsNullOrEmpty(filePath))
+                return;
+
+            // Creates data packet
+            var filePacket = JSONPacketManager.CreateFamilyPacket(FamilyName);
+
+            // Converts to string
+            var fileText = JsonConvert.SerializeObject(filePacket, Formatting.Indented);
+
+            // Writes to file
+            File.Create(filePath);
+            Task.Run(() =>
+            {
+                while (!JSONPacketManager.IsFileReady(filePath)) { }
+                File.WriteAllText(filePath, fileText);
+            });
+        }
+
 
         #endregion
     }

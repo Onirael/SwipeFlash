@@ -108,7 +108,7 @@ namespace SwipeFlash.Core
         /// <typeparam name="T">The type of the event's output</typeparam>
         /// <param name="awaitedEvent">The event to listen for</param>
         /// <param name="listenerFunction">The function to run when the event fires</param>
-        public void ListenForEvent<T>(ref EventHandler<T> awaitedEvent, ListenerDelegate listener)
+        public void ListenForEvent<T>(WindowReturnEvent awaitedEvent, ListenerDelegate listener)
         {
             // Create a single self-unhookable event
             // hooked to the application's file selected event handler
@@ -116,14 +116,46 @@ namespace SwipeFlash.Core
             listenerEvent = (sender, output) =>
             {
                 // Unhook the event
-                //awaitedEvent -= listenerEvent;
+                switch (awaitedEvent)
+                {
+                    case WindowReturnEvent.FileSelected:
+                        OnFileSelected -= (ss, e) => listenerEvent(sender, (T)Convert.ChangeType(e, typeof(T)));
+                        break;
+
+                    case WindowReturnEvent.FileSaved:
+                        OnFileSaved -= (ss, e) => listenerEvent(sender, (T)Convert.ChangeType(e, typeof(T)));
+                        break;
+
+                    case WindowReturnEvent.ConfirmationReceived:
+                        OnConfirmation -= (ss, e) => listenerEvent(sender, (T)Convert.ChangeType(e, typeof(T)));
+                        break;
+
+                    default:
+                        break;
+                }
 
                 // Run the input function
                 listener(output);
             };
 
             // Hooks the event to the application view model
-            awaitedEvent += listenerEvent;
+            switch (awaitedEvent)
+            {
+                case WindowReturnEvent.FileSelected:
+                    OnFileSelected += (ss, e) => listenerEvent(ss, (T)Convert.ChangeType(e, typeof(T)));
+                    break;
+
+                case WindowReturnEvent.FileSaved:
+                    OnFileSaved += (ss, e) => listenerEvent(ss, (T)Convert.ChangeType(e, typeof(T)));
+                    break;
+
+                case WindowReturnEvent.ConfirmationReceived:
+                    OnConfirmation += (ss, e) => listenerEvent(ss, (T)Convert.ChangeType(e, typeof(T)));
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         #endregion
@@ -198,10 +230,4 @@ namespace SwipeFlash.Core
 
         #endregion
     }
-    
-    /// <summary>
-    /// A delegate used to listen for window events
-    /// </summary>
-    /// <param name="parameter">The passed parameter</param>
-    public delegate void ListenerDelegate(object parameter);
 }
