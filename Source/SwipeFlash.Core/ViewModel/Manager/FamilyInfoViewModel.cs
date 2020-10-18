@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -35,6 +37,16 @@ namespace SwipeFlash.Core
         /// The logo of the family's side 2
         /// </summary>
         public string FamilyLogo2 { get; set; }
+
+        /// <summary>
+        /// The articles for category 1
+        /// </summary>
+        public string Category1Articles { get; set; }
+
+        /// <summary>
+        /// The articles for category 2
+        /// </summary>
+        public string Category2Articles { get; set; }
 
         /// <summary>
         /// The amount of cards in the family
@@ -85,10 +97,12 @@ namespace SwipeFlash.Core
 
             // Sets the variables
             FamilyName = familyData.Name;
-            FamilyCategory1 = familyData.Category1;
-            FamilyCategory2 = familyData.Category2;
-            FamilyLogo1 = familyData.Logo1;
-            FamilyLogo2 = familyData.Logo2;
+            FamilyCategory1 = familyData.Category1.Name;
+            FamilyCategory2 = familyData.Category2.Name;
+            FamilyLogo1 = familyData.Category1.Logo;
+            FamilyLogo2 = familyData.Category2.Logo;
+            Category1Articles = string.Join(", ", familyData.Category1.Articles);
+            Category2Articles = string.Join(", ", familyData.Category2.Articles);
             FamilyCardCount = familyData.CardCount;
 
             // Initializes the Categories list
@@ -122,38 +136,39 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnOKPressed()
         {
+            // Format the input side 1 articles
+            var articles1Str = Category1Articles.Replace(" ", "");
+            var articles1List = articles1Str.Split(new char[] { ',', ';', '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            // Format the input side 2 articles
+            var articles2Str = Category2Articles.Replace(" ", "");
+            var articles2List = articles2Str.Split(new char[] { ',', ';', '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
             // Creates the edited family data
             var newFamilyData = new FlashcardFamilyData()
             {
                 Name = FamilyName,
-                Logo1 = FamilyLogo1,
-                Logo2 = FamilyLogo2,
-                Category1 = FamilyCategory1,
-                Category2 = FamilyCategory2,
+                Category1 = new CategoryData(FamilyCategory1, FamilyLogo1, articles1List),
+                Category2 = new CategoryData(FamilyCategory2, FamilyLogo2, articles2List),
                 IsEnabled = DefaultData.IsEnabled,
                 CardCount = DefaultData.CardCount,
             };
 
             // Gets the validity of the family data
-            var isFamilyDataValid = DataChecker.IsFamilyDataValid(newFamilyData);
+            var isFamilyDataValid = newFamilyData.IsFamilyDataValid();
 
             // If the family data isn't valid or is equal, quit
             if (!isFamilyDataValid)
                 return;
 
             // Attempts to edit the family data
-            bool couldEditData = IoC.Get<FlashcardManager>().EditFamilyData(newFamilyData, DefaultData);
+            bool couldEditData = newFamilyData.EditFamilyData(DefaultData);
 
             // If the edit was unsuccessful
             if (!couldEditData)
             {
                 // Create a warning
-                IoC.Get<WindowService>().CreateWindow(new WindowArgs()
-                {
-                    TargetType = WindowType.Warning,
-                    Message = "Invalid family data was entered",
-                });
-
+                IoC.Get<WindowService>().CreateWarning("Invalid family data was entered");
                 return;
             }
 

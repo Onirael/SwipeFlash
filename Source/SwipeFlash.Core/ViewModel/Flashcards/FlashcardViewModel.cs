@@ -4,6 +4,8 @@ using System.Windows.Input;
 using Unsplasharp.Models;
 using System.Windows.Media.Imaging;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SwipeFlash.Core
 {
@@ -182,6 +184,7 @@ namespace SwipeFlash.Core
                 _isInEditMode = value;
             }
         }
+
         /// <summary>
         /// Whether the edit card content is currently visible
         /// </summary>
@@ -396,7 +399,7 @@ namespace SwipeFlash.Core
                 HasIllustration = HasIllustrationEdit,
             };
             
-            bool couldEditCard = IoC.Get<FlashcardManager>().EditFlashcardData(flashcardData);
+            bool couldEditCard = flashcardData.EditFlashcardData();
 
             if (!couldEditCard)
                 return;
@@ -505,8 +508,20 @@ namespace SwipeFlash.Core
             if (!appVM.IsServerReachable)
                 return;
 
+            // Gets the flashcard manager
+            var fm = IoC.Get<FlashcardManager>();
+
+            // Gets the articles from the static data
+            var foundArticles = fm.FindCategory((string)fm.FindStaticFamily(CardFamily)["category1"])["articles"].AsJEnumerable();
+
+            // Initializes the article lists
+            var articlesList = new List<string>();
+
+            // Adds the enumerable articles to the lists
+            foreach (var article in foundArticles) { articlesList.Add((string)article); }
+
             // Get the search results
-            var foundPhotos = await appVM.IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle());
+            var foundPhotos = await appVM.IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle(articlesList));
 
             // Gets the remaining API calls count
             var apiCallsRemaining = IoC.Get<ApplicationViewModel>().IllustrationsClient.RateLimitRemaining;

@@ -105,6 +105,16 @@ namespace SwipeFlash.Core
         }
 
         /// <summary>
+        /// The user-defined articles for side 1
+        /// </summary>
+        public string Side1Articles { get; set; } = "";
+
+        /// <summary>
+        /// The user-defined articles for side 2
+        /// </summary>
+        public string Side2Articles { get; set; } = "";
+
+        /// <summary>
         /// The user-defined line ignore pattern 
         /// </summary>
         public string IgnorePatternDescription { get; set; } = "";
@@ -217,86 +227,86 @@ namespace SwipeFlash.Core
             // If no file was selected
             if (!IsFileSelected)
             {
-                IoC.Get<WindowService>().CreateWindow(new WindowArgs()
-                {
-                    Message = "No file was selected",
-                    TargetType = WindowType.Warning,
-                });
-
+                IoC.Get<WindowService>().CreateWarning("No file was selected");
                 return;
             }
 
             switch (SelectedFileType)
             {
                 case ".txt":
+                {
+                    // Format the input side 1 articles
+                    var articles1Str = Side1Articles.Replace(" ", "");
+                    var articles1List = articles1Str.Split(new char[] { ',', ';', '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    
+                    // Format the input side 2 articles
+                    var articles2Str = Side1Articles.Replace(" ", "");
+                    var articles2List = articles2Str.Split(new char[] { ',', ';', '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                    // Creates a family data struct
+                    var baseFamilyData = new FlashcardFamilyData()
                     {
-                        // Creates a family data struct
-                        var baseFamilyData = new FlashcardFamilyData()
-                        {
-                            Name = FamilyName,
-                            Category1 = Category1,
-                            Category2 = Category2,
-                            Logo1 = Side1Logo,
-                            Logo2 = Side2Logo,
-                        };
+                        Name = FamilyName,
+                        Category1 = new CategoryData(Category1, Side1Logo),
+                        Category2 = new CategoryData(Category2, Side2Logo),
+                    };
 
-                        // Gets the validity of the family data
-                        var isFamilyDataValid = DataChecker.IsFamilyDataValid(baseFamilyData);
+                    // Sets the article lists
+                    baseFamilyData.Category1.Articles = articles1List;
+                    baseFamilyData.Category2.Articles = articles2List;
 
-                        // If it isn't valid, quit
-                        if (!isFamilyDataValid)
-                        {
-                            IoC.Get<WindowService>().CreateWarning("Invalid family data entered");
-                            return;
-                        }
+                    // Gets the validity of the family data
+                    var isFamilyDataValid = baseFamilyData.IsFamilyDataValid();
 
-                        // Create the family data struct with the trivial data
-                        var familyData = new ParsedFlashcardFamilyData(baseFamilyData);
-
-                        // Parses the file to a data struct
-                        var parsingSuccessful = FileParser.ParseFile(ref familyData,
-                                                                     SelectedFilePath,
-                                                                     IgnorePatternDescription,
-                                                                     SeparatorsDescription,
-                                                                     LinePatternDescription);
-
-                        // If the flashcards could be successfully parsed
-                        if (parsingSuccessful)
-                        {
-                            // Add the flashcard family to the JSON
-                            JSONWriter.AddFamilyToJSON(familyData);
-                            // Continue to close the window
-                            break;
-                        }
-                        // Otherwise, quit
-                        else
-                            return;
-                    }
-
-                case ".sff":
+                    // If it isn't valid, quit
+                    if (!isFamilyDataValid)
                     {
-                        // Attempt to add the family to the data
-                        bool couldAddFamily = JSONPacketManager.AddFamily(SFFData);
-
-                        // If the family could be added to the data
-                        if (couldAddFamily)
-                            // Continue to close the window
-                            break;
-                        // Otherwise, quit
-                        else
-                            return;
-                    }
-
-                default:
-                    {
-                        IoC.Get<WindowService>().CreateWindow(new WindowArgs()
-                        {
-                            Message = "This type of file is not currently handled",
-                            TargetType = WindowType.Warning,
-                        });
-
+                        IoC.Get<WindowService>().CreateWarning("Invalid family data entered");
                         return;
                     }
+
+                    // Create the family data struct with the trivial data
+                    var familyData = new ParsedFlashcardFamilyData(baseFamilyData);
+
+                    // Parses the file to a data struct
+                    var parsingSuccessful = FileParser.ParseFile(ref familyData,
+                                                                 SelectedFilePath,
+                                                                 IgnorePatternDescription,
+                                                                 SeparatorsDescription,
+                                                                 LinePatternDescription);
+
+                    // If the flashcards could be successfully parsed
+                    if (parsingSuccessful)
+                    {
+                        // Add the flashcard family to the JSON
+                        JSONWriter.AddFamilyToJSON(familyData);
+                        // Continue to close the window
+                        break;
+                    }
+                    // Otherwise, quit
+                    else
+                        return;
+                }
+
+                case ".sff":
+                {
+                    // Attempt to add the family to the data
+                    bool couldAddFamily = JSONPacketManager.AddFamily(SFFData);
+
+                    // If the family could be added to the data
+                    if (couldAddFamily)
+                        // Continue to close the window
+                        break;
+                    // Otherwise, quit
+                    else
+                        return;
+                }
+
+                default:
+                {
+                    IoC.Get<WindowService>().CreateWarning("This type of file is not currently handled");
+                    return;
+                }
             }
 
             // Close the window
@@ -464,10 +474,12 @@ namespace SwipeFlash.Core
 
                 // Saves the variables
                 FamilyName = familyData.Name;
-                Category1 = familyData.Category1;
-                Category2 = familyData.Category2;
-                Side1Logo = familyData.Logo1;
-                Side2Logo = familyData.Logo2;
+                Category1 = familyData.Category1.Name;
+                Category2 = familyData.Category2.Name;
+                Side1Logo = familyData.Category1.Logo;
+                Side2Logo = familyData.Category2.Logo;
+                Side1Articles = string.Join(", ", familyData.Category1.Articles);
+                Side1Articles = string.Join(", ", familyData.Category2.Articles);
             }
         }
 

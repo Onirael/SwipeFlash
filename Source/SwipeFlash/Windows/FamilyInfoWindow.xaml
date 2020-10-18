@@ -55,6 +55,16 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+
+                    <TextBlock Text="Side 1 articles:"
+                               Margin="0 0 0 5"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <TextBox HorizontalAlignment="Left"
+                             Text="{Binding Category1Articles}"
+                             Width="140"
+                             FontSize="{StaticResource FontSizeLarge}"
+                             IsEnabled="{Binding IsFamilyDataInputEnabled}"/>
                 </StackPanel>
                 <!-- Side 2 logo input -->
                 <StackPanel Grid.Column="2" HorizontalAlignment="Right">
@@ -84,6 +94,16 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+
+                    <TextBlock Text="Side 2 articles:"
+                               Margin="0 0 0 5"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <TextBox HorizontalAlignment="Left"
+                             Text="{Binding Category2Articles}"
+                             Width="140"
+                             FontSize="{StaticResource FontSizeLarge}"
+                             IsEnabled="{Binding IsFamilyDataInputEnabled}"/>
                 </StackPanel>
                 
                 

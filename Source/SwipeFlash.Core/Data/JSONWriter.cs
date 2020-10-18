@@ -38,6 +38,7 @@ namespace SwipeFlash.Core
                 var category1 = new JObject();
                 category1["name"] = family.Category1;
                 category1["icon"] = family.Logo1;
+                category1["articles"] = JArray.FromObject(family.Articles1);
 
                 // Adds it to the array
                 categories.Add(category1);
@@ -50,6 +51,7 @@ namespace SwipeFlash.Core
                 var category2 = new JObject();
                 category2["name"] = family.Category2;
                 category2["icon"] = family.Logo2;
+                category2["articles"] = JArray.FromObject(family.Articles2);
 
                 // Adds it to the array
                 categories.Add(category2);
@@ -120,7 +122,7 @@ namespace SwipeFlash.Core
 
                 var newUserCard = new JObject();
                 newUserCard["id"] = cardID;
-                newUserCard["category"] = 0;
+                newUserCard["section"] = 0;
                 newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
 
                 // Adds the card to the array
@@ -194,7 +196,7 @@ namespace SwipeFlash.Core
                         // Creates a new user card
                         var newUserCard = new JObject();
                         newUserCard["id"] = (int)staticCard["id"];
-                        newUserCard["category"] = 0;
+                        newUserCard["section"] = 0;
                         newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
 
                         // Adds it to the array
@@ -221,7 +223,7 @@ namespace SwipeFlash.Core
                     // Creates a new user card
                     var newUserCard = new JObject();
                     newUserCard["id"] = (int)staticCard["id"];
-                    newUserCard["category"] = 0;
+                    newUserCard["section"] = 0;
                     newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
 
                     // Adds it to the array

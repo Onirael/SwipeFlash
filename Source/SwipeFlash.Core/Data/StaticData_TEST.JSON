@@ -2,23 +2,39 @@
   "categories": [
     {
       "name": "spanish",
-      "icon": "🇪🇸"
+      "icon": "🇪🇸",
+      "articles": [
+        "el",
+        "la",
+        "los",
+        "las"
+      ]
     },
     {
       "name": "english",
-      "icon": "🇬🇧"
+      "icon": "🇬🇧",
+      "articles": [
+        "the"
+      ]
     },
     {
       "name": "german",
-      "icon": "🇩🇪"
+      "icon": "🇩🇪",
+      "articles": [
+        "der",
+        "die",
+        "das"
+      ]
     },
     {
       "name": "test1",
-      "icon": "❤"
+      "icon": "❤",
+      "articles": []
     },
     {
       "name": "test2",
-      "icon": "🐸"
+      "icon": "🐸",
+      "articles": []
     }
   ],
   "flashcards": [

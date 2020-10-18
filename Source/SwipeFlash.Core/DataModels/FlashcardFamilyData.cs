@@ -1,4 +1,6 @@
-﻿namespace SwipeFlash.Core
+﻿using System.Collections.Generic;
+
+namespace SwipeFlash.Core
 {
     /// <summary>
     /// A struct storing the data for a flashcard family
@@ -23,22 +25,12 @@
         /// <summary>
         /// The category of the family's side 1
         /// </summary>
-        public string Category1;
+        public CategoryData Category1;
 
         /// <summary>
-        /// The category of the family's side 2
+        /// The category of the family's side 1
         /// </summary>
-        public string Category2;
-        
-        /// <summary>
-        /// The logo of the family's side 1
-        /// </summary>
-        public string Logo1;
-
-        /// <summary>
-        /// The logo of the family's side 2
-        /// </summary>
-        public string Logo2;
+        public CategoryData Category2;
 
         public override bool Equals(object obj)
         {
@@ -47,11 +39,9 @@
                 return false;
 
             // Gets whether the static data is equal
-            bool isEqual = familyData.Category1 == Category1 &&
-                           familyData.Category2 == Category2 &&
-                           familyData.Name == Name &&
-                           familyData.Logo1 == Logo1 &&
-                           familyData.Logo2 == Logo2;
+            bool isEqual = familyData.Category1.Equals(Category1) &&
+                           familyData.Category2.Equals(Category2) &&
+                           familyData.Name == Name;
             return isEqual;
         }
 

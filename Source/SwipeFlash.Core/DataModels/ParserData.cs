@@ -54,16 +54,28 @@ namespace SwipeFlash.Core
         public List<ParsedFlashcardData> Flashcards;
 
         /// <summary>
+        /// The articles of the category of side 1
+        /// </summary>
+        public List<string> Articles1;
+
+        /// <summary>
+        /// The articles of the category of side 2
+        /// </summary>
+        public List<string> Articles2;
+
+        /// <summary>
         /// Family data constructor
         /// </summary>
         /// <param name="familyData">The family data</param>
         public ParsedFlashcardFamilyData(FlashcardFamilyData familyData) : this()
         {
             FamilyName = familyData.Name;
-            Category1 = familyData.Category1;
-            Category2 = familyData.Category2;
-            Logo1 = familyData.Logo1;
-            Logo2 = familyData.Logo2;
+            Category1 = familyData.Category1.Name;
+            Category2 = familyData.Category2.Name;
+            Logo1 = familyData.Category1.Logo;
+            Logo2 = familyData.Category2.Logo;
+            Articles1 = familyData.Category1.Articles;
+            Articles2 = familyData.Category2.Articles;
         }
     }
 

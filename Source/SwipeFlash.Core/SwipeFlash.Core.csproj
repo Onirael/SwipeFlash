@@ -179,14 +179,16 @@
   <ItemGroup>
     <Compile Include="DataModels\ApplicationSettings.cs" />
     <Compile Include="DataModels\AsyncObservableCollection.cs" />
+    <Compile Include="DataModels\CategoryData.cs" />
     <Compile Include="DataModels\ParserData.cs" />
     <Compile Include="DataModels\FlashcardFamilyData.cs" />
     <Compile Include="DataModels\WindowArgs.cs" />
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="Data\JSONPacketManager.cs" />
     <Compile Include="Data\JSONWriter.cs" />
-    <Compile Include="Helpers\EventHandlerHelpers.cs" />
-    <Compile Include="Parser\DataChecker.cs" />
+    <Compile Include="Helpers\CategoryDataHelpers.cs" />
+    <Compile Include="Helpers\FlashcardDataHelpers.cs" />
+    <Compile Include="Helpers\FlashcardFamilyDataHelpers.cs" />
     <Compile Include="Parser\ParserIgnoreRule.cs" />
     <Compile Include="Parser\ParserVariableInstruction.cs" />
     <Compile Include="ViewModel\Base\WindowService.cs" />

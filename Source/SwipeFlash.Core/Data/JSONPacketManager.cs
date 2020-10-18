@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -79,12 +80,28 @@ namespace SwipeFlash.Core
 
             // Writes the family data
             familyData.Name = (string)foundFamily["family"];
-            familyData.Category1 = (string)foundFamily["category1"];
-            familyData.Category2 = (string)foundFamily["category2"];
 
-            // Writes the category data
-            familyData.Logo1 = (string)foundCategory1["icon"];
-            familyData.Logo2 = (string)foundCategory2["icon"];
+            familyData.Category1 = new CategoryData((string)foundFamily["category1"],
+                                                    (string)foundCategory1["icon"]);
+            familyData.Category2 = new CategoryData((string)foundFamily["category1"],
+                                                    (string)foundCategory1["icon"]);
+
+
+            // Gets the article enumerables
+            var foundArticles1 = foundCategory1["articles"].AsJEnumerable();
+            var foundArticles2 = foundCategory2["articles"].AsJEnumerable();
+
+            // Initializes the article lists
+            var articles1 = new List<string>();
+            var articles2 = new List<string>();
+
+            // Adds the enumerable articles to the lists
+            foreach(var article in foundArticles1) { articles1.Add((string)article); }
+            foreach(var article in foundArticles2) { articles2.Add((string)article); }
+            
+            // Sets the category data articles
+            familyData.Category1.Articles = articles1;
+            familyData.Category2.Articles = articles2;
 
             return familyData;
         }

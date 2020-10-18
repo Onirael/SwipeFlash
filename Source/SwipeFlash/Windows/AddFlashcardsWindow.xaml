@@ -63,17 +63,6 @@
 
                     <!-- Side 1 logo input -->
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="Side 1 logo:"
-                                   Margin="0 0 0 5"
-                                   FontSize="{StaticResource FontSizeLarge}"/>
-
-                        <TextBox Name="logo1"
-                                 HorizontalAlignment="Left"
-                                 MaxWidth="100"
-                                 Text="{Binding Side1Logo}"
-                                 FontSize="{StaticResource FontSizeLarge}"
-                                 IsEnabled="{Binding IsLogo1InputEnabled}"
-                                 Tag="(emoji)"/>
 
                         <TextBlock Text="Side 1 category"
                                    Margin="0 0 0 5"
@@ -94,19 +83,31 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                    </StackPanel>
-                    <!-- Side 2 logo input -->
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Side 2 logo:"
+                        <TextBlock Text="Category 1 logo:"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <TextBox Name="logo1"
+                                 HorizontalAlignment="Left"
+                                 MaxWidth="100"
+                                 Text="{Binding Side1Logo}"
+                                 FontSize="{StaticResource FontSizeLarge}"
+                                 IsEnabled="{Binding IsLogo1InputEnabled}"
+                                 Tag="(emoji)"/>
+
+                        <TextBlock Text="Side 1 articles:"
                                    Margin="0 0 0 5"
                                    FontSize="{StaticResource FontSizeLarge}"/>
 
                         <TextBox HorizontalAlignment="Left"
-                                 Text="{Binding Side2Logo}"
-                                 MaxWidth="100"
+                                 Text="{Binding Side1Articles}"
+                                 Width="140"
                                  FontSize="{StaticResource FontSizeLarge}"
-                                 IsEnabled="{Binding IsLogo2InputEnabled}"
-                                 Tag="(emoji)"/>
+                                 IsEnabled="{Binding IsFamilyDataInputEnabled}"
+                                 Tag="ex: the, a, an"/>
+                    </StackPanel>
+                    <!-- Side 2 logo input -->
+                    <StackPanel Grid.Column="2">
 
                         <TextBlock Text="Side 2 category"
                                    Margin="0 0 0 5"
@@ -127,8 +128,31 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+
+                        <TextBlock Text="Side 2 logo:"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <TextBox HorizontalAlignment="Left"
+                                 Text="{Binding Side2Logo}"
+                                 MaxWidth="100"
+                                 FontSize="{StaticResource FontSizeLarge}"
+                                 IsEnabled="{Binding IsLogo2InputEnabled}"
+                                 Tag="(emoji)"/>
+                        
+                        <TextBlock Text="Side 2 articles:"
+                                   Margin="0 0 0 5"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+
+                        <TextBox HorizontalAlignment="Left"
+                                 Text="{Binding Side2Articles}"
+                                 Width="140"
+                                 FontSize="{StaticResource FontSizeLarge}"
+                                 IsEnabled="{Binding IsFamilyDataInputEnabled}"
+                                 Tag="ex: el, la, los, las"/>
                     </StackPanel>
                 </Grid>
+
             </StackPanel>
         </Border>
 
