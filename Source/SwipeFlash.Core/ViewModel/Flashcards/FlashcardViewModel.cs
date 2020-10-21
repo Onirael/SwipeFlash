@@ -121,7 +121,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Whether the image is currently visible on this side of the card
         /// </summary>
-        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded && _appIllustrationsEnabled && !IsInEditMode;
+        public bool IsImageVisible => IsOnSide1 && HasIllustration && IsIllustrationLoaded && _appIllustrationsEnabled && !IsEditContentVisible;
 
         private Photo _illustrationData;
         /// <summary>

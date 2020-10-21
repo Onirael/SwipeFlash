@@ -1,5 +1,4 @@
-﻿using Dna;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Unsplasharp;
@@ -73,6 +72,11 @@ namespace SwipeFlash.Core
         /// The path to the user data JSON file
         /// </summary>
         public string UserDataPath { get; set; }
+
+        /// <summary>
+        /// The checker used to check for internet availability
+        /// </summary>
+        public HttpEndpointChecker InternetChecker { get; set; }
 
         #endregion
 
@@ -166,6 +170,7 @@ namespace SwipeFlash.Core
         {
             // Initialize Unsplasharp client
             IllustrationsClient = InitializeUnsplasharp();
+            UnsplasharpTEST();
 
             // Start monitoring the availability of the Unsplash server
             MonitorServerstatus();
@@ -181,6 +186,11 @@ namespace SwipeFlash.Core
 
             StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData_TEST.JSON";
             UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData_TEST.JSON";
+        }
+
+        private async void UnsplasharpTEST()
+        {
+            var test = await IllustrationsClient.SearchPhotos("lamp");
         }
 
         #endregion
@@ -201,10 +211,13 @@ namespace SwipeFlash.Core
         /// </summary>
         private void MonitorServerstatus()
         {
-            var httpWatcher = new HttpEndpointChecker(
-                "https://unsplash.com/",
-                200,
-                (result) => { IsServerReachable = result; });
+            // Creates a new endpoint checker
+            InternetChecker = new HttpEndpointChecker("https://unsplash.api.com/",
+                                                      200,
+                                                      (result) => {
+                                                          IsServerReachable = result;
+                                                          if (result) InternetChecker.RunChecker = false;
+                                                      });
         }
         
         /// <summary>
