@@ -170,7 +170,6 @@ namespace SwipeFlash.Core
         {
             // Initialize Unsplasharp client
             IllustrationsClient = InitializeUnsplasharp();
-            UnsplasharpTEST();
 
             // Start monitoring the availability of the Unsplash server
             MonitorServerstatus();
@@ -186,11 +185,6 @@ namespace SwipeFlash.Core
 
             StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData_TEST.JSON";
             UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData_TEST.JSON";
-        }
-
-        private async void UnsplasharpTEST()
-        {
-            var test = await IllustrationsClient.SearchPhotos("lamp");
         }
 
         #endregion
@@ -212,11 +206,11 @@ namespace SwipeFlash.Core
         private void MonitorServerstatus()
         {
             // Creates a new endpoint checker
-            InternetChecker = new HttpEndpointChecker("https://unsplash.api.com/",
-                                                      200,
+            InternetChecker = new HttpEndpointChecker("www.unsplash.com",
+                                                      2000,
                                                       (result) => {
-                                                          IsServerReachable = result;
-                                                          if (result) InternetChecker.RunChecker = false;
+                                                            IsServerReachable = result;
+                                                            if (result) InternetChecker.RunChecker = false;
                                                       });
         }
         
@@ -234,6 +228,8 @@ namespace SwipeFlash.Core
                 case nameof(Properties.Settings.Default.IllustrationsEnabled):
                     // Update the local property
                     IllustrationsEnabled = Properties.Settings.Default.IllustrationsEnabled;
+                    // Run the network checker
+                    if (IllustrationsEnabled) InternetChecker.RunChecker = true;
                     break;
 
                 default:

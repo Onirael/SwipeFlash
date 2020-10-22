@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -75,6 +76,11 @@ namespace SwipeFlash.Core
         /// The command triggered by the confirm edit card button
         /// </summary>
         public ICommand ConfirmEditCommand { get; set; }
+        
+        /// <summary>
+        /// The command triggered by the delete card button
+        /// </summary>
+        public ICommand DeleteCardCommand { get; set; }
 
         #endregion
 
@@ -103,17 +109,58 @@ namespace SwipeFlash.Core
             // Initializes the confirm edit card button command
             ConfirmEditCommand = new RelayCommand(OnConfirmEditButtonPressed);
 
+            // Initializes the delete card button command
+            DeleteCardCommand = new RelayCommand(OnDeleteCardButtonPressed);
+
             // Hooks the initlaize flashcard list function to the OnQueueInitialized event
             IoC.Get<FlashcardManager>().OnQueueInitialized += InitializeFlashcardList;
+
+            // Hooks a flashcard family data update method to the families updated event
+            IoC.Get<FlashcardManager>().OnFamiliesUpdated += UpdateFlashcardFamilyData;
 
             // Initialize the JSON data
             // This must be done after InitializeFlashcardList has been hooked
             IoC.Get<FlashcardManager>().InitJSONData();
         }
-        
+
         #endregion
 
         #region Private Helpers
+
+        /// <summary>
+        /// Updates the all flashcards' family related data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UpdateFlashcardFamilyData(object sender, EventArgs e)
+        {
+            // Gets the families data
+            var familiesData = IoC.Get<FlashcardManager>().FlashcardFamilies;
+
+            // For each flashcard
+            foreach (var flashcard in Flashcards)
+            {
+                // The family of the flashcard
+                var cardFamily = familiesData.FirstOrDefault(family => family.Name == flashcard.CardFamily);
+
+                // If the card family was found
+                if (cardFamily.IsFamilyDataValid(false))
+                {
+                    // Finds the corresponding flashcard family
+                    var foundFamily = IoC.Get<FlashcardManager>().FindFlashcardFamily(flashcard.CardID,
+                                                                                      flashcard.Side1Text,
+                                                                                      flashcard.Side2Text);
+                    // Gets the new family of the card
+                    cardFamily = familiesData.FirstOrDefault(family => family.Name == (string)foundFamily["family"]);
+
+                    // Sets the flashcard family name in the flashcard
+                    flashcard.CardFamily = cardFamily.Name;
+                }
+                
+                // Updates the Family has illustrations flag
+                flashcard.FamilyHasIllustration = cardFamily.HasIllustrations;
+            }
+        }
 
         /// <summary>
         /// Called when the flashcard manager has finished loading the card queue
@@ -146,6 +193,21 @@ namespace SwipeFlash.Core
 
                 });
             });
+        }
+
+        /// <summary>
+        /// Called when the delete card button is pressed
+        /// </summary>
+        private void OnDeleteCardButtonPressed()
+        {
+            // Gets the stack top flashcard
+            var lastFlashcard = Flashcards[Flashcards.Count - 1];
+
+            // Deletes it
+            lastFlashcard.DeleteCard();
+
+            // Exits edit mode
+            IsInEditMode = false;
         }
 
         /// <summary>

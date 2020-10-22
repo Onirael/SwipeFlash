@@ -103,6 +103,8 @@ namespace SwipeFlash.Core
             familyData.Category1.Articles = articles1;
             familyData.Category2.Articles = articles2;
 
+            familyData.HasIllustrations = (bool)foundFamily["hasIllustrations"];
+
             return familyData;
         }
 

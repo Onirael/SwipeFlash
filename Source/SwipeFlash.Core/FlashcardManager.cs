@@ -147,7 +147,7 @@ namespace SwipeFlash.Core
 
             // Get first element
             FlashcardData nextCard = CardQueue[0];
-
+            
             // Remove element from list
             CardQueue.RemoveAt(0);
 
@@ -204,6 +204,9 @@ namespace SwipeFlash.Core
                 // Sets the category articles
                 familyData.Category1.Articles = articles1;
                 familyData.Category2.Articles = articles2;
+
+                // Sets the HasIllustrations flag
+                familyData.HasIllustrations = (bool)foundFamily["hasIllustrations"];
             }
 
             return familyData;
@@ -318,6 +321,30 @@ namespace SwipeFlash.Core
         }
 
         /// <summary>
+        /// Deletes a card's data from the static and user data
+        /// </summary>
+        /// <param name="cardFamily">The family of the card</param>
+        /// <param name="cardID">The card's ID</param>
+        public void DeleteCard(string cardFamily, int cardID)
+        {
+            // Gets the families
+            var staticFamily = FindStaticFamily(cardFamily);
+            var userFamily = FindUserFamily(cardFamily);
+
+            // Gets the card
+            var staticCard = GetFlashcard(cardID, staticFamily);
+            var userCard = GetFlashcard(cardID, userFamily);
+
+            // Removes the card from its parents
+            staticCard.Remove();
+            userCard.Remove();
+
+            OnStaticDataUpdated?.Invoke(this, null);
+
+            JSONWriter.UpdateJSONFiles();
+        }
+
+        /// <summary>
         /// Finds a family token by name in the static data
         /// </summary>
         /// <param name="familyName">The name of the family</param>
@@ -352,6 +379,27 @@ namespace SwipeFlash.Core
             // Gets the flashcard in the family
             return family["cards"].AsJEnumerable()
                                   .FirstOrDefault(card => (int)card["id"] == id);
+        }
+
+        /// <summary>
+        /// Finds a flashcard's family given its ID and text
+        /// </summary>
+        /// <param name="id">The unique ID of the card withing its family</param>
+        /// <param name="side1Text">The text on side 1 of the card</param>
+        /// <param name="side2Text">The text on side 2 of the card</param>
+        /// <returns></returns>
+        public JToken FindFlashcardFamily(int id, string side1Text, string side2Text)
+        {
+            // Gets the families enumerable
+            var families = StaticData["flashcards"].AsJEnumerable();
+
+            // Finds a family with the corresponding card
+            var foundFamily = families.FirstOrDefault(family => family["cards"].AsJEnumerable()
+                                                                               .FirstOrDefault(card => (int)card["id"] == id &&
+                                                                                                       (string)card["side1Text"] == side1Text &&
+                                                                                                       (string)card["side2Text"] == side2Text) != null);
+
+            return foundFamily;
         }
 
         /// <summary>
@@ -432,6 +480,7 @@ namespace SwipeFlash.Core
                         IsEnabled = (bool)FindUserFamily((string)family["family"])["isEnabled"],
                         Category1 = new CategoryData((string)family["category1"], ""),
                         Category2 = new CategoryData((string)family["category2"], ""),
+                        HasIllustrations = (bool)family["hasIllustrations"],
                     };
 
                     // Store it in FlashcardFamilies
@@ -481,7 +530,7 @@ namespace SwipeFlash.Core
                 var cardFamily = StaticData["flashcards"][0];
                 var cardFamilySize = cardFamily["cards"].Count();
 
-                if (FlashcardID < cardFamilySize)
+                if (FlashcardID < cardFamilySize) // DEVELOPMENT // // Card families might have IDs not starting at 0
                 {
                     // Sets the ID and family of the card
                     newFlashcardData.FlashcardID = FlashcardID;
@@ -502,12 +551,13 @@ namespace SwipeFlash.Core
                     newFlashcardData.Side1Icon = (string)StaticData["categories"].FirstOrDefault(result => (string)result["name"] == side1Category)["icon"];
                     newFlashcardData.Side2Icon = (string)StaticData["categories"].FirstOrDefault(result => (string)result["name"] == side2Category)["icon"];
 
-                    // Gets the HasIllustration flag
+                    // Gets the HasIllustration flag, the flag is overriden by the family settings
                     newFlashcardData.HasIllustration = (bool)flashcard["hasIllustration"];
+                    newFlashcardData.FamilyHasIllustrations = (bool)cardFamily["hasIllustrations"];
 
                     // Sets whether the card is reversed
                     var isCardReversed = Rand.Next(2) == 1;
-                    newFlashcardData.IsInverted = false;
+                    newFlashcardData.IsInverted = isCardReversed;
                 }
                 else
                 {

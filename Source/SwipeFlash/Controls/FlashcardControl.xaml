@@ -183,10 +183,12 @@
                                                 Margin="20"
                                                 Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}">
                                         <TextBlock Text="Enable card illustration"
-                                                   VerticalAlignment="Center"/>
+                                                   VerticalAlignment="Center"
+                                                   IsEnabled="{Binding FamilyHasIllustration}"/>
                                         <CheckBox Height="20" 
                                                   Margin="5 3 0 0"
-                                                  IsChecked="{Binding HasIllustrationEdit}"/>
+                                                  IsChecked="{Binding HasIllustrationEdit}"
+                                                  IsEnabled="{Binding FamilyHasIllustration}"/>
                                     </StackPanel>
 
                                     <!-- Image credit -->

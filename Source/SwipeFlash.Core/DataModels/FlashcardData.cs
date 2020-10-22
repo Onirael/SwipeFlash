@@ -36,6 +36,11 @@
         public bool HasIllustration;
 
         /// <summary>
+        /// Whether the family has illustrations
+        /// </summary>
+        public bool FamilyHasIllustrations;
+
+        /// <summary>
         /// Whether the card is the end of stack card
         /// </summary>
         public bool IsEndOfStackCard;

@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SwipeFlash.Core
 {
@@ -111,6 +112,11 @@ namespace SwipeFlash.Core
         /// Whether the card should display an illustration
         /// </summary>
         public bool HasIllustration { get; set; } = false;
+
+        /// <summary>
+        /// Whether the family has illustrations enabled
+        /// </summary>
+        public bool FamilyHasIllustration { get; set; } = true;
 
         /// <summary>
         /// The <see cref="HasIllustration"/> value set by the user in edit mode
@@ -368,6 +374,20 @@ namespace SwipeFlash.Core
         #region Public Methods
 
         /// <summary>
+        /// Called when the card was deleted by the host
+        /// </summary>
+        internal void DeleteCard()
+        {
+            // Disables edit mode
+            IsInEditMode = false;
+
+            // Swipes the card out
+            SwipeLeft();
+
+            IoC.Get<FlashcardManager>().DeleteCard(CardFamily, CardID);
+        }
+
+        /// <summary>
         /// Called when the card edit is cancelled by the host
         /// </summary>
         public void CancelEdit()
@@ -436,9 +456,17 @@ namespace SwipeFlash.Core
             Side1EditText = Side1Text;
             Side2EditText = Side2Text;
 
-            // Enable illustration
-            if (cardData.HasIllustration) EnableIllustration();
+            // Sets the family has illustration flag
+            FamilyHasIllustration = IoC.Get<FlashcardManager>().FlashcardFamilies
+                                                               .FirstOrDefault(family => family.Name == CardFamily)
+                                                               .HasIllustrations;
 
+            HasIllustration = cardData.HasIllustration;
+
+            // Enable illustration
+            if (cardData.HasIllustration && FamilyHasIllustration) EnableIllustration();
+
+            // Sets the default edit value
             HasIllustrationEdit = HasIllustration;
         }
 
@@ -472,7 +500,6 @@ namespace SwipeFlash.Core
             // If this card should have an illustration, call the API
             if (Properties.Settings.Default.IllustrationsEnabled)
                 FindIllustrationAsync();
-
         }
 
         #endregion
@@ -523,8 +550,12 @@ namespace SwipeFlash.Core
             // Get the search results
             var foundPhotos = await appVM.IllustrationsClient.SearchPhotos(Side1Text.RemoveArticle(articlesList));
 
+            // If no corresponding illustration could be found, run the internet checker 
+            // in case it is caused by an unresponsive server
+            if (foundPhotos.Count == 0) appVM.InternetChecker.RunChecker = true;
+
             // Gets the remaining API calls count
-            var apiCallsRemaining = IoC.Get<ApplicationViewModel>().IllustrationsClient.RateLimitRemaining;
+            var apiCallsRemaining = appVM.IllustrationsClient.RateLimitRemaining;
 
             // Logs the remaining API calls count
             Debugger.Log(0, "UserLog", $"API calls remaining: {apiCallsRemaining}\n");

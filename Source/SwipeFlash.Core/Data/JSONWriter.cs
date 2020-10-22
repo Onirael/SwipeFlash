@@ -80,6 +80,7 @@ namespace SwipeFlash.Core
                 newStaticFamily["category1"] = family.Category1;
                 newStaticFamily["category2"] = family.Category2;
                 newStaticFamily["cards"] = new JArray();
+                newStaticFamily["hasIllustrations"] = true;
 
                 // Creates the user family
                 var newUserFamily = new JObject();

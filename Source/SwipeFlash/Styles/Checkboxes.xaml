@@ -8,7 +8,7 @@
         <Setter Property="Height" Value="30"/>
 
         <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource SwipeFlashDarkVioletBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="{StaticResource ForegroundDarkBrush}"/>
 
@@ -42,7 +42,7 @@
                                 Height="20"
                                 Width="20"/>
 
-                            <TextBlock Foreground="{StaticResource SwipeFlashDarkVioletBrush}"
+                            <TextBlock Foreground="{TemplateBinding Foreground}"
                                        FontFamily="{StaticResource FontAwesomeSolid}"
                                        Text="{StaticResource FontAwesome_Check}"
                                        FontSize="{StaticResource FontSizeLarger}"
@@ -72,7 +72,7 @@
 
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="{StaticResource ForegroundDarkBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>

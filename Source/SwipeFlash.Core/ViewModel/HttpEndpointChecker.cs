@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
@@ -11,7 +13,12 @@ namespace SwipeFlash.Core
         /// <summary>
         /// The endpoint to ping
         /// </summary>
-        private string Endpoint { get; set; }
+        private IPAddress EndpointIP { get; set; }
+
+        /// <summary>
+        /// The name of the host
+        /// </summary>
+        private string Hostname { get; set; }
 
         /// <summary>
         /// The interval between checks in milliseconds
@@ -60,15 +67,40 @@ namespace SwipeFlash.Core
 
         public HttpEndpointChecker(string endpoint, int interval, Action<bool> stateChangedCallback)
         {
-            Endpoint = endpoint;
             CheckInterval = interval;
             StateChangedCallback = stateChangedCallback;
+            Hostname = endpoint;
 
+            // Gets the IP address from the host name
+            EndpointIP = GetIPAddress(endpoint);
+            
             // Starts the checker
             StartChecker();
         }
 
         #endregion
+
+        #region Private Helpers
+
+        /// <summary>
+        /// Gets the IP address from the host name
+        /// </summary>
+        /// <param name="hostname">The host name</param>
+        /// <returns>The IP address</returns>
+        private IPAddress GetIPAddress(string hostname)
+        {
+            // Initializes the endpoint IP
+            var address = IPAddress.None;
+
+            // Gets the IP Address of the endpoint name
+            try { address = Dns.GetHostAddresses(hostname)[0]; }
+            catch {
+                StateChangedCallback(false);
+                Debugger.Log(0, "error", "Couldn't resolve host\n");
+            }
+
+            return address;
+        }
 
         /// <summary>
         /// Starts the endpoint checker loop
@@ -88,7 +120,7 @@ namespace SwipeFlash.Core
                     var isResponding = await IsEndpointRespondingAsync();
 
                     // If the response is not the same as the last response
-                    if (isResponding != LastResponse || IsFirstLoad)
+                    if (isResponding || isResponding != LastResponse || IsFirstLoad)
                     {
                         // Call the state changed callback
                         StateChangedCallback(isResponding);
@@ -99,7 +131,7 @@ namespace SwipeFlash.Core
                     }
 
                     // Waits for the check interval
-                    await Task.Delay(CheckInterval);
+                    if (RunChecker) await Task.Delay(CheckInterval);
                 }
 
                 // Sets the running flag
@@ -113,11 +145,19 @@ namespace SwipeFlash.Core
         /// <returns></returns>
         private async Task<bool> IsEndpointRespondingAsync()
         {
+            // If the endpoint IP is invalid
+            if (EndpointIP == IPAddress.None)
+            {
+                // Tries to get the IP again
+                EndpointIP = GetIPAddress(Hostname);
+            }
+
             Ping ping = new Ping();
             try
             {
                 // Awaits a ping reply
-                PingReply reply = await ping.SendPingAsync(Endpoint, CheckInterval);
+                Debugger.Log(0, "user", "Pinging endpoint...\n");
+                PingReply reply = await ping.SendPingAsync(EndpointIP, 5000);
                 // If a reply is received and is successful
                 if (reply.Status == IPStatus.Success)
                     // The endpoint is responding
@@ -127,5 +167,7 @@ namespace SwipeFlash.Core
             // The endpoint is not responding
             return false;
         }
+
+        #endregion
     }
 }

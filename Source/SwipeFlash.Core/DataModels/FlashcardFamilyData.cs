@@ -32,6 +32,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public CategoryData Category2;
 
+        /// <summary>
+        /// Whether the family has illustrations
+        /// </summary>
+        public bool HasIllustrations;
+
         public override bool Equals(object obj)
         {
             // Type checks the object
@@ -41,7 +46,8 @@ namespace SwipeFlash.Core
             // Gets whether the static data is equal
             bool isEqual = familyData.Category1.Equals(Category1) &&
                            familyData.Category2.Equals(Category2) &&
-                           familyData.Name == Name;
+                           familyData.Name == Name &&
+                           familyData.HasIllustrations == HasIllustrations;
             return isEqual;
         }
 

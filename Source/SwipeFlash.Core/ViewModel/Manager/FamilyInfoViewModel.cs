@@ -49,6 +49,11 @@ namespace SwipeFlash.Core
         public string Category2Articles { get; set; }
 
         /// <summary>
+        /// Whether the illustrations are enabled for this family
+        /// </summary>
+        public bool AreIllustrationsEnabled { get; set; }
+
+        /// <summary>
         /// The amount of cards in the family
         /// </summary>
         public int FamilyCardCount { get; private set; }
@@ -104,6 +109,7 @@ namespace SwipeFlash.Core
             Category1Articles = string.Join(", ", familyData.Category1.Articles);
             Category2Articles = string.Join(", ", familyData.Category2.Articles);
             FamilyCardCount = familyData.CardCount;
+            AreIllustrationsEnabled = familyData.HasIllustrations;
 
             // Initializes the Categories list
             InitCategories();
@@ -152,6 +158,7 @@ namespace SwipeFlash.Core
                 Category2 = new CategoryData(FamilyCategory2, FamilyLogo2, articles2List),
                 IsEnabled = DefaultData.IsEnabled,
                 CardCount = DefaultData.CardCount,
+                HasIllustrations = AreIllustrationsEnabled,
             };
 
             // Gets the validity of the family data

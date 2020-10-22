@@ -13,13 +13,13 @@
             // If the name string is null or empty, quit
             if (string.IsNullOrEmpty(familyData.Name))
             {
-                IoC.Get<WindowService>().CreateWarning("All fields must be filled in");
+                if (showErrors) IoC.Get<WindowService>().CreateWarning("All fields must be filled in");
                 return false;
             }
 
             // If both categories aren't valid, quit
-            if (!familyData.Category1.IsCategoryDataValid() ||
-                !familyData.Category2.IsCategoryDataValid())
+            if (!familyData.Category1.IsCategoryDataValid(showErrors) ||
+                !familyData.Category2.IsCategoryDataValid(showErrors))
                 return false;
 
             return true;
@@ -73,6 +73,9 @@
                 // Updates the category of the static family
                 familyStaticObject["category2"] = newFamilyData.Category2.Name;
             }
+
+            // Sets the has illustrations flag
+            familyStaticObject["hasIllustrations"] = newFamilyData.HasIllustrations;
 
             // Deletes all the unused categories
             fm.DeleteUnusedCategories();

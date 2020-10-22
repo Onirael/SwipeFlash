@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SwipeFlash.Core
 {
@@ -53,7 +54,7 @@ namespace SwipeFlash.Core
 
             bool isEqual = Name == categoryData.Name &&
                            Logo == categoryData.Logo &&
-                           Articles == categoryData.Articles;
+                           Articles.SequenceEqual(categoryData.Articles);
 
             return isEqual;
         }

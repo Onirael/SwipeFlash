@@ -42,6 +42,7 @@
       "family": "Spanish to English",
       "category1": "spanish",
       "category2": "english",
+      "hasIllustrations": true,
       "cards": [
         {
           "id": 0,
@@ -85,6 +86,7 @@
       "family": "German to English",
       "category1": "german",
       "category2": "english",
+      "hasIllustrations": true,
       "cards": [
         {
           "id": 0,
@@ -110,6 +112,7 @@
       "family": "Test family",
       "category1": "test1",
       "category2": "test2",
+      "hasIllustrations": true,
       "cards": [
         {
           "side1Text": "¡anda!",
