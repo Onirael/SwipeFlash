@@ -1,0 +1,71 @@
+﻿<local:BaseWindow x:Class="SwipeFlash.ParsedFlashcardListWindow"
+                  x:TypeArguments="core:ParsedFlashcardListWindowViewModel"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:SwipeFlash"
+                  xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
+                  WindowStyle="ToolWindow"
+                  mc:Ignorable="d"
+                  SizeToContent="WidthAndHeight"
+                  Title="New flashcards"
+                  Height="200"
+                  d:DataContext="{x:Static core:ParsedFlashcardListWindowDesignModel.Instance}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Flashcard list -->
+            <RowDefinition Height="Auto"/>
+            <!-- Spacer -->
+            <RowDefinition Height="*"/>
+            <!-- Window control buttons -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Flashcard list items -->
+        <ScrollViewer Grid.Row="0">
+            <ItemsControl Grid.Row="0" 
+                          ItemsSource="{Binding ListItems}"
+                          Width="400">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:ParsedFlashcardListItem/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+
+        <!-- Window control buttons -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="0 0 10 10">
+
+            <!-- Cancel button -->
+            <Button Content="Cancel"
+                    Margin="0 0 10 0"
+                    Padding="40 10"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    FontFamily="{StaticResource LGCRegular}"
+                    Command="{Binding PressCancelCommand}"/>
+
+            <!-- OK button -->
+            <Button Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    Content="OK"
+                    Command="{Binding PressOKCommand}"
+                    FontSize="{StaticResource FontSizeRegular}"/>
+        </StackPanel>
+
+    </Grid>
+
+</local:BaseWindow>

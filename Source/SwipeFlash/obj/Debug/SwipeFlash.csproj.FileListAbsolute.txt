@@ -132,3 +132,7 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\FamilyInfoWindow.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\Images.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Styles\TextBoxes.baml
 D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Debug\Unsplasharp.xml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\ParsedFlashcardListItem.g.cs
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\ParsedFlashcardListWindow.g.cs
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Controls\ParsedFlashcardListItem.baml
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\Windows\ParsedFlashcardListWindow.baml

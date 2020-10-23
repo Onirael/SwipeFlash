@@ -83,7 +83,7 @@
                         HorizontalAlignment="Center">
 
                 <Button Style="{StaticResource RoundIconButton}"
-                        Foreground="Red"
+                        Foreground="{StaticResource ForegroundDarkBrush}"
                         Margin="20 0 0 0"
                         Content="{StaticResource FontAwesome_Trash}"
                         Height="{Binding ActualHeight, ElementName=editButtons}"

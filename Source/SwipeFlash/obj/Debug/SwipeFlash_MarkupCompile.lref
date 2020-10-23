@@ -3,6 +3,7 @@ FD:\Unreal\SwipeFlash\Source\SwipeFlash\App.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Controls\FlashcardControl.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Controls\FlashcardFamilyListItemControl.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Controls\FlashcardHost.xaml;;
+FD:\Unreal\SwipeFlash\Source\SwipeFlash\Controls\ParsedFlashcardListItem.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Controls\SettingsMenuControl.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Styles\TextBoxes.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Windows\AddFlashcardsWindow.xaml;;
@@ -13,4 +14,5 @@ FD:\Unreal\SwipeFlash\Source\SwipeFlash\Styles\Checkboxes.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Styles\Buttons.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Styles\Fonts.xaml;;
 FD:\Unreal\SwipeFlash\Source\SwipeFlash\Styles\Colors.xaml;;
+FD:\Unreal\SwipeFlash\Source\SwipeFlash\Windows\ParsedFlashcardListWindow.xaml;;
 

@@ -200,6 +200,31 @@ namespace SwipeFlash.Core
         /// </summary>
         private void OnDeleteCardButtonPressed()
         {
+            // Gets the application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // Listens for the confirmation event
+            appVM.ListenForEvent<bool>(WindowReturnEvent.ConfirmationReceived,
+                                       new ListenerDelegate(OnDeleteCardConfirmed));
+
+            // Creates the confirmation window
+            IoC.Get<WindowService>().CreateWindow(new WindowArgs()
+            {
+                Message = "Confirm card deletion ? This cannot be undone",
+                TargetType = WindowType.Confirmation,
+            });
+        }
+
+        /// <summary>
+        /// Called when the user confirms the deletion of a card
+        /// </summary>
+        /// <param name="parameter"></param>
+        private void OnDeleteCardConfirmed(object parameter)
+        {
+            // If the user has cancelled the operation, quit
+            if (!(bool)parameter)
+                return;
+
             // Gets the stack top flashcard
             var lastFlashcard = Flashcards[Flashcards.Count - 1];
 
