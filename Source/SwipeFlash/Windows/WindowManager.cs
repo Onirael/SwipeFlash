@@ -110,6 +110,12 @@ namespace SwipeFlash
                     newWindow = new FamilyInfoWindow(e.Message);
                     break;
 
+                case WindowType.ParsedFlashcards:
+                    // Checks if a ParsedFlashcardListWindow is already open
+                    foreach (var openWindow in openWindows) { if (openWindow is ParsedFlashcardListWindow) return; }
+                    newWindow = new ParsedFlashcardListWindow(e.Attachment);
+                    break;
+
                 // Should not be hit
                 default:
                     break;

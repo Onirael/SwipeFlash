@@ -31,6 +31,24 @@ namespace SwipeFlash.Core
                    CardCount = 5555,
                    IsFamilyEnabled = false,
                 },
+                new FlashcardFamilyListItemViewModel()
+                {
+                   FamilyName = "Test1",
+                   CardCount = 5555,
+                   IsFamilyEnabled = false,
+                },
+                new FlashcardFamilyListItemViewModel()
+                {
+                   FamilyName = "Test2",
+                   CardCount = 5555,
+                   IsFamilyEnabled = true,
+                },
+                new FlashcardFamilyListItemViewModel()
+                {
+                   FamilyName = "Test3",
+                   CardCount = 5555,
+                   IsFamilyEnabled = true,
+                },
             };
         }
 

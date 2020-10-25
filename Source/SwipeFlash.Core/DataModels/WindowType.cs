@@ -41,5 +41,9 @@
         /// The information window of a given family
         /// </summary>
         FamilyInfo = 8,
+        /// <summary>
+        /// The confirmation/edit window for parsed flashcards
+        /// </summary>
+        ParsedFlashcards = 9,
     }
 }

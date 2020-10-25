@@ -8,46 +8,91 @@
                   xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
                   WindowStyle="ToolWindow"
                   mc:Ignorable="d"
-                  SizeToContent="WidthAndHeight"
+                  SizeToContent="Height"
                   Title="New flashcards"
-                  Height="200"
+                  WindowStartupLocation="CenterOwner"
+                  MinHeight="200"
+                  MinWidth="400" Width="400"
                   d:DataContext="{x:Static core:ParsedFlashcardListWindowDesignModel.Instance}">
 
     <Grid>
         <Grid.RowDefinitions>
-            <!-- Flashcard list -->
+            <!-- Header -->
             <RowDefinition Height="Auto"/>
-            <!-- Spacer -->
+            <!-- Flashcard list -->
             <RowDefinition Height="*"/>
             <!-- Window control buttons -->
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <!-- Flashcard list items -->
-        <ScrollViewer Grid.Row="0">
-            <ItemsControl Grid.Row="0" 
-                          ItemsSource="{Binding ListItems}"
-                          Width="400">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:ParsedFlashcardListItem/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <!-- Header -->
+        <TextBlock Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Text="New flashcards"
+                   Margin="20"
+                   FontSize="{StaticResource FontSizeLarger}"/>
 
+        <!-- List grid-->
+        <DataGrid AutoGenerateColumns="False"
+                  Grid.Row="1"
+                  x:Name="dataGrid"
+                  CanUserResizeColumns="False"
+                  CanUserResizeRows="False"
+                  RowHeaderWidth="0"
+                  CanUserReorderColumns="False"
+                  EnableColumnVirtualization="False"
+                  ColumnWidth="*"
+                  FontFamily="{StaticResource LGCRegular}"
+                  FontSize="{StaticResource FontSizeRegular}"
+                  ItemsSource="{Binding ListItems}">
 
-        <!-- Window control buttons -->
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                                 Color="{StaticResource ForegroundMain}"/>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <!-- Side 1 column -->
+                <DataGridTextColumn Binding="{Binding Side1Text, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="{Binding DataContext.Category1Name, 
+                                                  RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                   FontFamily="{StaticResource LGCLight}"
+                                   FontSize="{StaticResource FontSizeLarge}"
+/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <!-- Side 2 column -->
+                <DataGridTextColumn Binding="{Binding Side2Text, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="{Binding DataContext.Category2Name, 
+                                                  RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                   FontFamily="{StaticResource LGCLight}"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <!-- Reset button column -->
+                <DataGridTemplateColumn Width="24">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource BorderlessIconButton}"
+                                        Content="{StaticResource FontAwesome_Undo}"
+                                        Foreground="{StaticResource ForegroundDarkBrush}"
+                                        Padding="0" Margin="0" Width="20"
+                                        Visibility="{Binding IsRowEdited, Converter={local:BooleanToVisibilityConverter}}"
+                                        Command="{Binding UndoCommand}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+            <!-- Window control buttons -->
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right" 
-                    Margin="0 0 10 10">
+                    VerticalAlignment="Center"
+                    Margin="0 0 10 0">
 
             <!-- Cancel button -->
             <Button Content="Cancel"
@@ -55,17 +100,15 @@
                     Padding="40 10"
                     VerticalAlignment="Center"
                     FontSize="{StaticResource FontSizeRegular}"
-                    FontFamily="{StaticResource LGCRegular}"
                     Command="{Binding PressCancelCommand}"/>
 
             <!-- OK button -->
-            <Button Grid.Row="3"
-                    HorizontalAlignment="Right"
+            <Button HorizontalAlignment="Right"
                     Content="OK"
-                    Command="{Binding PressOKCommand}"
-                    FontSize="{StaticResource FontSizeRegular}"/>
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    Command="{Binding PressOKCommand}"/>
         </StackPanel>
 
     </Grid>
-
 </local:BaseWindow>

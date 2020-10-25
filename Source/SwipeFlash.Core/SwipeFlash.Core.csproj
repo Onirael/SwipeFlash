@@ -216,8 +216,6 @@
     <Compile Include="ViewModel\HttpEndpointChecker.cs" />
     <Compile Include="ViewModel\Manager\AddFlashcards\AddFlashcardsWindowViewModel.cs" />
     <Compile Include="ViewModel\Manager\AddFlashcards\Design\ParsedFlashcardListWindowDesignModel.cs" />
-    <Compile Include="ViewModel\Manager\AddFlashcards\Design\ParsedFlashcardListItemDesignModel.cs" />
-    <Compile Include="ViewModel\Manager\AddFlashcards\ParsedFlashcardListItemViewModel.cs" />
     <Compile Include="ViewModel\Manager\AddFlashcards\ParsedFlashcardListWindowViewModel.cs" />
     <Compile Include="ViewModel\Manager\Design\FlashcardFamilyListItemDesignModel.cs" />
     <Compile Include="ViewModel\Manager\Design\FlashcardManagerWindowDesignModel.cs" />

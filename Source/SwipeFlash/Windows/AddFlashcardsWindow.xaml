@@ -237,7 +237,7 @@
         <StackPanel Grid.Row="3"
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right" 
-                    Margin="0 0 10 10">
+                    Margin="0 0 10 0">
 
             <!-- Cancel button -->
             <Button Content="Cancel"

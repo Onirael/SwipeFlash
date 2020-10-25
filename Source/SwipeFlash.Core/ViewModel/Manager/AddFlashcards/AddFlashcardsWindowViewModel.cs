@@ -278,10 +278,15 @@ namespace SwipeFlash.Core
                     // If the flashcards could be successfully parsed
                     if (parsingSuccessful)
                     {
-                        // Add the flashcard family to the JSON
-                        JSONWriter.AddFamilyToJSON(familyData);
+                        // Opens the parsed flashcard list window
+                        IoC.Get<WindowService>().CreateWindow(new WindowArgs()
+                        {
+                            TargetType = WindowType.ParsedFlashcards,
+                            Attachment = familyData,
+                        });
+
                         // Continue to close the window
-                        break;
+                        return;
                     }
                     // Otherwise, quit
                     else

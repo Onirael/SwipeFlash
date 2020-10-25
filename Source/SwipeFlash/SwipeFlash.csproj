@@ -100,9 +100,6 @@
     <Compile Include="Controls\FlashcardFamilyListItemControl.xaml.cs">
       <DependentUpon>FlashcardFamilyListItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ParsedFlashcardListItem.xaml.cs">
-      <DependentUpon>ParsedFlashcardListItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SettingsMenuControl.xaml.cs">
       <DependentUpon>SettingsMenuControl.xaml</DependentUpon>
     </Compile>
@@ -145,10 +142,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FlashcardHost.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ParsedFlashcardListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

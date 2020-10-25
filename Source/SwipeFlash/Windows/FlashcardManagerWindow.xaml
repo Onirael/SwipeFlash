@@ -38,7 +38,7 @@
                 Padding="0"
                 CornerRadius="10"
                 Background="{StaticResource BackgroundLightBrush}"
-                Margin="20 0 20 20">
+                Margin="10 0 10 10">
             <ScrollViewer>
                 <ItemsControl ItemsSource="{Binding FlashcardFamilies}">
                     
@@ -56,7 +56,7 @@
         <StackPanel Grid.Row="3"
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right" 
-                    Margin="0 0 20 10">
+                    Margin="0 0 10 0">
 
             <!-- Add flashcards button -->
             <Button Margin="20 10 10 10"

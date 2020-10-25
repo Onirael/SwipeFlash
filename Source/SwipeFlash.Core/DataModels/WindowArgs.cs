@@ -15,5 +15,10 @@
         /// used for warning and confirmation windows
         /// </summary>
         public string Message;
+
+        /// <summary>
+        /// The attachment sent to the window
+        /// </summary>
+        public object Attachment;
     }
 }

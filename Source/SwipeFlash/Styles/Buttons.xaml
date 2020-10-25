@@ -54,8 +54,8 @@
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" To="1.1" Duration="0:0:0.05"/>
-                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" To="1.1" Duration="0:0:0.05"/>
+                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" To="1.05" Duration="0:0:0.05"/>
+                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" To="1.05" Duration="0:0:0.05"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
@@ -72,8 +72,8 @@
                         <EventTrigger RoutedEvent="PreviewMouseDown">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" To=".9" Duration="0:0:0.05"/>
-                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" To=".9" Duration="0:0:0.05"/>
+                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" To=".95" Duration="0:0:0.05"/>
+                                    <DoubleAnimation Storyboard.TargetName="buttonScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" To=".95" Duration="0:0:0.05"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>

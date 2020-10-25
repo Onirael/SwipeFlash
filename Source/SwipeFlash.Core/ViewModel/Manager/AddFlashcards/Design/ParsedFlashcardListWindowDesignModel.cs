@@ -18,22 +18,23 @@
 
         public ParsedFlashcardListWindowDesignModel()
         {
+            Category1Name = "English";
+            Category2Name = "Spanish";
+
             ListItems = new AsyncObservableCollection<ParsedFlashcardListItemViewModel>()
             {
-                new ParsedFlashcardListItemViewModel()
-                {
-                    Side1Text = "The door",
-                    Side2Text = "La puerta",
-                },
-                new ParsedFlashcardListItemViewModel()
-                {
-                    Side1Text = "The lamp",
-                    Side2Text = "La lámpara",
-                    Side1DefaultText = "The lump",
-                },
+                new ParsedFlashcardListItemViewModel("The door", "La puerta", 0),
+                new ParsedFlashcardListItemViewModel("The cat", "El gato", 1),
+                new ParsedFlashcardListItemViewModel("The dog", "El perro", 2),
             };
         }
 
         #endregion
+        
+        public override void InitAsync(object items)
+        {
+            return;
+        }
+
     }
 }
