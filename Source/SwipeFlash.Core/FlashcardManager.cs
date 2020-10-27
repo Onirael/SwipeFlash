@@ -41,8 +41,16 @@ namespace SwipeFlash.Core
         /// </summary>
         public List<FlashcardFamilyData> FlashcardFamilies { get; set; }
 
-        // DEVELOPMENT ONLY
-        public int FlashcardID;
+        /// <summary>
+        /// The amount by which sections are weighted when selected
+        /// a scale factor of s means that the nth section has s times the weight of the n+1th
+        /// </summary>
+        private double SectionWeightFactor = 2;
+
+        /// <summary>
+        /// The maximal size of section 1
+        /// </summary>
+        private int MaxSection1Size = 15;
 
         #endregion
 
@@ -96,6 +104,9 @@ namespace SwipeFlash.Core
 
             // Finds flashcard families whenever the static data is updated
             OnStaticDataUpdated += FindFlashcardFamilies;
+
+            // Fills the card queue when the families
+            OnFamiliesUpdated += FillCardQueue;
         }
 
         #endregion
@@ -130,9 +141,6 @@ namespace SwipeFlash.Core
                 catch { }
 
             });
-
-            // Fill the card queue
-            FillCardQueue();
         }
 
         /// <summary>
@@ -152,7 +160,7 @@ namespace SwipeFlash.Core
             CardQueue.RemoveAt(0);
 
             // Fills the card queue
-            FillCardQueue();
+            FillCardQueue(null, null);
 
             return nextCard;
         }
@@ -451,6 +459,95 @@ namespace SwipeFlash.Core
             return unusedCategoriesCount;
         }
 
+        /// <summary>
+        /// Updates the card section based on whether the card was succeeded or not
+        /// </summary>
+        /// <param name="flashcard">The user flashcard JSON token</param>
+        /// <param name="swipedRight">Whether the card was succeeeded</param>
+        /// <returns>Whether the card could be moved</returns>
+        public bool UpdateCardSection(JToken flashcard, bool swipedRight)
+        {
+            // The current section of the flashcard
+            int currentSection = (int)flashcard["section"];
+            
+            int newSection = -1;
+            switch (currentSection)
+            {
+                // Section 0
+                // Success: the card jumps to section 3
+                // Failure: the card goes to section 1
+                case 0:
+                    if (swipedRight)
+                        newSection = 3;
+                    else
+                        newSection = 1;
+                    break;
+                // Section 1
+                // Success: the card moves up one section
+                // Failure: the card stays in section 1
+                case 1:
+                    if (swipedRight)
+                        newSection++;
+                    else
+                        newSection = 1;
+                    break;
+                // Section 2
+                // Success: the card moves up one section
+                // Failure: the card moves down one section
+                case 2:
+                    if (swipedRight)
+                        newSection++;
+                    else
+                        newSection = 1;
+                    break;
+                // Section 3
+                // Success: the card moves up one section
+                // Failure: the card moves down one section
+                case 3:
+                    if (swipedRight)
+                        newSection++;
+                    else
+                        newSection = 1;
+                    break;
+                // Section 4
+                // Success: the card moves up one section
+                // Failure: the card moves down one section
+                case 4:
+                    if (swipedRight)
+                        newSection++;
+                    else
+                        newSection = 1;
+                    break;
+                // Section 5
+                // Success: the card stays in section 5
+                // Failure: the card drops to section 2
+                case 5:
+                    if (swipedRight)
+                        newSection = 5;
+                    else
+                        newSection = 1;
+                    break;
+                // This should never be hit
+                default:
+                    break;
+
+            }
+
+            // If the new section isn't valid
+            if (newSection < 0)
+                return false;
+
+            // Sets the time and date when the card was seen for the last time
+            flashcard["lastSeen"] = DateTimeOffset.UtcNow;
+            
+            // Sets the new section of the flashcard
+            flashcard["section"] = newSection;
+
+            JSONWriter.UpdateJSONFiles();
+
+            return true;
+        }
+
         #endregion
 
         #region Private Helpers
@@ -494,7 +591,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Asynchronously updates the card queue
         /// </summary>
-        private void FillCardQueue()
+        private void FillCardQueue(object sender, EventArgs e)
         {
             Task.Run(() =>
             {
@@ -523,17 +620,39 @@ namespace SwipeFlash.Core
             // Creates a new flashcard data object
             FlashcardData newFlashcardData = new FlashcardData();
 
+            // Select a flashcard family
+            var familiesCount = FlashcardFamilies.Count;
+
+            var selectedFamily = Rand.Next(familiesCount);
+
+            // Select a section
+            // The amount of sections
+            int sectionCount = 5;
+            // Gets the maximal random value (sum of weights)
+            var weightedRandMax = Math.Pow(SectionWeightFactor, sectionCount) - 1;
+            // Generates a random number
+            var randSelection = Rand.NextDouble();
+            // Gets the selected section
+            var selectedSection = (int)Math.Floor(sectionCount - Math.Log(weightedRandMax * (1 - randSelection) + 1, SectionWeightFactor)) + 1;
+
+            // Selects a flashcard in the selected section
+            var flashcardID = SelectFlashcardInSection(selectedSection, FlashcardFamilies[selectedFamily].Name);
+
+            // If the flashcard is invalid, quit
+            if (flashcardID < 0)
+                return;
+
             // Get card from JSON
             if (StaticData != null && UserData != null)
             {
                 // Get the card family and card family flashcard count
-                var cardFamily = StaticData["flashcards"][0];
+                var cardFamily = FindStaticFamily(FlashcardFamilies[selectedFamily].Name);
                 var cardFamilySize = cardFamily["cards"].Count();
 
-                if (FlashcardID < cardFamilySize) // DEVELOPMENT // // Card families might have IDs not starting at 0
+                if (flashcardID < cardFamilySize) // DEVELOPMENT // // Card families might have IDs not starting at 0
                 {
                     // Sets the ID and family of the card
-                    newFlashcardData.FlashcardID = FlashcardID;
+                    newFlashcardData.FlashcardID = flashcardID;
                     newFlashcardData.FamilyName = cardFamily["family"].ToString();
 
                     // Gets the card family's categories
@@ -541,7 +660,7 @@ namespace SwipeFlash.Core
                     var side2Category = (string)cardFamily["category2"];
 
                     // Gets the flashcard from the ID
-                    var flashcard = cardFamily["cards"][FlashcardID];
+                    var flashcard = cardFamily["cards"][flashcardID];
 
                     // Gets the texts
                     newFlashcardData.Side1Text = (string)flashcard["side1Text"];
@@ -557,21 +676,221 @@ namespace SwipeFlash.Core
 
                     // Sets whether the card is reversed
                     var isCardReversed = Rand.Next(2) == 1;
-                    newFlashcardData.IsInverted = isCardReversed;
+                    //newFlashcardData.IsInverted = isCardReversed;
                 }
                 else
                 {
                     // If the card exceeds the array, return an end of stack card
                     newFlashcardData.IsEndOfStackCard = true;
-                    FlashcardID = -1;
+                    flashcardID = -1;
                 }
 
                 // Adds card to array
                 CardQueue.Add(newFlashcardData);
-
-                // DEVELOPMENT ONLY
-                FlashcardID++;
             }
+        }
+
+        /// <summary>
+        /// Selects a flashcard in the given section, 
+        /// if none is valid, gets it from another section
+        /// </summary>
+        /// <param name="selectedSection">The section to select a flashcard in</param>
+        /// <param name="familyName">The name of the family</param>
+        /// <param name="ignoreExpiry">Whether the flashcards should be checked for expiry</param>
+        /// <returns>The selected flashcard, -1 if no flashcard could be selected</returns>
+        private int SelectFlashcardInSection(int selectedSection, string familyName, bool ignoreExpiry=false)
+        {
+            switch(selectedSection)
+            {
+                case 0:
+                    {
+                        // Gets all flashcards in the section
+                        var sectionFlashcards = GetSectionFlashcards(selectedSection,
+                                                                     FindUserFamily(familyName));
+                        // Counts the flashcards
+                        var flashcardsCount = sectionFlashcards.Count();
+
+                        // If there are no flashcards in this section
+                        if (flashcardsCount <= 0)
+                            // Select a flashcard in section 1
+                            return -1;
+
+                        // Gets a random flashcard in the section
+                        var flashcard = sectionFlashcards.ElementAtOrDefault(Rand.Next(flashcardsCount));
+
+                        // Returns the flashcard if it is valid
+                        return flashcard == null ? -1 : (int)flashcard["id"];
+                    }
+                case 1:
+                    // Gets the size of the section
+                    int sectionSize = GetSectionCount(familyName, selectedSection);
+
+                    // If the section isn't full
+                    if (sectionSize < MaxSection1Size)
+                    {
+                        // Gets a flashcard in section 0
+                        var flashcard = SelectFlashcardInSection(0, familyName);
+                        // If the flashcard isn't valid
+                        if (flashcard < 0 && !ignoreExpiry)
+                            // Get a flashcard in section 5
+                            flashcard = SelectFlashcardInSection(5, familyName, true);
+                        // Returns the flashcard
+                        return flashcard;
+                    }
+                    else
+                    {
+                        // Gets all flashcards in the section
+                        var sectionFlashcards = GetSectionFlashcards(selectedSection, 
+                                                                     FindUserFamily(familyName));
+                        // Counts the flashcards
+                        var flashcardsCount = sectionFlashcards.Count();
+
+                        // If there are no flashcards in this section
+                        if (flashcardsCount <= 0)
+                            // Select a flashcard in section 1
+                            return -1;
+
+                        // Gets a random flashcard in the section
+                        var flashcard = sectionFlashcards.ElementAtOrDefault(Rand.Next(flashcardsCount));
+
+                        // Returns the flashcard if it is valid
+                        return flashcard == null ? -1 : (int)flashcard["id"];
+                    }
+                case 2:
+                    // Gets a random expired card in the section
+                    return GetRandomExpiredCardInSection(selectedSection, familyName);
+                case 3:
+                    // Gets a random expired card in the section
+                    return GetRandomExpiredCardInSection(selectedSection, familyName);
+                case 4:
+                    // Gets a random expired card in the section
+                    return GetRandomExpiredCardInSection(selectedSection, familyName);
+                case 5:
+                    // If the expiry should be ignored
+                    if (ignoreExpiry)
+                    {
+                        // Gets all flashcards in the section
+                        var sectionFlashcards = GetSectionFlashcards(selectedSection,
+                                                                     FindUserFamily(familyName));
+                        // Counts the flashcards
+                        var flashcardsCount = sectionFlashcards.Count();
+
+                        // If there are no flashcards in this section
+                        if (flashcardsCount <= 0)
+                            // Select a flashcard in section 1
+                            return -1;
+
+                        // Gets a random flashcard in the section
+                        var flashcard = sectionFlashcards.ElementAtOrDefault(Rand.Next(flashcardsCount));
+
+                        // Returns the flashcard if it is valid
+                        return flashcard == null ? -1 : (int)flashcard["id"];
+                    }
+
+                    // Gets a random expired card in the section
+                    return GetRandomExpiredCardInSection(selectedSection, familyName);
+                default:
+                    return -1;
+            }
+        }
+
+        /// <summary>
+        /// Gets a random expired flashcard in the given section
+        /// </summary>
+        /// <param name="selectedSection">The section of the card</param>
+        /// <param name="familyName">The family of the card</param>
+        /// <returns>The expired flashcard's ID</returns>
+        private int GetRandomExpiredCardInSection(int selectedSection, string familyName)
+        {
+
+            // Gets the expired section flashcards
+            var expiredFlashcards = GetExpiredFlashcards(selectedSection, familyName);
+
+            // The amount of expired flashcards
+            var expiredCardCount = expiredFlashcards.Count();
+
+            // If there are expired cards
+            if (expiredCardCount > 0)
+            {
+                // Gets a random expired flashcard
+                var flashcard = expiredFlashcards.ElementAtOrDefault(Rand.Next(expiredCardCount));
+
+                // Returns the flashcard if it is valid
+                return flashcard == null ? -1 : (int)flashcard["id"];
+            }
+            else
+            {
+                // Returns a flashcard in section 1
+                return SelectFlashcardInSection(selectedSection - 1, familyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the expired flashcards of a section in a given family
+        /// </summary>
+        /// <param name="section">The section to get the flashcards from</param>
+        /// <param name="familyName">The family of the flashcards</param>
+        /// <returns></returns>
+        private JEnumerable<JToken> GetExpiredFlashcards(int section, string familyName)
+        {
+            // Gets the family JToken
+            var family = FindUserFamily(familyName);
+
+            // If the found family is invalid
+            if (family == null)
+                // Returns an empty enumerable
+                return new JEnumerable<JToken>();
+
+            // Gets the section flashcards
+            var sectionFlashcards = GetSectionFlashcards(section, family);
+
+            // Gets expiry time of the flashcards in this section
+            var expiryTime = FlashcardSelectionData.SectionExpiryTime[section];
+
+            // Gets the expired flashcards
+            var expiredFlashcards = sectionFlashcards.Where(flashcard => DateTimeOffset.UtcNow
+                                                     .Subtract((DateTimeOffset)flashcard["lastSeen"])
+                                                     .Duration() > expiryTime);
+            // returns the expired flashcards
+            return new JEnumerable<JToken>(expiredFlashcards);
+        }
+
+        /// <summary>
+        /// Gets the size of a section within a given family
+        /// </summary>
+        /// <param name="familyName">The family to count in</param>
+        /// <param name="selectedSection">The section to count</param>
+        /// <returns>The element count of the section</returns>
+        private int GetSectionCount(string familyName, int section)
+        {
+            // Gets the family JSON Token
+            var foundFamily = FindUserFamily(familyName);
+
+            // If no family was found, quit
+            if (foundFamily == null)
+                return -1;
+
+            // Gets all flashcards of the section
+            var sectionFlashcards = GetSectionFlashcards(section, foundFamily);
+
+            // Returns the cards count
+            return sectionFlashcards.Count();
+        }
+
+        /// <summary>
+        /// Gets all flashcards of a given section within a given family
+        /// </summary>
+        /// <param name="section">The section to search for</param>
+        /// <param name="family">The family to search in</param>
+        /// <returns>The flashcards of the section</returns>
+        private JEnumerable<JToken> GetSectionFlashcards(int section, JToken family)
+        {
+            // Finds corresponding flahcards
+            var foundFlashcards = family["cards"].AsJEnumerable()
+                                                       .Where(flashcard => (int)flashcard["section"] == section);
+
+            // Returns the found flashcards
+            return new JEnumerable<JToken>(foundFlashcards);
         }
 
         #endregion

@@ -181,6 +181,7 @@
     <Compile Include="DataModels\FlashcardFamilyData.cs" />
     <Compile Include="DataModels\WindowArgs.cs" />
     <Compile Include="DataModels\WindowType.cs" />
+    <Compile Include="Data\FlashcardSelectionData.cs" />
     <Compile Include="Data\JSONPacketManager.cs" />
     <Compile Include="Data\JSONWriter.cs" />
     <Compile Include="Helpers\CategoryDataHelpers.cs" />

@@ -18,10 +18,15 @@ namespace SwipeFlash.Core
         /// </summary>
         public AsyncObservableCollection<ParsedFlashcardListItemViewModel> ListItems { get; set; }
 
+        private ParsedFlashcardFamilyData _parsedFamily;
         /// <summary>
         /// The parsed flashcard family data
         /// </summary>
-        public ParsedFlashcardFamilyData ParsedFamily { get; protected set; }
+        public ParsedFlashcardFamilyData ParsedFamily
+        {
+            get => _parsedFamily;
+            protected set => _parsedFamily = value;
+        }
 
         /// <summary>
         /// The name of the side 1 category
@@ -36,7 +41,7 @@ namespace SwipeFlash.Core
         #endregion
 
         #region Commands
-        
+
         /// <summary>
         /// A command for the OK button
         /// </summary>
@@ -67,76 +72,43 @@ namespace SwipeFlash.Core
 
         #region Command Methods
 
+        /// <summary>
+        /// Called when the cancel button has been pressed
+        /// </summary>
         private void OnCancelPressed()
         {
             // Destroy the windows
             IoC.Get<WindowService>().DestroyWindow(new WindowArgs() { TargetType = WindowType.ParsedFlashcards });
         }
 
+        /// <summary>
+        /// Called when the OK button is pressed
+        /// </summary>
         private void OnOKPressed()
         {
             // Casts the list items to a collection
-            var itemsCollection = (ListItems as Collection<ParsedFlashcardListItemViewModel>);
+            var itemsList = (ListItems as Collection<ParsedFlashcardListItemViewModel>).ToList();
 
-            // Initializes the list of removed flashcards
-            var removedFlashcards = new List<ParsedFlashcardData>();
+            var editedFlashcards = new List<ParsedFlashcardData>(itemsList.Count);
 
-            // Creates a current ID variable 
-            // to track whether an item has been removed
-            int currentID = -1;
-
-            // For each edited item
-            foreach (var item in itemsCollection)
+            // For each list item
+            itemsList.ForEach((item) =>
             {
-                // Increments the ID
-                currentID++;
-
-                // Stores whether the item is new
-                bool isNewItem = item.ListID < 0;
-
-                // If the item wasn't modified, continue
-                if (!item.IsRowEdited && !isNewItem)
-                    continue;
-
-                // If side 1 or side 2 is empty, continue
+                // If the item is empty, quit
                 if (string.IsNullOrEmpty(item.Side1Text) ||
                     string.IsNullOrEmpty(item.Side2Text))
-                    continue;
+                    return;
 
-                // If the item isn't new and its ID is not the current ID
-                if (!isNewItem && currentID != item.ListID)
+                // Adds a new flashcard to the edited list
+                editedFlashcards.Add(new ParsedFlashcardData()
                 {
-                    // For each missing index
-                    for (int i = 0; i < item.ListID - currentID; i++)
-                    {
-                        // Adds the card with the index to the remove list
-                        removedFlashcards.Add(ParsedFamily.Flashcards[currentID]);
-                        // Increment the ID
-                        currentID++;
-                    }
-                }
+                    Side1Text = item.Side1Text,
+                    Side2Text = item.Side2Text,
+                });
+            });
 
-                // If the item is from the list
-                if (item.ListID > 0)
-                {
-                    // Edits the family data
-                    ParsedFamily.Flashcards[item.ListID] = new ParsedFlashcardData()
-                    {
-                        Side1Text = item.Side1Text,
-                        Side2Text = item.Side2Text,
-                    };
-                }
-                // If it was added
-                else
-                {
-                    // Adds it to the family data
-                    ParsedFamily.Flashcards.Add(new ParsedFlashcardData()
-                    {
-                        Side1Text = item.Side1Text,
-                        Side2Text = item.Side2Text,
-                    });
-                }
-            }
+            // Replaces the flashcard list
+            _parsedFamily.Flashcards = editedFlashcards;
 
             // Adds the family to the JSON
             JSONWriter.AddFamilyToJSON(ParsedFamily);
@@ -172,7 +144,7 @@ namespace SwipeFlash.Core
             // Sets the category names
             Category1Name = ParsedFamily.Category1;
             Category2Name = ParsedFamily.Category2;
-            
+
             // Asynchronously adds the flashcards to the list
             await Task.Run(() =>
             {
@@ -221,7 +193,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Whether the row was edited
         /// </summary>
-        public bool IsRowEdited => Side1Text != DefaultSide1Text || Side2Text != DefaultSide2Text;
+        public bool IsRowEdited => (Side1Text != DefaultSide1Text || Side2Text != DefaultSide2Text) && !(ListID < 0);
 
         /// <summary>
         /// The index of the flashcard
@@ -241,6 +213,12 @@ namespace SwipeFlash.Core
 
         #region Constructor
 
+        /// <summary>
+        /// Overriden constructor
+        /// </summary>
+        /// <param name="side1Text">The text on side 1 of the card</param>
+        /// <param name="side2Text">The text on side 2 of the card</param>
+        /// <param name="id">The ID of the card</param>
         public ParsedFlashcardListItemViewModel(string side1Text, string side2Text, int id)
         {
             // Initializes the texts
@@ -255,6 +233,9 @@ namespace SwipeFlash.Core
                                                    Side2Text = DefaultSide2Text; });
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ParsedFlashcardListItemViewModel()
         {
             // Initializes the texts

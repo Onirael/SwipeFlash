@@ -79,7 +79,7 @@
                                         Content="{StaticResource FontAwesome_Undo}"
                                         Foreground="{StaticResource ForegroundDarkBrush}"
                                         Padding="0" Margin="0" Width="20"
-                                        Visibility="{Binding IsRowEdited, Converter={local:BooleanToVisibilityConverter}}"
+                                        Visibility="{Binding IsRowEdited, Converter={local:BooleanToVisibilityConverter}, FallbackValue=Hidden}"
                                         Command="{Binding UndoCommand}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -1,59 +1,59 @@
 {
   "flashcards": [
     {
-      "family": "Spanish to English",
+      "family": "English to Spanish",
       "isEnabled": true,
       "cards": [
         {
           "id": 0,
-          "section": 0,
-          "lastSeen": "0000-00-00T00:00:00.000+01:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:47:31.096524+01:00"
         },
         {
           "id": 1,
-          "section": 0,
-          "lastSeen": "0000-00-00T00:00:00.000+01:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:47:32.4546187+01:00"
         },
         {
           "id": 2,
-          "section": 0,
-          "lastSeen": "0000-00-00T00:00:00.000+01:00"
+          "section": 3,
+          "lastSeen": "2020-10-27T23:07:57.9853486+01:00"
         },
         {
           "id": 3,
           "section": 1,
-          "lastSeen": "2020-09-22T21:28:05+02:00"
+          "lastSeen": "01.01.0001 00:00:00 +00:00"
         },
         {
           "id": 4,
           "section": 1,
-          "lastSeen": "2020-09-22T21:28:05+02:00"
+          "lastSeen": "01.01.0001 00:00:00 +00:00"
         },
         {
           "id": 5,
-          "section": 2,
-          "lastSeen": "2020-09-22T21:28:05+02:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:30:24.0661093+01:00"
         },
         {
           "id": 6,
           "section": 3,
-          "lastSeen": "2020-09-22T21:28:05+02:00"
+          "lastSeen": "01.01.0001 00:00:00 +00:00"
         }
       ]
     },
     {
-      "family": "German to English",
+      "family": "English to German",
       "isEnabled": true,
       "cards": [
         {
           "id": 0,
-          "section": 0,
-          "lastSeen": "0000-00-00T00:00:00.000+01:00"
+          "section": 3,
+          "lastSeen": "2020-10-27T22:48:45.5603941+01:00"
         },
         {
           "id": 1,
-          "section": 0,
-          "lastSeen": "0000-00-00T00:00:00.000+01:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:08:05.4491397+01:00"
         },
         {
           "id": 2,
@@ -67,63 +67,63 @@
       "cards": [
         {
           "id": 0,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:53.0718494+01:00"
         },
         {
           "id": 1,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:38:51.9212415+00:00"
         },
         {
           "id": 2,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:55.7728641+01:00"
         },
         {
           "id": 3,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:38:49.4895999+00:00"
         },
         {
           "id": 4,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:38:55.9329324+00:00"
         },
         {
           "id": 5,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:52.0563012+01:00"
         },
         {
           "id": 6,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:54.6100045+01:00"
         },
         {
           "id": 7,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:53.5407754+01:00"
         },
         {
           "id": 8,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:38:44.9756823+00:00"
         },
         {
           "id": 9,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:52.5594712+01:00"
         },
         {
           "id": 10,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T23:37:51.0169922+01:00"
         },
         {
           "id": 11,
-          "section": 0,
-          "lastSeen": "01.01.0001 00:00:00 +00:00"
+          "section": 1,
+          "lastSeen": "2020-10-27T22:38:47.213652+00:00"
         }
       ],
       "isEnabled": true

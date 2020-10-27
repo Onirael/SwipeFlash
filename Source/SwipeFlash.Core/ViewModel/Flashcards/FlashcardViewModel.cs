@@ -331,6 +331,19 @@ namespace SwipeFlash.Core
 
             // Fire swipe left event
             OnCardSwipeLeft(this, null);
+
+            // If it is the end of the stack, quit
+            if (IsEndOfStackCard)
+                return;
+
+            // Gets the flashcard manager
+            var fm = IoC.Get<FlashcardManager>();
+
+            // Gets the flashcard token
+            var flashcardToken = fm.GetFlashcard(CardID, fm.FindUserFamily(CardFamily));
+
+            // Updates the card section
+            fm.UpdateCardSection(flashcardToken, false);
         }
 
         /// <summary>
@@ -350,6 +363,19 @@ namespace SwipeFlash.Core
 
             // Fire swipe right event
             OnCardSwipeRight(this, null);
+
+            // If it is the end of stack card, quit
+            if (IsEndOfStackCard)
+                return;
+
+            // Gets the flashcard manager
+            var fm = IoC.Get<FlashcardManager>();
+
+            // Gets the flashcard token
+            var flashcardToken = fm.GetFlashcard(CardID, fm.FindUserFamily(CardFamily));
+
+            // Updates the card section
+            fm.UpdateCardSection(flashcardToken, true);
         }
 
         /// <summary>

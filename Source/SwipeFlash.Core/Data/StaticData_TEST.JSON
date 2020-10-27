@@ -39,9 +39,9 @@
   ],
   "flashcards": [
     {
-      "family": "Spanish to English",
-      "category1": "spanish",
-      "category2": "english",
+      "family": "English to Spanish",
+      "category1": "english",
+      "category2": "spanish",
       "hasIllustrations": true,
       "cards": [
         {
@@ -83,9 +83,9 @@
       ]
     },
     {
-      "family": "German to English",
-      "category1": "german",
-      "category2": "english",
+      "family": "English to German",
+      "category1": "english",
+      "category2": "german",
       "hasIllustrations": true,
       "cards": [
         {
