@@ -29,12 +29,16 @@
     {
       "name": "test1",
       "icon": "❤",
-      "articles": []
+      "articles": [
+        "the"
+      ]
     },
     {
       "name": "test2",
       "icon": "🐸",
-      "articles": []
+      "articles": [
+        "the"
+      ]
     }
   ],
   "flashcards": [
@@ -112,81 +116,81 @@
       "family": "Test family",
       "category1": "test1",
       "category2": "test2",
-      "hasIllustrations": true,
       "cards": [
         {
-          "side1Text": "¡anda!",
-          "side2Text": "come on!",
+          "side1Text": "come on!",
+          "side2Text": "¡anda!",
           "id": 0,
           "hasIllustration": true
         },
         {
-          "side1Text": "¿a qué hora?",
-          "side2Text": "when? what time?",
+          "side1Text": "when? what time?",
+          "side2Text": "¿a qué hora?",
           "id": 1,
           "hasIllustration": true
         },
         {
-          "side1Text": "a causa de",
-          "side2Text": "because of",
+          "side1Text": "because of",
+          "side2Text": "a causa de",
           "id": 2,
           "hasIllustration": true
         },
         {
-          "side1Text": "a continuación",
-          "side2Text": "next",
+          "side1Text": "next",
+          "side2Text": "a continuación",
           "id": 3,
           "hasIllustration": true
         },
         {
-          "side1Text": "el ábaco",
-          "side2Text": "abacus",
+          "side1Text": "abacus",
+          "side2Text": "el ábaco",
           "id": 4,
           "hasIllustration": true
         },
         {
-          "side1Text": "abajo",
-          "side2Text": "downstairs, down",
+          "side1Text": "downstairs, down",
+          "side2Text": "abajo",
           "id": 5,
           "hasIllustration": true
         },
         {
-          "side1Text": "abandonar",
-          "side2Text": "abandon",
+          "side1Text": "abandon",
+          "side2Text": "abandonar",
           "id": 6,
           "hasIllustration": true
         },
         {
-          "side1Text": "el abdomen",
-          "side2Text": "abdomen",
+          "side1Text": "abdomen",
+          "side2Text": "el abdomen",
           "id": 7,
           "hasIllustration": true
         },
         {
-          "side1Text": "el abdominales",
-          "side2Text": "abdominal muscles",
+          "side1Text": "abdominal muscles",
+          "side2Text": "el abdominales",
           "id": 8,
           "hasIllustration": true
         },
         {
-          "side1Text": "abierto",
-          "side2Text": "open",
+          "side1Text": "open",
+          "side2Text": "abierto",
           "id": 9,
           "hasIllustration": true
         },
         {
-          "side1Text": "el abogado",
-          "side2Text": "lawyer",
+          "side1Text": "lawyer",
+          "side2Text": "el abogado",
           "id": 10,
           "hasIllustration": true
         },
         {
-          "side1Text": "el abonado",
-          "side2Text": "member",
+          "side1Text": "member",
+          "side2Text": "el abonado",
           "id": 11,
           "hasIllustration": true
         }
-      ]
+      ],
+      "hasIllustrations": true
     }
   ]
 }

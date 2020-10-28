@@ -24,8 +24,8 @@ namespace SwipeFlash.Core
             var userJSON = fm.UserData;
 
             // Gets the categories array from the static data
-            var categories = staticJSON["categories"] as JArray;
-            if (categories == null) return;
+            if (!(staticJSON["categories"] is JArray categories))
+                return;
 
             // Tries to find the categories in the JSON
             var foundCategory1 = fm.FindCategory(family.Category1);
@@ -35,10 +35,12 @@ namespace SwipeFlash.Core
             if (foundCategory1 == null)
             {
                 // Creates the category
-                var category1 = new JObject();
-                category1["name"] = family.Category1;
-                category1["icon"] = family.Logo1;
-                category1["articles"] = JArray.FromObject(family.Articles1);
+                var category1 = new JObject
+                {
+                    ["name"] = family.Category1,
+                    ["icon"] = family.Logo1,
+                    ["articles"] = JArray.FromObject(family.Articles1)
+                };
 
                 // Adds it to the array
                 categories.Add(category1);
@@ -48,10 +50,12 @@ namespace SwipeFlash.Core
             if (foundCategory2 == null)
             {
                 // Creates the category
-                var category2 = new JObject();
-                category2["name"] = family.Category2;
-                category2["icon"] = family.Logo2;
-                category2["articles"] = JArray.FromObject(family.Articles2);
+                var category2 = new JObject
+                {
+                    ["name"] = family.Category2,
+                    ["icon"] = family.Logo2,
+                    ["articles"] = JArray.FromObject(family.Articles2)
+                };
 
                 // Adds it to the array
                 categories.Add(category2);
@@ -75,18 +79,22 @@ namespace SwipeFlash.Core
             if (activeStaticFamily == null)
             {
                 // Creates the static family
-                var newStaticFamily = new JObject();
-                newStaticFamily["family"] = family.FamilyName;
-                newStaticFamily["category1"] = family.Category1;
-                newStaticFamily["category2"] = family.Category2;
-                newStaticFamily["cards"] = new JArray();
-                newStaticFamily["hasIllustrations"] = true;
+                var newStaticFamily = new JObject
+                {
+                    ["family"] = family.FamilyName,
+                    ["category1"] = family.Category1,
+                    ["category2"] = family.Category2,
+                    ["cards"] = new JArray(),
+                    ["hasIllustrations"] = true
+                };
 
                 // Creates the user family
-                var newUserFamily = new JObject();
-                newUserFamily["family"] = family.FamilyName;
-                newUserFamily["isEnabled"] = true;
-                newUserFamily["cards"] = new JArray();
+                var newUserFamily = new JObject
+                {
+                    ["family"] = family.FamilyName,
+                    ["isEnabled"] = true,
+                    ["cards"] = new JArray()
+                };
 
                 // Adds the newly created family
                 staticFlashcardFamilies.Add(newStaticFamily);
@@ -100,9 +108,11 @@ namespace SwipeFlash.Core
             staticCards = activeStaticFamily["cards"] as JArray;
             userCards = activeUserFamily["cards"] as JArray;
 
-            // Gets the first card ID
-            int cardsMaxID = staticCards.Max(card => (int)card["id"]);
-            int cardID = staticCards.Count > 0 ? cardsMaxID + 1 : 0;
+            // If there are any cards in the array, 
+            // set the starting ID to the maximum ID
+            int cardID = 0;
+            if (staticCards.Any())
+                cardID = staticCards.Max(card => (int)card["id"]) + 1;
 
             // For each flashcard
             foreach (var flashcard in family.Flashcards)
@@ -115,16 +125,20 @@ namespace SwipeFlash.Core
                     continue;
 
                 // Creates the flashcard JObject
-                var newStaticCard = new JObject();
-                newStaticCard["side1Text"] = flashcard.Side1Text;
-                newStaticCard["side2Text"] = flashcard.Side2Text;
-                newStaticCard["id"] = cardID;
-                newStaticCard["hasIllustration"] = true;
+                var newStaticCard = new JObject
+                {
+                    ["side1Text"] = flashcard.Side1Text,
+                    ["side2Text"] = flashcard.Side2Text,
+                    ["id"] = cardID,
+                    ["hasIllustration"] = true
+                };
 
-                var newUserCard = new JObject();
-                newUserCard["id"] = cardID;
-                newUserCard["section"] = 0;
-                newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
+                var newUserCard = new JObject
+                {
+                    ["id"] = cardID,
+                    ["section"] = 0,
+                    ["lastSeen"] = DateTimeOffset.MinValue.ToString()
+                };
 
                 // Adds the card to the array
                 staticCards.Add(newStaticCard);
@@ -195,10 +209,12 @@ namespace SwipeFlash.Core
                     if (!userCardsArray.Any(card => (int)card["id"] == (int)staticCard["id"]))
                     {
                         // Creates a new user card
-                        var newUserCard = new JObject();
-                        newUserCard["id"] = (int)staticCard["id"];
-                        newUserCard["section"] = 0;
-                        newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
+                        var newUserCard = new JObject
+                        {
+                            ["id"] = (int)staticCard["id"],
+                            ["section"] = 0,
+                            ["lastSeen"] = DateTimeOffset.MinValue.ToString()
+                        };
 
                         // Adds it to the array
                         userCardsArray.Add(newUserCard);
@@ -222,10 +238,12 @@ namespace SwipeFlash.Core
                 foreach (var staticCard in staticCards)
                 {
                     // Creates a new user card
-                    var newUserCard = new JObject();
-                    newUserCard["id"] = (int)staticCard["id"];
-                    newUserCard["section"] = 0;
-                    newUserCard["lastSeen"] = DateTimeOffset.MinValue.ToString();
+                    var newUserCard = new JObject
+                    {
+                        ["id"] = (int)staticCard["id"],
+                        ["section"] = 0,
+                        ["lastSeen"] = DateTimeOffset.MinValue.ToString()
+                    };
 
                     // Adds it to the array
                     userCardsArray.Add(newUserCard);
