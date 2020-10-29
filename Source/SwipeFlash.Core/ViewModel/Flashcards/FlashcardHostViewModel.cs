@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,10 +13,15 @@ namespace SwipeFlash.Core
     {
         #region Public Properties
 
+        private AsyncObservableCollection<FlashcardViewModel> _flashcards;
         /// <summary>
         /// An observable collection of view models for the flashcards
         /// </summary>
-        public AsyncObservableCollection<FlashcardViewModel> Flashcards { get; set; }
+        public AsyncObservableCollection<FlashcardViewModel> Flashcards
+        {
+            get => _flashcards;
+            set => _flashcards = value;
+        }
 
         /// <summary>
         /// A list containing swiped cards, limited to <see cref="FlashcardHistoryLength"/>
@@ -76,7 +82,7 @@ namespace SwipeFlash.Core
         /// The command triggered by the confirm edit card button
         /// </summary>
         public ICommand ConfirmEditCommand { get; set; }
-        
+
         /// <summary>
         /// The command triggered by the delete card button
         /// </summary>
@@ -156,7 +162,7 @@ namespace SwipeFlash.Core
                     // Sets the flashcard family name in the flashcard
                     flashcard.CardFamily = cardFamily.Name;
                 }
-                
+
                 // Updates the Family has illustrations flag
                 flashcard.FamilyHasIllustration = cardFamily.HasIllustrations;
             }
@@ -182,12 +188,14 @@ namespace SwipeFlash.Core
                     if (i == 0) newCard.HasInput = true;
 
                     // Add the card to the list
-                    Flashcards.Insert(0, newCard);
+                    _flashcards.Insert(0, newCard);
                 }
+
+                // Updates the flashcards property
+                OnPropertyChanged(nameof(Flashcards));
 
                 Task.Delay(1000).ContinueWith((t) =>
                 {
-
                     // Set the application view model's content loaded flag
                     IoC.Get<ApplicationViewModel>().IsContentLoaded = true;
 
@@ -270,7 +278,7 @@ namespace SwipeFlash.Core
             // Enables the flashcard's edit mode
             lastFlashcard.IsInEditMode = true;
         }
-        
+
         /// <summary>
         /// Called when the confirm edit card button is pressed
         /// </summary>

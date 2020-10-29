@@ -1,4 +1,5 @@
 ﻿using Ninject;
+using System.Threading.Tasks;
 
 namespace SwipeFlash.Core
 {
@@ -35,10 +36,10 @@ namespace SwipeFlash.Core
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-
+            
             // Bind to a single instance of Flashcard manager
             Kernel.Bind<FlashcardManager>().ToConstant(new FlashcardManager());
-
+            
             // Bind to a single instance of Window service
             Kernel.Bind<WindowService>().ToConstant(new WindowService());
         }

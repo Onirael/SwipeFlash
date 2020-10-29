@@ -10,12 +10,7 @@ namespace SwipeFlash.Core
     public class FlashcardManager
     {
         #region Public Properties
-
-        /// <summary>
-        /// The maximum length of the card queue
-        /// </summary>
-        public int CardQueueMaxLength = 10;
-
+        
         /// <summary>
         /// The queue of card data elements
         /// </summary>
@@ -41,6 +36,10 @@ namespace SwipeFlash.Core
         /// </summary>
         public List<FlashcardFamilyData> FlashcardFamilies { get; set; }
 
+        #endregion
+
+        #region Private Properties
+
         /// <summary>
         /// The amount by which sections are weighted when selected
         /// a scale factor of s means that the nth section has s times the weight of the n+1th
@@ -63,6 +62,16 @@ namespace SwipeFlash.Core
         /// </summary>
         private int CardSwipeCount = 0;
 
+        /// <summary>
+        /// The amount of flashcards in enabled families
+        /// </summary>
+        private int ActiveFlashcardCount = 0;
+
+        /// <summary>
+        /// The maximum length of the card queue
+        /// </summary>
+        private int CardQueueMaxLength => Math.Min(10, ActiveFlashcardCount);
+        
         #endregion
 
         #region Private Properties
@@ -108,6 +117,7 @@ namespace SwipeFlash.Core
             // Initializes the random generator
             Rand = new Random();
 
+            // Initializes the flashcard families list
             FlashcardFamilies = new List<FlashcardFamilyData>();
 
             // Finds flashcard families as soon as the JSON has been parsed
@@ -305,6 +315,9 @@ namespace SwipeFlash.Core
             // Sets the collection element back
             FlashcardFamilies[familyIndex] = familyData;
 
+            // Updates the active flashcards count
+            ActiveFlashcardCount = FlashcardFamilies.Sum(family => family.IsEnabled ? family.CardCount : 0);
+
             // Updates the files
             JSONWriter.UpdateJSONFiles();
         }
@@ -478,10 +491,10 @@ namespace SwipeFlash.Core
         /// <param name="flashcard">The user flashcard JSON token</param>
         /// <param name="swipedRight">Whether the user marked its answer as correct</param>
         /// <returns>Whether the card could be moved</returns>
-        public bool UpdateCardSection(JToken flashcard, bool swipedRight)
+        public bool UpdateCardSection(JToken flashcard, bool swipedRight, bool isReversed=false)
         {
             // The current section of the flashcard
-            int currentSection = (int)flashcard["section"];
+            int currentSection = isReversed ? (int)flashcard["reversedSection"] : (int)flashcard["section"];
             
             // The section to send the card to
             int newSection = -1;
@@ -553,9 +566,18 @@ namespace SwipeFlash.Core
 
             // Sets the time and date when the card was seen for the last time
             flashcard["lastSeen"] = DateTimeOffset.UtcNow;
-            
+
             // Sets the new section of the flashcard
-            flashcard["section"] = newSection;
+            if (newSection == 1)
+            {
+                flashcard["section"] = newSection;
+                flashcard["reversedSection"] = newSection;
+            }
+            else if (isReversed)
+                flashcard["reversedSection"] = newSection;
+            else
+                flashcard["section"] = newSection;
+
 
             // Increments the session card swipe count
             CardSwipeCount++;
@@ -605,6 +627,10 @@ namespace SwipeFlash.Core
                 }
             }
 
+            // Updates the active flashcards count
+            ActiveFlashcardCount = FlashcardFamilies.Sum(family => family.IsEnabled ? family.CardCount : 0);
+
+            // Fires the families updated event
             OnFamiliesUpdated?.Invoke(this, null);
         }
 
@@ -639,6 +665,9 @@ namespace SwipeFlash.Core
         {
             // Creates a new flashcard data object
             FlashcardData newFlashcardData = new FlashcardData();
+           
+            // Sets whether the card is reversed
+            var isCardReversed = Rand.Next(2) == 1;
 
             // Select a flashcard family
             // Gets the families flagged as enabled
@@ -668,7 +697,7 @@ namespace SwipeFlash.Core
             var selectedSection = (int)Math.Floor(sectionCount - Math.Log(weightedRandMax * (1 - randSelection) + 1, SectionWeightFactor)) + 1;
 
             // Selects a flashcard in the selected section
-            var flashcardID = SelectFlashcardInSection(selectedSection, enabledFamilies[selectedFamily].Name);
+            var flashcardID = SelectFlashcardInSection(selectedSection, enabledFamilies[selectedFamily].Name, isReversed: isCardReversed);
 
             // If the flashcard is invalid, quit
             if (flashcardID < 0)
@@ -711,8 +740,6 @@ namespace SwipeFlash.Core
                 newFlashcardData.HasIllustration = (bool)flashcard["hasIllustration"];
                 newFlashcardData.FamilyHasIllustrations = (bool)cardFamily["hasIllustrations"];
 
-                // Sets whether the card is reversed
-                var isCardReversed = Rand.Next(2) == 1;
                 //newFlashcardData.IsInverted = isCardReversed;
                 
                 // Adds card to array
@@ -727,23 +754,24 @@ namespace SwipeFlash.Core
         /// <param name="selectedSection">The section to select a flashcard in</param>
         /// <param name="familyName">The name of the family</param>
         /// <param name="ignoreExpiry">Whether the flashcards should be checked for expiry</param>
+        /// <param name="isReversed">Whether the card is reversed</param>
         /// <returns>The selected flashcard, -1 if no flashcard could be selected</returns>
-        private int SelectFlashcardInSection(int selectedSection, string familyName, bool ignoreExpiry=false)
+        private int SelectFlashcardInSection(int selectedSection, string familyName, bool ignoreExpiry=false, bool isReversed=false)
         {
             switch(selectedSection)
             {
                 case 0:
                     // Returns a random flashcard in this section
-                    return GetRandomFlashcardInSection(selectedSection, familyName);
+                    return GetRandomFlashcardInSection(selectedSection, familyName, isReversed:isReversed);
                 case 1:
                     // Gets the size of the section
-                    int sectionSize = GetSectionCount(familyName, selectedSection);
+                    int sectionSize = GetSectionCount(familyName, selectedSection, isReversed: isReversed);
                     
                     // If the section isn't full
-                    if (sectionSize < MaxSection1Size)
+                    if (sectionSize < MaxSection1Size && !isReversed)
                     {
                         // Gets a flashcard in section 0
-                        var flashcard = SelectFlashcardInSection(0, familyName);
+                        var flashcard = SelectFlashcardInSection(0, familyName, isReversed: isReversed);
 
                         // If the flashcard is valid
                         if (flashcard >= 0)
@@ -752,20 +780,20 @@ namespace SwipeFlash.Core
                     }
 
                     // Gets a random flashcard in the section, 
-                    // falling back to section 5 if none was found
-                    return GetRandomFlashcardInSection(selectedSection, familyName, 2);
+                    // falling back to section 2 if none was found
+                    return GetRandomFlashcardInSection(selectedSection, familyName, 2, isReversed: isReversed);
                 case 2:
                     // Gets a random expired card in the section
-                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName);
+                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName, isReversed: isReversed);
                 case 3:
                     // Gets a random expired card in the section
-                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName);
+                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName, isReversed: isReversed);
                 case 4:
                     // Gets a random expired card in the section
-                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName);
+                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName, isReversed: isReversed);
                 case 5:
                     // Gets a random expired card in the section
-                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName, false);
+                    return GetRandomExpiredFlashcardInSection(selectedSection, familyName, false, isReversed: isReversed);
                 default:
                     return -1;
             }
@@ -776,12 +804,16 @@ namespace SwipeFlash.Core
         /// </summary>
         /// <param name="section">The section to get the flashcard in</param>
         /// <param name="familyName">The name of the flashard's family</param>
+        /// <param name="fallbackSection">The section to fallback to if no card was found, 
+        /// a value of -1 will prevent the method from looking further for a match</param>
+        /// <param name="isReversed">Whether the card is reversed</param>
         /// <returns>The found flashcard, -1 if none was found</returns>
-        private int GetRandomFlashcardInSection(int section, string familyName, int fallbackSection=-1)
+        private int GetRandomFlashcardInSection(int section, string familyName, int fallbackSection=-1, bool isReversed=false)
         {
             // Gets all flashcards in the section
             var sectionFlashcards = GetSectionFlashcards(section,
-                                                         FindUserFamily(familyName));
+                                                         FindUserFamily(familyName),
+                                                         isReversed: isReversed);
             // Counts the flashcards
             var flashcardsCount = sectionFlashcards.Count();
 
@@ -791,7 +823,7 @@ namespace SwipeFlash.Core
                 // If a fallback section was specified
                 if (fallbackSection > 0)
                     // Select a card in that section
-                    return SelectFlashcardInSection(fallbackSection, familyName);
+                    return SelectFlashcardInSection(fallbackSection, familyName, isReversed: isReversed);
                 // Otherwise, quit
                 else
                     return - 1;
@@ -809,11 +841,12 @@ namespace SwipeFlash.Core
         /// </summary>
         /// <param name="section">The section of the card</param>
         /// <param name="familyName">The family of the card</param>
+        /// <param name="isReversed">Whether the card is reversed</param>
         /// <returns>The expired flashcard's ID</returns>
-        private int GetRandomExpiredFlashcardInSection(int section, string familyName, bool searchUpSections=true)
+        private int GetRandomExpiredFlashcardInSection(int section, string familyName, bool searchUpSections=true, bool isReversed=false)
         {
             // Gets the expired section flashcards
-            var expiredFlashcards = GetExpiredFlashcards(section, familyName);
+            var expiredFlashcards = GetExpiredFlashcards(section, familyName, isReversed: isReversed);
 
             // The amount of expired flashcards
             var expiredCardCount = expiredFlashcards.Count();
@@ -842,8 +875,9 @@ namespace SwipeFlash.Core
         /// </summary>
         /// <param name="section">The section to get the flashcards from</param>
         /// <param name="familyName">The family of the flashcards</param>
+        /// <param name="isReversed">Whether the card is reversed</param>
         /// <returns></returns>
-        private JEnumerable<JToken> GetExpiredFlashcards(int section, string familyName)
+        private JEnumerable<JToken> GetExpiredFlashcards(int section, string familyName, bool isReversed=false)
         {
             // Gets the family JToken
             var family = FindUserFamily(familyName);
@@ -854,14 +888,17 @@ namespace SwipeFlash.Core
                 return new JEnumerable<JToken>();
 
             // Gets the section flashcards
-            var sectionFlashcards = GetSectionFlashcards(section, family);
+            var sectionFlashcards = GetSectionFlashcards(section, family, isReversed: isReversed);
 
             // Gets expiry time of the flashcards in this section
             var expiryTime = FlashcardSelectionData.SectionExpiryTime[section];
 
+            // The key to use to look for when the card was seen for the last time
+            string lastSeenKey = isReversed ? "lastSeenReversed" : "lastSeen";
+
             // Gets the expired flashcards
             var expiredFlashcards = sectionFlashcards.Where(flashcard => DateTimeOffset.UtcNow
-                                                     .Subtract((DateTimeOffset)flashcard["lastSeen"])
+                                                     .Subtract((DateTimeOffset)flashcard[lastSeenKey])
                                                      .Duration() > expiryTime);
             // returns the expired flashcards
             return new JEnumerable<JToken>(expiredFlashcards);
@@ -872,8 +909,9 @@ namespace SwipeFlash.Core
         /// </summary>
         /// <param name="familyName">The family to count in</param>
         /// <param name="selectedSection">The section to count</param>
+        /// <param name="isReversed">Whether the card is reversed</param>
         /// <returns>The element count of the section</returns>
-        private int GetSectionCount(string familyName, int section)
+        private int GetSectionCount(string familyName, int section, bool isReversed=false)
         {
             // Gets the family JSON Token
             var foundFamily = FindUserFamily(familyName);
@@ -883,7 +921,7 @@ namespace SwipeFlash.Core
                 return -1;
 
             // Gets all flashcards of the section
-            var sectionFlashcards = GetSectionFlashcards(section, foundFamily);
+            var sectionFlashcards = GetSectionFlashcards(section, foundFamily, isReversed: isReversed);
 
             // Returns the cards count
             return sectionFlashcards.Count();
@@ -894,12 +932,16 @@ namespace SwipeFlash.Core
         /// </summary>
         /// <param name="section">The section to search for</param>
         /// <param name="family">The family to search in</param>
+        /// <param name="isReversed">Whether the card is reversed</param>
         /// <returns>The flashcards of the section</returns>
-        private JEnumerable<JToken> GetSectionFlashcards(int section, JToken family)
+        private JEnumerable<JToken> GetSectionFlashcards(int section, JToken family, bool isReversed = false)
         {
+            // The key to use to look for the section of a card
+            string sectionKey = isReversed ? "reversedSection" : "section";
+
             // Finds corresponding flahcards
             var foundFlashcards = family["cards"].AsJEnumerable()
-                                                       .Where(flashcard => (int)flashcard["section"] == section);
+                                                       .Where(flashcard => (int)flashcard[sectionKey] == section);
 
             // Returns the found flashcards
             return new JEnumerable<JToken>(foundFlashcards);

@@ -137,6 +137,7 @@ namespace SwipeFlash.Core
                 {
                     ["id"] = cardID,
                     ["section"] = 0,
+                    ["reversedSection"] = 0,
                     ["lastSeen"] = DateTimeOffset.MinValue.ToString()
                 };
 
@@ -213,6 +214,7 @@ namespace SwipeFlash.Core
                         {
                             ["id"] = (int)staticCard["id"],
                             ["section"] = 0,
+                            ["reversedSection"] = 0,
                             ["lastSeen"] = DateTimeOffset.MinValue.ToString()
                         };
 
@@ -242,6 +244,7 @@ namespace SwipeFlash.Core
                     {
                         ["id"] = (int)staticCard["id"],
                         ["section"] = 0,
+                        ["reversedSection"] = 0,
                         ["lastSeen"] = DateTimeOffset.MinValue.ToString()
                     };
 
