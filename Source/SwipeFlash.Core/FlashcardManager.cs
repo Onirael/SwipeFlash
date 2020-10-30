@@ -73,7 +73,7 @@ namespace SwipeFlash.Core
         private int CardQueueMaxLength => Math.Min(10, ActiveFlashcardCount);
         
         #endregion
-
+    
         #region Private Properties
 
         /// <summary>
@@ -489,7 +489,7 @@ namespace SwipeFlash.Core
         /// Updates the card section based on whether the card was succeeded or not
         /// </summary>
         /// <param name="flashcard">The user flashcard JSON token</param>
-        /// <param name="swipedRight">Whether the user marked its answer as correct</param>
+        /// <param name="swipedRight">Whether the user marked his/her answer as correct</param>
         /// <returns>Whether the card could be moved</returns>
         public bool UpdateCardSection(JToken flashcard, bool swipedRight, bool isReversed=false)
         {
@@ -514,7 +514,7 @@ namespace SwipeFlash.Core
                 // Failure: the card stays in section 1
                 case 1:
                     if (swipedRight)
-                        newSection++;
+                        newSection = currentSection + 1;
                     else
                         newSection = 1;
                     break;
@@ -523,7 +523,7 @@ namespace SwipeFlash.Core
                 // Failure: the card moves down one section
                 case 2:
                     if (swipedRight)
-                        newSection++;
+                        newSection = currentSection + 1;
                     else
                         newSection = 1;
                     break;
@@ -532,7 +532,7 @@ namespace SwipeFlash.Core
                 // Failure: the card moves down one section
                 case 3:
                     if (swipedRight)
-                        newSection++;
+                        newSection = currentSection + 1;
                     else
                         newSection = 1;
                     break;
@@ -541,7 +541,7 @@ namespace SwipeFlash.Core
                 // Failure: the card moves down one section
                 case 4:
                     if (swipedRight)
-                        newSection++;
+                        newSection = currentSection + 1;
                     else
                         newSection = 1;
                     break;
@@ -564,11 +564,14 @@ namespace SwipeFlash.Core
             if (newSection < 0)
                 return false;
 
+            // Sets the key of the last seen JSON value to set
+            string lastSeenKey = isReversed ? "lastSeenReversed" : "lastSeen";
+
             // Sets the time and date when the card was seen for the last time
-            flashcard["lastSeen"] = DateTimeOffset.UtcNow;
+            flashcard[lastSeenKey] = DateTimeOffset.UtcNow;
 
             // Sets the new section of the flashcard
-            if (newSection == 1)
+            if (currentSection == 0)
             {
                 flashcard["section"] = newSection;
                 flashcard["reversedSection"] = newSection;
@@ -665,7 +668,7 @@ namespace SwipeFlash.Core
         {
             // Creates a new flashcard data object
             FlashcardData newFlashcardData = new FlashcardData();
-           
+
             // Sets whether the card is reversed
             var isCardReversed = Rand.Next(2) == 1;
 
@@ -740,7 +743,8 @@ namespace SwipeFlash.Core
                 newFlashcardData.HasIllustration = (bool)flashcard["hasIllustration"];
                 newFlashcardData.FamilyHasIllustrations = (bool)cardFamily["hasIllustrations"];
 
-                //newFlashcardData.IsInverted = isCardReversed;
+                // Sets the reversed flag
+                newFlashcardData.IsInverted = isCardReversed;
                 
                 // Adds card to array
                 CardQueue.Add(newFlashcardData);

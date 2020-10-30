@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SwipeFlash"
              xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
              xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+             xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              mc:Ignorable="d"
              Width="300" Height="400"
              local:AnimateFlipProperty.Value="{Binding IsFlipped}"
@@ -23,31 +24,35 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <Grid>
-                            <Grid.Effect>
-                                <DropShadowEffect Opacity=".2" BlurRadius="20" ShadowDepth="0"/>
-                            </Grid.Effect>
+                            <Border CornerRadius="20">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity=".2" BlurRadius="20" ShadowDepth="0"/>
+                                </Border.Effect>
+                            </Border>
 
                             <Border Name="cardContainer"
                                     Background="{StaticResource BackgroundLightBrush}"
                                     CornerRadius="20"
                                     BorderThickness="1"
                                     BorderBrush="{StaticResource ForegroundDarkBrush}">
-
+                                
                                 <Grid>
-                                    <!-- Clipping mask -->
+                                    <!--Clipping mask--> 
+                                    <!-- The values are hard-coded because of binding errors -->
                                     <Grid.Clip>
-                                        <RectangleGeometry RadiusX="{Binding CornerRadius, ElementName=cardContainer, Converter={local:CornerRadiusToDoubleConverter}}" 
-                                                           RadiusY="{Binding CornerRadius, ElementName=cardContainer, Converter={local:CornerRadiusToDoubleConverter}}">
+                                        <!--<RectangleGeometry RadiusX="{Binding CornerRadius, ElementName=cardContainer, Converter={local:CornerRadiusToDoubleConverter}, TargetNullValue=20}" 
+                                                           RadiusY="{Binding CornerRadius, ElementName=cardContainer, Converter={local:CornerRadiusToDoubleConverter}, TargetNullValue=20}">
                                             <RectangleGeometry.Rect>
-                                                <MultiBinding>
+                                                <MultiBinding TargetNullValue="0 0 300 400">
                                                     <MultiBinding.Converter>
                                                         <local:MultiToRectConverter/>
                                                     </MultiBinding.Converter>
-                                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Border}"/>
-                                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Border}"/>
+                                                    <Binding Path="ActualWidth" ElementName="cardContainer"/>
+                                                    <Binding Path="ActualHeight" ElementName="cardContainer"/>
                                                 </MultiBinding>
                                             </RectangleGeometry.Rect>
-                                        </RectangleGeometry>
+                                        </RectangleGeometry>-->
+                                        <RectangleGeometry RadiusX="20" RadiusY="20" Rect="0 0 300 400"/>
                                     </Grid.Clip>
 
                                     <!-- Edit mode sliding border -->
@@ -56,7 +61,7 @@
                                             VerticalAlignment="Top"
                                             CornerRadius="20"
                                             local:AnimateContentSlideDownProperty.Value="{Binding IsInEditMode}"
-                                            Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}">
+                                            Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToCollapsedVisibilityConverter}}">
                                         <Viewbox Margin="50">
                                             <Grid>
                                                 <!-- Edit mode side 1 input -->
@@ -67,7 +72,7 @@
                                                          TextAlignment="Center"
                                                          FontSize="{Binding FontSize, ElementName=text1}"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                                         Visibility="{Binding IsOnSide1, Converter={local:BooleanToCollapsedVisibilityConverter}, ConverterParameter=True}"
                                                          Background="Transparent"
                                                          local:SelectAllTextOnFocusProperty.Value="True"/>
                                                 <!-- Edit mode side 2 input -->
@@ -78,7 +83,7 @@
                                                          HorizontalAlignment="Center"
                                                          FontSize="{Binding FontSize, ElementName=text1}"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Visibility="{Binding IsOnSide1, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Visibility="{Binding IsOnSide1, Converter={local:BooleanToCollapsedVisibilityConverter}}"
                                                          Background="Transparent"
                                                          local:SelectAllTextOnFocusProperty.Value="True"/>
                                             </Grid>
@@ -86,20 +91,11 @@
                                     </Border>
 
                                     <!-- Icon -->
-                                    <emoji:TextBlock Text="{Binding Side1Icon}"
+                                    <emoji:TextBlock Text="{Binding IconText}"
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Top"
                                                      FontSize="{StaticResource FontSizeLarger}"
-                                                     Margin="30 30"
-                                                     Visibility="{Binding IsSide1Visible, Converter={local:BooleanToVisibilityConverter}}"/>
-
-                                    <emoji:TextBlock Text="{Binding Side2Icon}"
-                                                     HorizontalAlignment="Right"
-                                                     VerticalAlignment="Top"
-                                                     FontSize="{StaticResource FontSizeLarger}"
-                                                     Margin="30 30"
-                                                     Visibility="{Binding IsSide2Visible, Converter={local:BooleanToVisibilityConverter}}"/>
-
+                                                     Margin="30 30"/>
                                     <!-- Content -->
                                     <Grid Margin="50" Name="textContainer">
                                         <Grid.RowDefinitions>
@@ -107,7 +103,7 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
 
-                                        <!-- Stock image -->
+                                         <!--Stock image --> 
                                         <Border x:Name="imageContainer"
                                                 Grid.Row="0"
                                                 Height="150"
@@ -117,7 +113,7 @@
                                                 CornerRadius="150"
                                                 Visibility="{Binding IsImageVisible, Converter={local:BooleanToCollapsedVisibilityConverter}}">
                                             <Border.Background>
-                                                <ImageBrush ImageSource="{Binding Illustration}" Stretch="UniformToFill"/>
+                                                <ImageBrush ImageSource="{Binding Illustration, FallbackValue={StaticResource DefaultIllustration}}" Stretch="UniformToFill"/>
                                             </Border.Background>
                                         </Border>
 
@@ -132,8 +128,8 @@
                                                            TextAlignment="Center"
                                                            FontSize="{StaticResource FontSizeVeryLarge}"
                                                            TextWrapping="WrapWithOverflow"
-                                                           Visibility="{Binding IsSide1Visible, Converter={local:BooleanToVisibilityConverter}}"/>
-                                                
+                                                           Visibility="{Binding IsSide1Visible, Converter={local:BooleanToCollapsedVisibilityConverter}}"/>
+
                                                 <!-- Edit mode side 1 input -->
                                                 <TextBox Text="{Binding Side1EditText}"
                                                          MaxWidth="{Binding MaxWidth, ElementName=text1}"
@@ -142,7 +138,7 @@
                                                          TextAlignment="Center"
                                                          FontSize="{Binding FontSize, ElementName=text1}"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Visibility="{Binding IsOnSide1Edit, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Visibility="{Binding IsOnSide1Edit, Converter={local:BooleanToCollapsedVisibilityConverter}}"
                                                          Background="Transparent"
                                                          local:AnimateTextInputSlideDownProperty.Value="{Binding IsInEditMode}"
                                                          local:SelectAllTextOnFocusProperty.Value="True"/>
@@ -158,8 +154,8 @@
                                                            TextAlignment="Center"
                                                            FontSize="{StaticResource FontSizeVeryLarge}"
                                                            TextWrapping="WrapWithOverflow"
-                                                           Visibility="{Binding IsSide2Visible, Converter={local:BooleanToVisibilityConverter}}"/>
-                                                
+                                                           Visibility="{Binding IsSide2Visible, Converter={local:BooleanToCollapsedVisibilityConverter}}"/>
+
                                                 <!-- Edit mode side 2 input -->
                                                 <TextBox Text="{Binding Side2EditText}"
                                                          MaxWidth="{Binding MaxWidth, ElementName=text1}"
@@ -168,7 +164,7 @@
                                                          HorizontalAlignment="Center"
                                                          FontSize="{Binding FontSize, ElementName=text1}"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Visibility="{Binding IsOnSide2Edit, Converter={local:BooleanToVisibilityConverter}}"
+                                                         Visibility="{Binding IsOnSide2Edit, Converter={local:BooleanToCollapsedVisibilityConverter}}"
                                                          Background="{StaticResource BackgroundLightBrush}"
                                                          local:AnimateTextInputSlideDownProperty.Value="{Binding IsInEditMode}"
                                                          local:SelectAllTextOnFocusProperty.Value="True"/>
@@ -181,7 +177,7 @@
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Right"
                                                 Margin="20"
-                                                Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToVisibilityConverter}}">
+                                                Visibility="{Binding IsEditContentVisible, Converter={local:BooleanToCollapsedVisibilityConverter}}">
                                         <TextBlock Text="Enable card illustration"
                                                    VerticalAlignment="Center"
                                                    IsEnabled="{Binding FamilyHasIllustration}"/>
@@ -197,29 +193,20 @@
                                                Margin="0 0 20 10"
                                                FontSize="{StaticResource FontSizeSmaller}"
                                                Foreground="{StaticResource ForegroundDarkBrush}"
-                                               Visibility="{Binding IsImageVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                               Visibility="{Binding IsImageVisible, Converter={local:BooleanToCollapsedVisibilityConverter}}"
                                                Text="{Binding ImageCreditText}"/>
 
                                 </Grid>
                             </Border>
-                            
-                            <!-- End of stack card -->
-                            <Border Background="{StaticResource ForegroundDarkBrush}"
-                                    CornerRadius="20"
-                                    Visibility="{Binding IsEndOfStackCard, Converter={local:BooleanToVisibilityConverter}}">
-                                <Viewbox Margin="20">
-                                    <TextBlock Text="End of stack reached" 
-                                               Width="400"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center"
-                                               Foreground="{StaticResource BackgroundLightBrush}"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Center"
-                                               FontSize="{StaticResource FontSizeHuge}"/>
-                                </Viewbox>
-                            </Border>
-
                         </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsEndOfStackCard}" Value="True">
+                                <Setter TargetName="cardContainer" Property="Background" Value="{StaticResource ForegroundDarkBrush}"/>
+                                <Setter TargetName="text1" Property="Foreground" Value="{StaticResource BackgroundLightBrush}"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                        
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -227,15 +214,15 @@
     </UserControl.Resources>
     
     <UserControl.InputBindings>
-        <!-- Flip on click -->
+         <!--Flip on click--> 
         <MouseBinding MouseAction="LeftClick" Command="{Binding FlipCommand}"/>
-        <!-- Flip on spacebar press -->
+         <!--Flip on spacebar press--> 
         <KeyBinding Key="Space" Command="{Binding FlipCommand}"/>
-        <!-- Swipe left -->
+         <!--Swipe left--> 
         <KeyBinding Key="Left" Command="{Binding SwipeLeftCommand}"/>
-        <!-- Swipe right -->
+         <!--Swipe right--> 
         <KeyBinding Key="Right" Command="{Binding SwipeRightCommand}"/>
-        <!-- Undo swipe -->
+         <!--Undo swipe--> 
         <KeyBinding Key="R" Command="{Binding UndoSwipeCommand}"/>
     </UserControl.InputBindings>
 

@@ -176,6 +176,8 @@ namespace SwipeFlash.Core
         {
             Task.Run(() =>
             {
+                var initialCardList = new List<FlashcardViewModel>(FlashcardCount);
+
                 for (int i = 0; i < FlashcardCount; ++i)
                 {
                     // Get the new card
@@ -188,17 +190,22 @@ namespace SwipeFlash.Core
                     if (i == 0) newCard.HasInput = true;
 
                     // Add the card to the list
-                    _flashcards.Insert(0, newCard);
+                    initialCardList.Insert(0, newCard);
                 }
-
-                // Updates the flashcards property
-                OnPropertyChanged(nameof(Flashcards));
-
-                Task.Delay(1000).ContinueWith((t) =>
+                
+                // Waits for the splash screen animation to start before loading
+                Task.Delay(500).ContinueWith((t) =>
                 {
-                    // Set the application view model's content loaded flag
-                    IoC.Get<ApplicationViewModel>().IsContentLoaded = true;
+                    initialCardList.ForEach((card) =>
+                    {
+                        Flashcards.Add(card);
+                    });
 
+                    Task.Delay(100).ContinueWith((t2) =>
+                    {
+                        // Set the application view model's content loaded flag
+                        IoC.Get<ApplicationViewModel>().IsContentLoaded = true;
+                    });
                 });
             });
         }

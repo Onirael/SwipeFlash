@@ -6,162 +6,162 @@
       "cards": [
         {
           "id": 0,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-29T09:39:02.7283873+00:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 2,
+          "lastSeen": "2020-10-30T13:07:19.6567976+01:00",
+          "lastSeenReversed": "2020-10-30T16:24:38.4556673+01:00"
         },
         {
           "id": 1,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:06:30.8085584+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 2,
+          "reversedSection": 2,
+          "lastSeen": "2020-10-30T16:12:52.5534725+01:00",
+          "lastSeenReversed": "2020-10-30T16:24:32.6089295+01:00"
         },
         {
           "id": 3,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:29.2750498+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T13:08:00.6130836+01:00",
+          "lastSeenReversed": "2020-10-30T17:24:38.2374531+00:00"
         },
         {
           "id": 4,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:30.4184493+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 2,
+          "reversedSection": 3,
+          "lastSeen": "2020-10-30T16:11:57.1814875+01:00",
+          "lastSeenReversed": "2020-10-30T14:54:35.1871761+01:00"
         },
         {
           "id": 5,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-29T09:39:02.9398703+00:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T17:24:34.6626137+00:00",
+          "lastSeenReversed": "2020-10-30T16:24:33.1804993+01:00"
         },
         {
           "id": 6,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-29T09:39:03.3305531+00:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:24:22.2155275+01:00",
+          "lastSeenReversed": "2020-10-30T17:24:37.7306156+00:00"
         }
       ]
     },
     {
       "family": "English to German",
-      "isEnabled": false,
+      "isEnabled": true,
       "cards": [
         {
           "id": 0,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-29T09:39:01.8518417+00:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T13:06:51.7878776+01:00",
+          "lastSeenReversed": "2020-10-30T17:24:35.1104863+00:00"
         },
         {
           "id": 1,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-29T09:39:02.3600621+00:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:24:37.0645297+01:00",
+          "lastSeenReversed": "2020-10-30T17:24:36.1282824+00:00"
         },
         {
           "id": 2,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-29T09:39:01.615163+00:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T17:24:35.3218327+00:00",
+          "lastSeenReversed": "2020-10-30T16:24:38.9406148+01:00"
         }
       ]
     },
     {
       "family": "Test family",
-      "isEnabled": false,
+      "isEnabled": true,
       "cards": [
         {
           "id": 0,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:06:20.624823+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:19:40.3096036+01:00",
+          "lastSeenReversed": "2020-10-30T16:24:30.3272932+01:00"
         },
         {
           "id": 1,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T22:49:46.5300386+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 4,
+          "lastSeen": "2020-10-30T14:54:35.6122283+01:00",
+          "lastSeenReversed": "2020-10-30T16:24:31.4202317+01:00"
         },
         {
           "id": 2,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T22:49:05.1347757+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 2,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:12:51.7009358+01:00",
+          "lastSeenReversed": "2020-10-30T17:24:35.6129198+00:00"
         },
         {
           "id": 3,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:30.7791977+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 2,
+          "lastSeen": "2020-10-30T13:08:19.2423934+01:00",
+          "lastSeenReversed": "2020-10-30T16:12:53.6542693+01:00"
         },
         {
           "id": 4,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:30.0609595+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 2,
+          "reversedSection": 4,
+          "lastSeen": "2020-10-30T16:12:54.6645092+01:00",
+          "lastSeenReversed": "2020-10-30T14:54:36.3607303+01:00"
         },
         {
           "id": 5,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:34:09.1507802+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 2,
+          "lastSeen": "2020-10-30T17:24:36.4070176+00:00",
+          "lastSeenReversed": "2020-10-30T16:11:58.1083674+01:00"
         },
         {
           "id": 6,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:31.6821659+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:24:30.804251+01:00",
+          "lastSeenReversed": "2020-10-30T16:19:45.0857412+01:00"
         },
         {
           "id": 7,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:28.2030691+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 4,
+          "lastSeen": "2020-10-30T14:54:45.7029328+01:00",
+          "lastSeenReversed": "2020-10-30T16:12:00.6422161+01:00"
         },
         {
           "id": 8,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T22:48:50.7553315+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 3,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T13:07:54.3297929+01:00",
+          "lastSeenReversed": "2020-10-30T17:24:35.8996738+00:00"
         },
         {
           "id": 9,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:06:20.3548494+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:24:26.2584958+01:00",
+          "lastSeenReversed": "2020-10-30T16:11:14.7718455+01:00"
         },
         {
           "id": 10,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:31.2045913+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 1,
+          "lastSeen": "2020-10-30T16:24:37.9070034+01:00",
+          "lastSeenReversed": "2020-10-30T14:54:45.0892321+01:00"
         },
         {
           "id": 11,
-          "section": 0,
-          "reversedSection": 0,
-          "lastSeen": "2020-10-28T23:53:32.4362195+01:00",
-          "lastSeenReversed": "2020-10-29T09:39:02.7283873+00:00"
+          "section": 1,
+          "reversedSection": 3,
+          "lastSeen": "2020-10-30T17:24:34.1279561+00:00",
+          "lastSeenReversed": "2020-10-30T16:12:55.7365752+01:00"
         }
       ]
     }

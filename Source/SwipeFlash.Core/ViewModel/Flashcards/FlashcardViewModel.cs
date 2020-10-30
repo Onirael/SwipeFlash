@@ -48,6 +48,11 @@ namespace SwipeFlash.Core
         public string Side2Icon { get; set; }
 
         /// <summary>
+        /// The text of the icon region
+        /// </summary>
+        public string IconText => IsOnSide1 ? Side2Icon : Side1Icon;
+
+        /// <summary>
         /// Whether the card was flipped by the user
         /// </summary>
         public bool IsFlipped { get; set; } = false;
@@ -226,6 +231,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public string CardFamily { get; set; }
 
+        /// <summary>
+        /// The text to display when the card is the end of stack
+        /// </summary>
+        private string EndOfStackText = "End of stack reached";
+
         #endregion
 
         #region Event Handlers
@@ -277,9 +287,6 @@ namespace SwipeFlash.Core
 
             // Initializes the undo swipe command
             UndoSwipeCommand = new RelayCommand(UndoSwipe);
-
-            // Sets the initial side
-            IsOnSide1 = IsFlipped == IsInverted;
 
             // Initializes event handlers
             OnCardSwipeLeft = new EventHandler((ss, ee) => { });
@@ -343,7 +350,7 @@ namespace SwipeFlash.Core
             var flashcardToken = fm.GetFlashcard(CardID, fm.FindUserFamily(CardFamily));
 
             // Updates the card section
-            fm.UpdateCardSection(flashcardToken, false);
+            fm.UpdateCardSection(flashcardToken, false, IsInverted);
         }
 
         /// <summary>
@@ -375,7 +382,7 @@ namespace SwipeFlash.Core
             var flashcardToken = fm.GetFlashcard(CardID, fm.FindUserFamily(CardFamily));
 
             // Updates the card section
-            fm.UpdateCardSection(flashcardToken, true);
+            fm.UpdateCardSection(flashcardToken, true, IsInverted);
         }
 
         /// <summary>
@@ -393,8 +400,7 @@ namespace SwipeFlash.Core
             // Fire undo swipe event
             OnUndoSwipe(this, null);
         }
-
-
+        
         #endregion
 
         #region Public Methods
@@ -466,6 +472,8 @@ namespace SwipeFlash.Core
             if (cardData.IsEndOfStackCard)
             {
                 IsEndOfStackCard = true;
+                Side1Text = EndOfStackText;
+                IsOnSide1 = true;
                 return;
             }
 
@@ -477,6 +485,9 @@ namespace SwipeFlash.Core
             IsInverted = cardData.IsInverted;
             CardID = cardData.FlashcardID;
             CardFamily = cardData.FamilyName;
+
+            // Sets the initial side
+            IsOnSide1 = IsFlipped == IsInverted;
 
             // Sets the edit mode values to the default text
             Side1EditText = Side1Text;

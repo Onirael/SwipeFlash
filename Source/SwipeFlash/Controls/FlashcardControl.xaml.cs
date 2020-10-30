@@ -1,5 +1,6 @@
 ﻿using SwipeFlash.Core;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace SwipeFlash
 {
