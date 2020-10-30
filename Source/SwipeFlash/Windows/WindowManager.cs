@@ -1,4 +1,5 @@
 ﻿using SwipeFlash.Core;
+using System;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -146,8 +147,12 @@ namespace SwipeFlash
             {
                 // If the window is of the given type
                 if (openWindow is BaseWindow baseWindow && baseWindow.BaseWindowType == e.TargetType)
-                    // Destroy it
+                {
+                    // Closes the window and runs the garbage collector
+                    baseWindow.DataContext = null;
                     baseWindow.Close();
+                    GC.Collect();
+                }
             }
 
         }

@@ -24,6 +24,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <Grid>
+
                             <Border CornerRadius="20">
                                 <Border.Effect>
                                     <DropShadowEffect Opacity=".2" BlurRadius="20" ShadowDepth="0"/>

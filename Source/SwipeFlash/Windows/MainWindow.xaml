@@ -101,6 +101,51 @@
                IsHitTestVisible="False"/>
 
         <!--#region Settings Menu-->
+        
+        <!-- Instructions -->
+        <Grid HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="20"
+              Visibility="{Binding ApplicationViewModel.IsContentLoaded, 
+                                   Source={x:Static local:ViewModelLocator.Instance},
+                                   Converter={local:BooleanToCollapsedVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Swipe -->
+            <TextBlock Text="{StaticResource FontAwesome_ArrowKeys}"
+                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       FontFamily="{StaticResource FontAwesomeSolid}"
+                       Margin="10 0"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       FontSize="{StaticResource FontSizeLarge}"
+                       Grid.Row="0" Grid.Column="0"/>
+            <TextBlock Text="Swipe"
+                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       FontSize="{StaticResource FontSizeLarge}"
+                       Grid.Row="0" Grid.Column="1"/>
+
+            <!-- Swipe Space -->
+            <TextBlock Text="SPACE"
+                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       FontFamily="{StaticResource LGCBold}"
+                       Margin="10 0"
+                       VerticalAlignment="Bottom"
+                       FontSize="{StaticResource FontSizeRegular}"
+                       Grid.Row="1" Grid.Column="0"/>
+            <TextBlock Text="Flip card"
+                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       FontSize="{StaticResource FontSizeLarge}"
+                       Grid.Row="1" Grid.Column="1"/>
+        </Grid>
 
         <!-- Settings menu backdrop -->
         <Border Background="#80000000"

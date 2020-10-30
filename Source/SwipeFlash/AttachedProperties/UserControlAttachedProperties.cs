@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SwipeFlash
@@ -9,7 +10,10 @@ namespace SwipeFlash
         {
             if ((bool)e.NewValue && sender is FrameworkElement element)
             {
+                // Removes the framework element from its parents and garbage collects its VM
+                element.DataContext = null;
                 element.RemoveFromParent();
+                GC.Collect();
             }
         }
     }

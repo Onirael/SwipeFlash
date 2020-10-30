@@ -17,12 +17,12 @@
                 <!-- Buttons -->
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            
+
             <!--#region Cards-->
 
             <!-- Active and queued flashcards -->
             <ItemsControl Grid.Row="0" ItemsSource="{Binding Flashcards}">
-                
+
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid/>
@@ -35,12 +35,12 @@
                         <local:FlashcardControl Opacity="1"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-                
+
             </ItemsControl>
 
             <!-- The cards that are pending destroy -->
             <ItemsControl Grid.Row="0" ItemsSource="{Binding FlashcardHistory}">
-                
+
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid/>
@@ -52,11 +52,11 @@
                         <local:FlashcardControl/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-                
+
             </ItemsControl>
 
             <!--#endregion-->
-            
+
             <!--#region Buttons-->
 
             <StackPanel Grid.Row="1" 
@@ -70,7 +70,7 @@
                 <Button Style="{StaticResource SettingsButton}"
                         Command="{Binding SettingsButtonCommand}"
                         Margin="20 0 0 0"/>
-                
+
                 <Button Style="{StaticResource RoundIconButton}"
                         Content="{StaticResource FontAwesome_Edit}"
                         Foreground="{StaticResource SwipeFlashYellowBrush}"
@@ -106,9 +106,7 @@
             </StackPanel>
 
             <!--#endregion-->
-            
-        </Grid>
 
+        </Grid>
     </Viewbox>
-    
 </UserControl>

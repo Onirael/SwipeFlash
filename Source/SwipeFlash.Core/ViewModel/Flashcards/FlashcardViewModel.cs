@@ -416,6 +416,7 @@ namespace SwipeFlash.Core
             // Swipes the card out
             SwipeLeft();
 
+            // Gets the flashcard manager to delete the card
             IoC.Get<FlashcardManager>().DeleteCard(CardFamily, CardID);
         }
 
@@ -513,6 +514,9 @@ namespace SwipeFlash.Core
         public void DestroyCard()
         {
             IsPendingDestroy = true;
+
+            // Unsubscribe to events for garbage collection
+            Properties.Settings.Default.PropertyChanged -= OnSettingsUpdated;
         }
 
         /// <summary>
