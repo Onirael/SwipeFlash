@@ -205,7 +205,25 @@ namespace SwipeFlash
             else
                 // Fade the element out
                 await element.FadeOutAsync(IsFirstLoad ? 0f : 0.4f);
+        }
+    }
 
+    /// <summary>
+    /// Animates a framework element, fading it in
+    /// if the value is set to false, the animation is reversed. 
+    /// Uses the background opacity value instead of the base opacity value
+    /// </summary>
+    public class AnimateBackgroundFadeInProperty : AnimateBaseProperty<AnimateFadeInProperty>
+    {
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            //If the the animation is run forward
+            if (value)
+                // Fade the element in
+                await element.FadeInAsync(IsFirstLoad ? 0f : 0.4f, true);
+            else
+                // Fade the element out
+                await element.FadeOutAsync(IsFirstLoad ? 0f : 0.4f, true);
         }
     }
 

@@ -200,13 +200,13 @@ namespace SwipeFlash
         /// <param name="element">The framework element to animate</param>
         /// <param name="duration">The duration of the animation in seconds</param>
         /// <returns></returns>
-        public static async Task FadeInAsync(this FrameworkElement element, float duration = 0.5f)
+        public static async Task FadeInAsync(this FrameworkElement element, float duration = 0.5f, bool useBackgroundOpacity=false)
         {
             // Create the storyboard
             var sb = new Storyboard();
 
             // Add the fade in animation
-            sb.AddFadeIn(duration);
+            sb.AddFadeIn(duration, useBackgroundOpacity:useBackgroundOpacity);
 
             // Begin the animation
             sb.Begin(element);
@@ -221,13 +221,13 @@ namespace SwipeFlash
         /// <param name="element">The framework element to animate</param>
         /// <param name="duration">The duration of the animation in seconds</param>
         /// <returns></returns>
-        public static async Task FadeOutAsync(this FrameworkElement element, float duration = 0.5f)
+        public static async Task FadeOutAsync(this FrameworkElement element, float duration = 0.5f, bool useBackgroundOpacity=false)
         {
             // Create the storyboard
             var sb = new Storyboard();
 
             // Add the fade out animation
-            sb.AddFadeOut(duration);
+            sb.AddFadeOut(duration, useBackgroundOpacity:useBackgroundOpacity);
 
             // Begin the animation
             sb.Begin(element);

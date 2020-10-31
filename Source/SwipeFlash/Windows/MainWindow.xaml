@@ -103,7 +103,7 @@
         <!--#region Settings Menu-->
         
         <!-- Instructions -->
-        <Grid HorizontalAlignment="Right"
+        <Grid HorizontalAlignment="Left"
               VerticalAlignment="Bottom"
               Margin="20"
               Visibility="{Binding ApplicationViewModel.IsContentLoaded, 
@@ -121,7 +121,7 @@
 
             <!-- Swipe -->
             <TextBlock Text="{StaticResource FontAwesome_ArrowKeys}"
-                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       Foreground="{StaticResource BackgroundLightBrush}"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Margin="10 0"
                        VerticalAlignment="Bottom"
@@ -129,30 +129,33 @@
                        FontSize="{StaticResource FontSizeLarge}"
                        Grid.Row="0" Grid.Column="0"/>
             <TextBlock Text="Swipe"
-                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       Foreground="{StaticResource BackgroundLightBrush}"
                        FontSize="{StaticResource FontSizeLarge}"
+                       FontFamily="{StaticResource LGCBold}"
                        Grid.Row="0" Grid.Column="1"/>
 
             <!-- Swipe Space -->
             <TextBlock Text="SPACE"
-                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       Foreground="{StaticResource BackgroundLightBrush}"
                        FontFamily="{StaticResource LGCBold}"
                        Margin="10 0"
-                       VerticalAlignment="Bottom"
+                       VerticalAlignment="Center"
                        FontSize="{StaticResource FontSizeRegular}"
                        Grid.Row="1" Grid.Column="0"/>
             <TextBlock Text="Flip card"
-                       Foreground="{StaticResource ForegroundDarkBrush}"
+                       Foreground="{StaticResource BackgroundLightBrush}"
                        FontSize="{StaticResource FontSizeLarge}"
+                       FontFamily="{StaticResource LGCBold}"
                        Grid.Row="1" Grid.Column="1"/>
         </Grid>
 
         <!-- Settings menu backdrop -->
-        <Border Background="#80000000"
-                IsHitTestVisible="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
+        <!--<Border IsHitTestVisible="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
                                    Source={x:Static local:ViewModelLocator.Instance}}"
-                local:AnimateFadeInProperty.Value ="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
-                                                     Source={x:Static local:ViewModelLocator.Instance}}"/>
+                local:AnimateBackgroundFadeInProperty.Value ="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
+                                                               Source={x:Static local:ViewModelLocator.Instance}}"
+                Opacity="0.5">
+        </Border>-->
 
         <!-- Settings menu control -->
         <local:SettingsMenuControl VerticalAlignment="Top"

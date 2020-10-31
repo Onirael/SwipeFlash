@@ -258,7 +258,7 @@ namespace SwipeFlash
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="duration">The duration of the animation</param>
         /// <param name="decelerationRatio">The rate of deceleration</param>
-        public static void AddFadeIn(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        public static void AddFadeIn(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f, bool useBackgroundOpacity=false)
         {
             var animation = new DoubleAnimation
             {
@@ -268,7 +268,7 @@ namespace SwipeFlash
             };
 
             // Set the target property name
-            Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
+            Storyboard.SetTargetProperty(animation, new PropertyPath(useBackgroundOpacity ? "Background.Opacity" : "Opacity"));
 
             // Add this to the storyboard
             storyboard.Children.Add(animation);
@@ -280,7 +280,7 @@ namespace SwipeFlash
         /// <param name="storyboard"></param>
         /// <param name="duration"></param>
         /// <param name="decelerationRatio"></param>
-        public static void AddFadeOut(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f)
+        public static void AddFadeOut(this Storyboard storyboard, float duration, float decelerationRatio = 0.9f, bool useBackgroundOpacity=false)
         {
             var animation = new DoubleAnimation
             {
@@ -290,7 +290,7 @@ namespace SwipeFlash
             };
 
             // Set the target property name
-            Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
+            Storyboard.SetTargetProperty(animation, new PropertyPath(useBackgroundOpacity ? "Background.Opacity" : "Opacity"));
 
             // Add this to the storyboard
             storyboard.Children.Add(animation);
