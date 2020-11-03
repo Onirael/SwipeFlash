@@ -1,5 +1,3 @@
-D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Unsplasharp.xml
-D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.dll.config
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.dll
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\SwipeFlash.Core.pdb
@@ -145,8 +143,10 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Microsoft.Extensions.Primi
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Newtonsoft.Json.xml
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Ninject.xml
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\bin\Debug\Unsplasharp.xml
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csprojAssemblyReference.cache
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.CoreCompileInputs.cache
+D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.Fody.CopyLocal.cache
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csproj.CopyComplete
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.dll
 D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.pdb
-D:\Unreal\SwipeFlash\Source\SwipeFlash.Core\obj\Debug\SwipeFlash.Core.csprojAssemblyReference.cache

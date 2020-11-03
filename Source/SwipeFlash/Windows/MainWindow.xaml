@@ -1,15 +1,15 @@
 ﻿<local:BaseWindow x:Class="SwipeFlash.MainWindow" 
-        x:TypeArguments="core:WindowViewModel"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SwipeFlash"
-        xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
-        mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        x:Name="Page"
-        Title="Swipe Flash" Height="450" Width="800">
+                  x:TypeArguments="core:WindowViewModel"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:SwipeFlash"
+                  xmlns:core="clr-namespace:SwipeFlash.Core;assembly=SwipeFlash.Core"
+                  mc:Ignorable="d"
+                  WindowStartupLocation="CenterScreen"
+                  x:Name="Page"
+                  Title="Swipe Flash" Height="450" Width="800">
 
     <Grid>
 
@@ -41,30 +41,26 @@
             </Border.OpacityMask>
         </Border>
 
-        <!-- Right border -->
-        <Border Background="#00ff00">
-            <Border.OpacityMask>
+        <!-- Green border -->
+        <Border local:AnimateGradientBrushXRadiusProperty.Value="{Binding IsCardSwipedRight}">
+            <Border.Background>
                 <RadialGradientBrush GradientOrigin="1.1 .5" Center="1.1 .5" Opacity="1" RadiusX=".35" RadiusY="1">
-                    <RadialGradientBrush.GradientStops>
-                        <GradientStop Offset="0" Color="#ffffffff"/>
-                        <GradientStop Offset=".3" Color="#80ffffff"/>
-                        <GradientStop Offset="1" Color="#00ffffff"/>
-                    </RadialGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="#ff00ff00"/>
+                    <GradientStop Offset=".3" Color="#8000ff00"/>
+                    <GradientStop Offset="1" Color="#0000ff00"/>
                 </RadialGradientBrush>
-            </Border.OpacityMask>
+            </Border.Background>
         </Border>
 
-        <!-- Left border -->
-        <Border Background="#ff2600">
-            <Border.OpacityMask>
+        <!-- Red border -->
+        <Border local:AnimateGradientBrushXRadiusProperty.Value="{Binding IsCardSwipedLeft}">
+            <Border.Background>
                 <RadialGradientBrush GradientOrigin="-0.1 .5" Center="-0.1 .5" Opacity="1" RadiusX=".3" RadiusY="1">
-                    <RadialGradientBrush.GradientStops>
-                        <GradientStop Offset="0" Color="#ffffffff"/>
-                        <GradientStop Offset=".3" Color="#80ffffff"/>
-                        <GradientStop Offset="1" Color="#00ffffff"/>
-                    </RadialGradientBrush.GradientStops>
+                    <GradientStop Offset="0" Color="#ffff0000"/>
+                    <GradientStop Offset=".3" Color="#80ff0000"/>
+                    <GradientStop Offset="1" Color="#00ff0000"/>
                 </RadialGradientBrush>
-            </Border.OpacityMask>
+            </Border.Background>
         </Border>
 
         <!--#endregion-->
@@ -93,7 +89,7 @@
 
 
         <!-- Splash screen -->
-        <Image Source="/Images/SwipeFlashIcon.ico"
+        <Image Source="pack://application:,,,/Resources/SwipeFlashIcon.ico"
                Margin="50"
                local:AnimateScaleAndFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
                                                            Source={x:Static local:ViewModelLocator.Instance},
@@ -106,9 +102,8 @@
         <Grid HorizontalAlignment="Left"
               VerticalAlignment="Bottom"
               Margin="20"
-              Visibility="{Binding ApplicationViewModel.IsContentLoaded, 
-                                   Source={x:Static local:ViewModelLocator.Instance},
-                                   Converter={local:BooleanToCollapsedVisibilityConverter}}">
+              Visibility="{Binding InstructionsVisible, Converter={local:BooleanToCollapsedVisibilityConverter}}">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>

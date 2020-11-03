@@ -212,35 +212,5 @@ namespace SwipeFlash.Core
 
             return true;
         }
-
-        /// <summary>
-        /// Whether a file is available to write on in the main thread
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static bool IsFileReady(string fileName)
-        {
-            // If the file can be opened for exclusive access it means that the file
-            // is no longer locked by another process.
-            try
-            {
-                using (Stream stream = new FileStream(fileName, FileMode.Open))
-                {
-                    if (stream != null)
-                    {
-                        stream.Close();
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }

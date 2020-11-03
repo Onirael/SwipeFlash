@@ -40,5 +40,12 @@
 
     <Color x:Key="LightBlue">#99ADFF</Color>
     <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
+    
+    <!-- Background colors -->
+    <Color x:Key="GradientGreen">#00ff00</Color>
+    <SolidColorBrush x:Key="GradientGreenBrush" Color="{StaticResource GradientGreen}"/>
+
+    <Color x:Key="GradientRed">#ff2600</Color>
+    <SolidColorBrush x:Key="GradientRedBrush" Color="{StaticResource GradientRed}"/>
 
 </ResourceDictionary>

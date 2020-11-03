@@ -41,7 +41,7 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Contains the raw string instruction for every given possible value of this variable
         /// </summary>
-        public Dictionary<string, ParserValueInstruction> ValueInstructions { get; set; }
+        public Dictionary<string, List<ParserValueInstruction>> ValueInstructions { get; set; }
 
         private bool _isSyntaxValid = true;
         /// <summary>
@@ -61,7 +61,7 @@ namespace SwipeFlash.Core
                                          ref List<ParserLineVariable> lineVars)
         {
             // Initializes the dictionary
-            ValueInstructions = new Dictionary<string, ParserValueInstruction>();
+            ValueInstructions = new Dictionary<string, List<ParserValueInstruction>>();
 
             // Check if the instruction is empty
             if (rawVariableInstruction.Length == 0)
@@ -93,8 +93,16 @@ namespace SwipeFlash.Core
                 var rx = new Regex("\"(.*)\"");
                 valueStr = rx.Match(valueStr).Groups[1].Value;
 
-                // Creates a new dictionary entry with the value name and the raw instruction
-                ValueInstructions.Add(valueStr, MakeValueInstruction(splitValueInstruction[1], ref lineVars));
+                // Creates the value instruction
+                var newInstruction = MakeValueInstruction(splitValueInstruction[1], ref lineVars);
+
+                // If the value already has an instruction
+                if (ValueInstructions.ContainsKey(valueStr))
+                    // Adds the instruction to the list
+                    ValueInstructions[valueStr].Add(newInstruction);
+                else
+                    // Create a new list
+                    ValueInstructions.Add(valueStr, new List<ParserValueInstruction>() { newInstruction });
             }
         }
 
@@ -119,42 +127,46 @@ namespace SwipeFlash.Core
                 return false;
 
             // For each possible value
-            foreach (KeyValuePair<string, ParserValueInstruction> entry in ValueInstructions)
+            foreach (KeyValuePair<string, List<ParserValueInstruction>> entry in ValueInstructions)
             {
                 // If the entry key matches the variable value
                 if (splitLine[variableIndex] == entry.Key)
                 {
-                    var instruction = entry.Value;                    
+                    var instructionList = entry.Value;
 
-                    // For each operator in the operators array
-                    foreach (var item in instruction.Operators.Select((operatorChar, index) => new { index, operatorChar }))
+                    // For each instruction
+                    foreach (var instruction in instructionList)
                     {
-                        var opElement1 = instruction.InstructionElements[item.index];
-                        // If the element starts and ends with \" remove the quotation marks
-                        if (opElement1[0] == '\"' && opElement1.Last() == '\"')
-                            opElement1 = opElement1.Replace("\"", "");
-                        // If it is a variable name, get the variable
-                        else
+                        // For each operator in the operators array
+                        foreach (var item in instruction.Operators.Select((operatorChar, index) => new { index, operatorChar }))
                         {
-                            // Gets the variable
-                            int varIndex = lineVars.FindIndex(variable => variable.VariableName == opElement1);
-                            opElement1 = splitLine[varIndex];
-                        }
+                            var opElement1 = instruction.InstructionElements[item.index];
+                            // If the element starts and ends with \" remove the quotation marks
+                            if (opElement1[0] == '\"' && opElement1.Last() == '\"')
+                                opElement1 = opElement1.Replace("\"", "");
+                            // If it is a variable name, get the variable
+                            else
+                            {
+                                // Gets the variable
+                                int varIndex = lineVars.FindIndex(variable => variable.VariableName == opElement1);
+                                opElement1 = splitLine[varIndex];
+                            }
 
-                        var opElement2 = instruction.InstructionElements[item.index + 1];
-                        // If the element starts and ends with \" remove the quotation marks
-                        if (opElement2[0] == '\"' && opElement2.Last() == '\"')
-                            opElement2 = opElement2.Replace("\"", "");
-                        // If it is a variable name, get the variable
-                        else
-                        {
-                            // Gets the variable
-                            int varIndex = lineVars.FindIndex(variable => variable.VariableName == opElement2);
-                            opElement2 = splitLine[varIndex];
-                        }
+                            var opElement2 = instruction.InstructionElements[item.index + 1];
+                            // If the element starts and ends with \" remove the quotation marks
+                            if (opElement2[0] == '\"' && opElement2.Last() == '\"')
+                                opElement2 = opElement2.Replace("\"", "");
+                            // If it is a variable name, get the variable
+                            else
+                            {
+                                // Gets the variable
+                                int varIndex = lineVars.FindIndex(variable => variable.VariableName == opElement2);
+                                opElement2 = splitLine[varIndex];
+                            }
 
-                        // Sets the appropriate variable to its new value
-                        splitLine[instruction.AssignedVar] = ApplyOperation(item.operatorChar, opElement1, opElement2);
+                            // Sets the appropriate variable to its new value
+                            splitLine[instruction.AssignedVar] = ApplyOperation(item.operatorChar, opElement1, opElement2);
+                        }
                     }
                 }
             }

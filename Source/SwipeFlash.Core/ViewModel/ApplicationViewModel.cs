@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Unsplasharp;
 
 namespace SwipeFlash.Core
@@ -33,6 +34,11 @@ namespace SwipeFlash.Core
         public bool IllustrationsEnabled { get; private set; }
 
         /// <summary>
+        /// Whether the instructions are visible
+        /// </summary>
+        public bool InstructionsEnabled { get; private set; }
+
+        /// <summary>
         /// Whether the "server unreachable" message should be displayed
         /// </summary>
         public bool IsNetworkErrorMessageVisible => !IsServerReachable && IllustrationsEnabled;
@@ -53,8 +59,19 @@ namespace SwipeFlash.Core
             {
                 // Updates the current value
                 _isContentLoaded = value;
-                // Sets the content visibility after a delay
-                Task.Delay((int)(ContentAppearDelay * 1000)).ContinueWith((t) => { IsContentVisible = true; });
+                if (value)
+                {
+                    // Sets the content visibility after a delay
+                    Task.Delay((int)(ContentAppearDelay * 1000)).ContinueWith((t) =>
+                    {
+                        IsContentVisible = true;
+                        OnContentLoaded(null, null);
+                    });
+                }
+                else
+                {
+                    IsContentVisible = false;
+                }
             }
         }
 
@@ -77,6 +94,11 @@ namespace SwipeFlash.Core
         /// The checker used to check for internet availability
         /// </summary>
         public HttpEndpointChecker InternetChecker { get; set; }
+
+        /// <summary>
+        /// The view model of the main window
+        /// </summary>
+        public WindowViewModel MainWindowVM { get; set; }
 
         #endregion
 
@@ -101,6 +123,16 @@ namespace SwipeFlash.Core
         /// confirmation window
         /// </summary>
         public EventHandler<bool> OnConfirmation;
+
+        /// <summary>
+        /// Fired when the window data content has finished loading
+        /// </summary>
+        public EventHandler OnContentLoaded;
+
+        /// <summary>
+        /// Fired when a key has been pressed while on the main window
+        /// </summary>
+        public EventHandler<Key> OnPreviewKeyDown;
 
         #endregion
 
@@ -183,8 +215,8 @@ namespace SwipeFlash.Core
                                   Directory.GetParent(
                                   Directory.GetCurrentDirectory()).ToString()).ToString());
 
-            StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData_TEST.JSON";
-            UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData_TEST.JSON";
+            StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData.JSON";
+            UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
         }
 
         #endregion
@@ -230,6 +262,11 @@ namespace SwipeFlash.Core
                     IllustrationsEnabled = Properties.Settings.Default.IllustrationsEnabled;
                     // Run the network checker
                     if (IllustrationsEnabled) InternetChecker.RunChecker = true;
+                    break;
+
+                case nameof(Properties.Settings.Default.ShowInstructions):
+                    // Update the local property
+                    InstructionsEnabled = Properties.Settings.Default.ShowInstructions;
                     break;
 
                 default:

@@ -58,16 +58,6 @@ namespace SwipeFlash.Core
         public bool IsFlipped { get; set; } = false;
 
         /// <summary>
-        /// Whether the card takes in the input by the user
-        /// </summary>
-        public bool HasInput { get; set; } = false;
-
-        /// <summary>
-        /// Whether the input is currently enabled for this card
-        /// </summary>
-        public bool IsInputEnabled => HasInput && !IsEditContentVisible;
-
-        /// <summary>
         /// Whether the card was swiped left by the user
         /// </summary>
         public bool IsSwipedLeft { get; private set; } = false;
@@ -240,11 +230,11 @@ namespace SwipeFlash.Core
 
         #region Event Handlers
 
-        public EventHandler OnCardSwipeLeft;
-
-        public EventHandler OnCardSwipeRight;
-
-        public EventHandler OnUndoSwipe;
+        /// <summary>
+        /// An event handler fired when a card has been swiped, 
+        /// the parameter is true if the card has been swipe to the right
+        /// </summary>
+        public EventHandler<bool> OnCardSwipe;
 
         #endregion
 
@@ -265,11 +255,6 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand SwipeRightCommand { get; set; }
 
-        /// <summary>
-        /// Undo the previous swipe
-        /// </summary>
-        public ICommand UndoSwipeCommand { get; set; }
-
         #endregion
 
         #region Constructor
@@ -285,13 +270,8 @@ namespace SwipeFlash.Core
             // Initializes the flip command
             SwipeRightCommand = new RelayCommand(SwipeRight);
 
-            // Initializes the undo swipe command
-            UndoSwipeCommand = new RelayCommand(UndoSwipe);
-
             // Initializes event handlers
-            OnCardSwipeLeft = new EventHandler((ss, ee) => { });
-            OnCardSwipeRight = new EventHandler((ss, ee) => { });
-            OnUndoSwipe = new EventHandler((ss, ee) => { });
+            OnCardSwipe = new EventHandler<bool>((ss, ee) => { });
 
             // Hook the OnSettingsUpdated method to settings' Property changed
             Properties.Settings.Default.PropertyChanged += OnSettingsUpdated;
@@ -337,7 +317,7 @@ namespace SwipeFlash.Core
             if (!IsSwipedRight) IsSwipedLeft = true;
 
             // Fire swipe left event
-            OnCardSwipeLeft(this, null);
+            OnCardSwipe(this, false);
 
             // If it is the end of the stack, quit
             if (IsEndOfStackCard)
@@ -351,6 +331,9 @@ namespace SwipeFlash.Core
 
             // Updates the card section
             fm.UpdateCardSection(flashcardToken, false, IsInverted);
+
+            // Plays a fail sound
+            IoC.Get<SoundService>().PlaySound(SoundType.Fail);
         }
 
         /// <summary>
@@ -369,7 +352,7 @@ namespace SwipeFlash.Core
             if (!IsSwipedLeft) IsSwipedRight = true;
 
             // Fire swipe right event
-            OnCardSwipeRight(this, null);
+            OnCardSwipe(this, true);
 
             // If it is the end of stack card, quit
             if (IsEndOfStackCard)
@@ -383,22 +366,9 @@ namespace SwipeFlash.Core
 
             // Updates the card section
             fm.UpdateCardSection(flashcardToken, true, IsInverted);
-        }
 
-        /// <summary>
-        /// Undo the previous swipe
-        /// </summary>
-        private void UndoSwipe()
-        {
-            // Get application view model
-            var appVM = IoC.Get<ApplicationViewModel>();
-
-            // Quit if settings menu is visible
-            if (appVM.IsSettingsMenuVisible)
-                return;
-
-            // Fire undo swipe event
-            OnUndoSwipe(this, null);
+            // Plays a success sound
+            IoC.Get<SoundService>().PlaySound(SoundType.Success);
         }
         
         #endregion

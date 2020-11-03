@@ -105,6 +105,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public EventHandler OnFamiliesUpdated;
 
+        /// <summary>
+        /// Fires when a queue reset has been issued
+        /// </summary>
+        public EventHandler OnQueueReset;
+
         #endregion
 
         #region Constructor
@@ -128,6 +133,9 @@ namespace SwipeFlash.Core
 
             // Fills the card queue when the families
             OnFamiliesUpdated += FillCardQueue;
+
+            // Resets the queues when the families have been updated
+            OnFamiliesUpdated += ResetQueues;
         }
 
         #endregion
@@ -320,6 +328,8 @@ namespace SwipeFlash.Core
 
             // Updates the files
             JSONWriter.UpdateJSONFiles();
+
+            ResetQueues(this, null);
         }
 
         /// <summary>
@@ -593,6 +603,25 @@ namespace SwipeFlash.Core
             return true;
         }
 
+        /// <summary>
+        /// Clears all queues, showing a loading screen
+        /// </summary>
+        public void ResetQueues(object sender, EventArgs e)
+        {
+            // If the queue has not yet been initialized
+            if (!IsQueueInitialized)
+                return;
+
+            // Sets the loading flag
+            IoC.Get<ApplicationViewModel>().IsContentLoaded = false;
+            // Clears the local card queue
+            CardQueue.Clear();
+            // Sets the queue as not initialized
+            IsQueueInitialized = false;
+            // Refills the local queue
+            FillCardQueue(this, null);
+        }
+
         #endregion
 
         #region Private Helpers
@@ -644,9 +673,11 @@ namespace SwipeFlash.Core
         {
             Task.Run(() =>
             {
+                // Update the active flashcard count
+                UpdateActiveFlashcardCount();
+
                 // While the card queue isn't full
                 while (CardQueue.Count < CardQueueMaxLength)
-                    // Add card to queue
                     AddFlashcardToQueue();
 
                 // If the array has not yet been flagged as initialized
@@ -658,6 +689,65 @@ namespace SwipeFlash.Core
                     // Fire the OnQueueInitialized event handler
                     OnQueueInitialized?.Invoke(this, null);
                 }
+            });
+        }
+
+        /// <summary>
+        /// Updates the active flashcard count
+        /// </summary>
+        private void UpdateActiveFlashcardCount()
+        {
+            // Initializes the total count
+            int totalCount = 0;
+
+            // Iterate all families
+            foreach (var family in FlashcardFamilies)
+            {
+                // If the family is disabled, quit
+                if (!family.IsEnabled)
+                    continue;
+
+                // Gets the family token
+                var familyToken = FindUserFamily(family.Name);
+
+                // For each section
+                for (int i = 0; i < 5; i++)
+                {
+                    // If the active flashcards found so far match or exceed the max queue size
+                    if (totalCount >= CardQueueMaxLength)
+                    {
+                        // Set the active flashcards count to the max queue length and quit
+                        ActiveFlashcardCount = CardQueueMaxLength;
+                        return;
+                    }
+
+                    // If it is the first section
+                    if (i <= 1)
+                    {
+                        // Adds the section flashcard count to the total count
+                        totalCount += GetSectionFlashcards(i, familyToken).Count();
+                        totalCount += GetSectionFlashcards(i, familyToken, true).Count();
+                    }
+                    else
+                    {
+                        // Adds the expired flashcard count to the total count
+                        totalCount += GetExpiredFlashcards(i, family.Name).Count();
+                        totalCount += GetExpiredFlashcards(i, family.Name, true).Count();
+                    }
+                }
+            }
+
+            ActiveFlashcardCount = totalCount;
+        }
+
+        /// <summary>
+        /// Adds an empty card to the queue
+        /// </summary>
+        private void AddEmptyFlashcardToQueue()
+        {
+            CardQueue.Add(new FlashcardData()
+            {
+                IsEndOfStackCard = true,
             });
         }
 
@@ -707,8 +797,9 @@ namespace SwipeFlash.Core
                 return;
 
             // Whether the card is already in the queue
-            bool isCardInQueue = CardQueue.Any(card => card.FamilyName == enabledFamilies[selectedFamily].Name && 
+            bool isCardInQueue = CardQueue.ToList().Any(card => card.FamilyName == enabledFamilies[selectedFamily].Name && 
                                                        card.FlashcardID == flashcardID);
+
             // If the card is already in the queue, quit
             if (isCardInQueue)
                 return;

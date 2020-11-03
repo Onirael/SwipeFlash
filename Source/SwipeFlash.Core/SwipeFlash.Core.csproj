@@ -175,11 +175,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModels\ApplicationSettings.cs" />
     <Compile Include="DataModels\AsyncObservableCollection.cs" />
     <Compile Include="DataModels\CategoryData.cs" />
     <Compile Include="DataModels\ParserData.cs" />
     <Compile Include="DataModels\FlashcardFamilyData.cs" />
+    <Compile Include="DataModels\SoundType.cs" />
     <Compile Include="DataModels\WindowArgs.cs" />
     <Compile Include="DataModels\WindowType.cs" />
     <Compile Include="Data\FlashcardSelectionData.cs" />
@@ -190,9 +190,8 @@
     <Compile Include="Helpers\FlashcardFamilyDataHelpers.cs" />
     <Compile Include="Parser\ParserIgnoreRule.cs" />
     <Compile Include="Parser\ParserVariableInstruction.cs" />
+    <Compile Include="ViewModel\Base\SoundService.cs" />
     <Compile Include="ViewModel\Base\WindowService.cs" />
-    <None Include="Data\StaticData_TEST.JSON" />
-    <None Include="Data\UserData_TEST.JSON" />
     <None Include="Data\UserData.JSON" />
     <None Include="Data\StaticData.JSON" />
     <Compile Include="DataModels\FlashcardData.cs" />

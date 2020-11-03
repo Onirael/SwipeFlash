@@ -138,7 +138,8 @@ namespace SwipeFlash.Core
                     ["id"] = cardID,
                     ["section"] = 0,
                     ["reversedSection"] = 0,
-                    ["lastSeen"] = DateTimeOffset.MinValue.ToString()
+                    ["lastSeen"] = DateTimeOffset.MinValue.ToString(),
+                    ["lastSeenReversed"] = DateTimeOffset.MinValue.ToString(),
                 };
 
                 // Adds the card to the array
@@ -175,6 +176,10 @@ namespace SwipeFlash.Core
             // Writes the data to the files
             Task.Run(() => 
             {
+                // Waits for the files to be available
+                while (!IsFileReady(staticFile) ||
+                       !IsFileReady(userFile)) { }
+
                 File.WriteAllText(staticFile, newStaticData);
                 File.WriteAllText(userFile, newUserData);
             });
@@ -215,7 +220,8 @@ namespace SwipeFlash.Core
                             ["id"] = (int)staticCard["id"],
                             ["section"] = 0,
                             ["reversedSection"] = 0,
-                            ["lastSeen"] = DateTimeOffset.MinValue.ToString()
+                            ["lastSeen"] = DateTimeOffset.MinValue.ToString(),
+                            ["lastSeenReversed"] = DateTimeOffset.MinValue.ToString(),
                         };
 
                         // Adds it to the array
@@ -245,12 +251,44 @@ namespace SwipeFlash.Core
                         ["id"] = (int)staticCard["id"],
                         ["section"] = 0,
                         ["reversedSection"] = 0,
-                        ["lastSeen"] = DateTimeOffset.MinValue.ToString()
+                        ["lastSeen"] = DateTimeOffset.MinValue.ToString(),
+                        ["lastSeenReversed"] = DateTimeOffset.MinValue.ToString(),
                     };
 
                     // Adds it to the array
                     userCardsArray.Add(newUserCard);
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// Whether a file is available to write on in the main thread
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool IsFileReady(string fileName)
+        {
+            // If the file can be opened for exclusive access it means that the file
+            // is no longer locked by another process.
+            try
+            {
+                using (Stream stream = new FileStream(fileName, FileMode.Open))
+                {
+                    if (stream != null)
+                    {
+                        stream.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }

@@ -42,6 +42,9 @@ namespace SwipeFlash.Core
             
             // Bind to a single instance of Window service
             Kernel.Bind<WindowService>().ToConstant(new WindowService());
+
+            // Bind to a single instance of Sound service
+            Kernel.Bind<SoundService>().ToConstant(new SoundService());
         }
 
         #endregion

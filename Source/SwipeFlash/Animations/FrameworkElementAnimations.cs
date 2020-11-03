@@ -315,6 +315,30 @@ namespace SwipeFlash
             // Wait for it to finish
             await Task.Delay((int)(duration * 1000));
         }
+        
+        /// <summary>
+        /// Scale up the gradient radius on the X axis
+        /// </summary>
+        /// <param name="element">The framework element to animate</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <returns></returns>
+        public static async Task BurstGradientBrushXRadiusAsync(this FrameworkElement element, double minScale, float duration = 0.5f)
+        {
+            element.SetElementTransform();
+
+            // Create the storyboard
+            var sb = new Storyboard();
+
+            // Add the scale up animation
+            sb.AddBurstGradientBrushX(duration, minScale);
+
+            // Begin the animation
+            sb.Begin(element);
+
+            // Wait for it to finish
+            await Task.Delay((int)(duration * 1000));
+
+        }
 
         #region Private Helpers
 

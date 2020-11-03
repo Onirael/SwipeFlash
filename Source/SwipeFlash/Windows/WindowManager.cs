@@ -151,10 +151,10 @@ namespace SwipeFlash
                     // Closes the window and runs the garbage collector
                     baseWindow.DataContext = null;
                     baseWindow.Close();
+                    baseWindow.Owner.Focus();
                     GC.Collect();
                 }
             }
-
         }
 
         #endregion 

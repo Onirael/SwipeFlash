@@ -245,6 +245,21 @@ namespace SwipeFlash
         }
     }
 
+    /// <summary>
+    /// Animates a gradient, creating a burst effect on its X axis radius property
+    /// </summary>
+    public class AnimateGradientBrushXRadiusProperty : AnimateBaseProperty<AnimateGradientBrushXRadiusProperty>
+    {
+        protected async override void RunAnimation(FrameworkElement element, bool value)
+        {
+            if (value)
+            {
+                // Scale the gradient's x radius up
+                await element.BurstGradientBrushXRadiusAsync(0.35, 1f);
+            }
+        }
+    }
+
     #region Instances
 
     /// <summary>
@@ -324,7 +339,7 @@ namespace SwipeFlash
     /// </summary>
     public class AnimateTextInputSlideDownProperty : AnimateBaseProperty<AnimateTextInputSlideDownProperty>
     {
-        protected int SlideDistance = -50;
+        protected int SlideDistance = -75;
 
         // Initializes constants
         public AnimateTextInputSlideDownProperty() : base() { AnimDuration = 0.2f; }

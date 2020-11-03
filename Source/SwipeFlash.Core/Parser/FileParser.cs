@@ -362,6 +362,10 @@ namespace SwipeFlash.Core
                 // Stores the instruction
                 var instruction = lineVars[i].VariableInstruction;
 
+                // If the instruction is invalid, continue
+                if (instruction == null)
+                    continue;
+
                 // For each instruction key value
                 foreach(var keyValue in instruction.ValueInstructions.Keys)
                 {

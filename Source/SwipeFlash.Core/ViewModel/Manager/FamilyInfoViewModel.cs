@@ -254,7 +254,7 @@ namespace SwipeFlash.Core
             File.Create(filePath);
             Task.Run(() =>
             {
-                while (!JSONPacketManager.IsFileReady(filePath)) { }
+                while (!JSONWriter.IsFileReady(filePath)) { }
                 File.WriteAllText(filePath, fileText);
             });
         }

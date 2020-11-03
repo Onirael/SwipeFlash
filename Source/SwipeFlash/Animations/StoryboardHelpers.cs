@@ -332,9 +332,9 @@ namespace SwipeFlash
         /// <summary>
         /// Adds a scale down animation to the storyboard
         /// </summary>
-        /// <param name="storyboard"></param>
-        /// <param name="duration"></param>
-        /// <param name="decelerationRatio"></param>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <param name="decelerationRatio">The decleration ratio of the animation</param>
         public static void AddScaleDown(this Storyboard storyboard, float duration, double minScale, float decelerationRatio = 0.9f)
         {
             var scaleXAnimation = new DoubleAnimation
@@ -358,6 +358,33 @@ namespace SwipeFlash
             // Add this to the storyboard
             storyboard.Children.Add(scaleXAnimation);
             storyboard.Children.Add(scaleYAnimation);
+        }
+
+        /// <summary>
+        /// Adds a scale up gradient brush X radius animation to the storyboard
+        /// </summary>
+        /// <param name="storyboard">The storyboard to add the animation to</param>
+        /// <param name="duration">The duration of the animation in seconds</param>
+        /// <param name="decelerationRatio">The decleration ratio of the animation</param>
+        public static void AddBurstGradientBrushX(this Storyboard storyboard, float duration, double minScale, float decelerationRatio = 0.9f)
+        {
+            var scaleXAnimation = new DoubleAnimationUsingKeyFrames
+            {
+                Duration = new Duration(TimeSpan.FromSeconds(duration)),
+                KeyFrames = new DoubleKeyFrameCollection()
+                {
+                    new SplineDoubleKeyFrame(minScale, KeyTime.FromPercent(0)),
+                    new SplineDoubleKeyFrame(1, KeyTime.FromPercent(0.05)),
+                    new SplineDoubleKeyFrame(minScale, KeyTime.FromPercent(1)),
+                },
+                DecelerationRatio = decelerationRatio
+            };
+
+            // Set the target property name
+            Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("(Border.Background).(RadialGradientBrush.RadiusX)"));
+
+            // Add this to the storyboard
+            storyboard.Children.Add(scaleXAnimation);
         }
     }
 }

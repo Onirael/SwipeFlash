@@ -118,11 +118,15 @@ namespace SwipeFlash.Core
             // Initializes the delete card button command
             DeleteCardCommand = new RelayCommand(OnDeleteCardButtonPressed);
 
+            IoC.Get<ApplicationViewModel>().OnPreviewKeyDown += OnPreviewKeyDown;
+
+            var fm = IoC.Get<FlashcardManager>();
+
             // Hooks the initlaize flashcard list function to the OnQueueInitialized event
-            IoC.Get<FlashcardManager>().OnQueueInitialized += InitializeFlashcardList;
+            fm.OnQueueInitialized += InitializeFlashcardList;
 
             // Hooks a flashcard family data update method to the families updated event
-            IoC.Get<FlashcardManager>().OnFamiliesUpdated += UpdateFlashcardFamilyData;
+            fm.OnFamiliesUpdated += UpdateFlashcardFamilyData;
 
             // Initialize the JSON data
             // This must be done after InitializeFlashcardList has been hooked
@@ -186,9 +190,6 @@ namespace SwipeFlash.Core
                     // Set the new card's queue position
                     newCard.CardQueuePosition = i;
 
-                    // Enables input on the last card
-                    if (i == 0) newCard.HasInput = true;
-
                     // Add the card to the list
                     initialCardList.Insert(0, newCard);
                 }
@@ -196,6 +197,10 @@ namespace SwipeFlash.Core
                 // Waits for the splash screen animation to start before loading
                 Task.Delay(500).ContinueWith((t) =>
                 {
+                    // Empties the flashcards collection
+                    Flashcards.Clear();
+
+                    // Adds all flashcards from the list to the collection
                     initialCardList.ForEach((card) =>
                     {
                         Flashcards.Add(card);
@@ -257,7 +262,7 @@ namespace SwipeFlash.Core
         {
             // Relay the command to the last swiped card if it exists
             if (FlashcardHistory.Count > 0)
-                FlashcardHistory[FlashcardHistory.Count - 1].UndoSwipeCommand.Execute(null);
+                OnUndoSwipe(this, null);
         }
 
         /// <summary>
@@ -313,13 +318,10 @@ namespace SwipeFlash.Core
         /// <summary>
         /// Called when a card is swiped to the left or right
         /// </summary>
-        public void OnCardSwipe(object sender, EventArgs e)
+        public void OnCardSwipe(object sender, bool isSwipedRight)
         {
             if (Flashcards.Count > 0)
             {
-                // Disable the input on the old card
-                Flashcards[Flashcards.Count - 1].HasInput = false;
-
                 // If the maximum amount of cards hasn't been reached
                 if (Flashcards.Count <= FlashcardCount)
                     // Insert new flashcard at index 0
@@ -328,6 +330,15 @@ namespace SwipeFlash.Core
                     // Update stack
                     PushCardToStack(null, true);
             }
+
+            // Gets the application view model
+            var appVM = IoC.Get<ApplicationViewModel>();
+
+            // If the card was swiped to the right
+            if (isSwipedRight)
+                appVM.MainWindowVM.IsCardSwipedRight = true;
+            else
+                appVM.MainWindowVM.IsCardSwipedLeft = true;
         }
 
         /// <summary>
@@ -417,17 +428,6 @@ namespace SwipeFlash.Core
                 // Updates the card queue positions
                 int newPos = Flashcards.Count - i - 1 + offsetPosition;
                 Flashcards[i].CardQueuePosition = newPos;
-
-                // If the card is at the front
-                if (newPos == 0)
-                {
-                    // Delay the input activation on the new active card
-                    FlashcardViewModel activeCard = Flashcards[i]; // Store the variable to avoid error when reading i value on the task thread
-                    Task.Delay((int)(CardChangeInputDelay * 1000)).ContinueWith((t) => activeCard.HasInput = true); // Error when switching input !!!!!!!
-                }
-                else
-                    // Disable the card's input
-                    Flashcards[i].HasInput = false;
             }
         }
 
@@ -447,11 +447,37 @@ namespace SwipeFlash.Core
             flashcard.InitCard(newFlashcardData);
 
             // Hook methods to EventHandlers
-            flashcard.OnCardSwipeLeft += OnCardSwipe;
-            flashcard.OnCardSwipeRight += OnCardSwipe;
-            flashcard.OnUndoSwipe += OnUndoSwipe;
+            flashcard.OnCardSwipe += OnCardSwipe;
 
             return flashcard;
+        }
+
+        /// <summary>
+        /// Called when any preview key has been pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnPreviewKeyDown(object sender, Key previewKey)
+        {
+            // If the settings menu is visible, quit
+            if (IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible)
+                return;
+            
+            switch(previewKey)
+            {
+                case Key.R:
+                    OnUndoSwipe(sender, null);
+                    break;
+                case Key.Space:
+                    Flashcards.Last().FlipCommand.Execute(this);
+                    break;
+                case Key.Left:
+                    Flashcards.Last().SwipeLeftCommand.Execute(this);
+                    break;
+                case Key.Right:
+                    Flashcards.Last().SwipeRightCommand.Execute(this);
+                    break;
+            }
         }
 
         #endregion

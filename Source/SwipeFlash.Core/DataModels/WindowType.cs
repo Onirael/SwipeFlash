@@ -1,7 +1,7 @@
 ﻿namespace SwipeFlash.Core
 {
     /// <summary>
-    /// An enum describiing which child window is used
+    /// An enum describing which child window is used
     /// </summary>
     public enum WindowType
     {

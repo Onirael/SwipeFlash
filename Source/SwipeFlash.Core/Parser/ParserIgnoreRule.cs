@@ -188,6 +188,12 @@ namespace SwipeFlash.Core
                 // If the symbol is a # a digit is expected
                 case '#':
                     return char.IsDigit(character);
+                // If the symbol is a ^ an uppercase character is expected
+                case '^':
+                    return char.IsUpper(character);
+                // If the symbol is a _ a lowercase character is expected
+                case '_':
+                    return char.IsLower(character);
 
                 // If the symbol is not a key, compare both characters
                 default:
@@ -278,7 +284,6 @@ namespace SwipeFlash.Core
                     // in order to maintain the order of the array
                     LineMidChars.Add(lastIgnorePattern);
             }
-            // If the rule only has one element and it is not in the mid characters
         }
 
         /// <summary>

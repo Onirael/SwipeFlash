@@ -15,6 +15,21 @@ namespace SwipeFlash.Core
             set => Properties.Settings.Default.IllustrationsEnabled = value;
         }
 
+        /// <summary>
+        /// The current application settings
+        /// </summary>
+        public bool InstructionsVisible
+        {
+            get => Properties.Settings.Default.ShowInstructions;
+            set => Properties.Settings.Default.ShowInstructions = value;
+        }
+
+        public bool SoundsEnabled
+        {
+            get => Properties.Settings.Default.SoundsEnabled;
+            set => Properties.Settings.Default.SoundsEnabled = value;
+        }
+
         #endregion
 
         #region Commands

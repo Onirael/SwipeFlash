@@ -8,7 +8,15 @@ namespace SwipeFlash
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// The application window manager
+        /// </summary>
         private WindowManager mWindowManager;
+
+        /// <summary>
+        /// The application audio manager
+        /// </summary>
+        private SoundManager mSoundManager;
 
         /// <summary>
         /// Custom startup so we load our IoC immediately before anything else
@@ -22,7 +30,9 @@ namespace SwipeFlash
             // Setup Ioc
             IoC.Setup();
 
+            // Creates the managers
             mWindowManager = new WindowManager();
+            mSoundManager = new SoundManager();
 
             // Show the main window
             Current.MainWindow = new MainWindow();

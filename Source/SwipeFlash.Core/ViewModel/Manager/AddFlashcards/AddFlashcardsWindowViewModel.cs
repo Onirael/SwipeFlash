@@ -199,20 +199,6 @@ namespace SwipeFlash.Core
 
             // Initializes the categories array
             InitCategories();
-
-
-            // DEVELOPMENT ONLY
-
-            FamilyName = "Test family";
-            Category1 = "test1";
-            Category2 = "test2";
-            Side1Logo = "❤";
-            Side2Logo = "🐸";
-            IgnorePatternDescription = "#*";
-            SeparatorsDescription = "";
-            LinePatternDescription = "[1],gender?,[2]; gender=={\"m\":[1]=\"el \"+[1], \"f\":[1]=\"la \"+[1], \"m/f\":[1]=\"el \"+[1]}";
-
-            //
         }
 
         #endregion
