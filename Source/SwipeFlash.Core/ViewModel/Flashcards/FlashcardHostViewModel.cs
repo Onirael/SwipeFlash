@@ -460,7 +460,8 @@ namespace SwipeFlash.Core
         private void OnPreviewKeyDown(object sender, Key previewKey)
         {
             // If the settings menu is visible, quit
-            if (IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible)
+            if (IoC.Get<ApplicationViewModel>().IsSettingsMenuVisible ||
+                IsInEditMode)
                 return;
             
             switch(previewKey)

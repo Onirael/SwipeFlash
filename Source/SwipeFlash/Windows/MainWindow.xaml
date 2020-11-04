@@ -89,7 +89,7 @@
 
 
         <!-- Splash screen -->
-        <Image Source="pack://application:,,,/Resources/SwipeFlashIcon.ico"
+        <Image Source="pack://application:,,,/Resources/SwipeFlashIcon.png"
                Margin="50"
                local:AnimateScaleAndFadeInProperty.Value="{Binding ApplicationViewModel.IsContentLoaded, 
                                                            Source={x:Static local:ViewModelLocator.Instance},
@@ -143,14 +143,6 @@
                        FontFamily="{StaticResource LGCBold}"
                        Grid.Row="1" Grid.Column="1"/>
         </Grid>
-
-        <!-- Settings menu backdrop -->
-        <!--<Border IsHitTestVisible="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
-                                   Source={x:Static local:ViewModelLocator.Instance}}"
-                local:AnimateBackgroundFadeInProperty.Value ="{Binding ApplicationViewModel.IsSettingsMenuVisible, 
-                                                               Source={x:Static local:ViewModelLocator.Instance}}"
-                Opacity="0.5">
-        </Border>-->
 
         <!-- Settings menu control -->
         <local:SettingsMenuControl VerticalAlignment="Top"

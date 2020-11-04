@@ -277,6 +277,7 @@
     <Resource Include="Resources\SwipeFlashIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\SwipeFlashIcon.png" />
     <None Include="Resources\Wrong.wav" />
     <Content Include="Resources\Success.wav" />
   </ItemGroup>
