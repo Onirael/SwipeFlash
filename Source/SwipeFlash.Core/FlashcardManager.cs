@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -167,7 +168,26 @@ namespace SwipeFlash.Core
                     // Fire JSON loaded event
                     OnJSONLoaded(this, null);
                 }
-                catch { }
+                catch
+                {
+                    // Creates a new static data object
+                    StaticData = new JObject()
+                    {
+                        ["categories"] = new JArray(),
+                        ["flashcards"] = new JArray(),
+                    };
+                    // Creates a new use data object
+                    UserData = new JObject()
+                    {
+                        ["flashcards"] = new JArray(),
+                    };
+
+                    // Writes the files
+                    JSONWriter.UpdateJSONFiles();
+
+                    // Fire JSON loaded event
+                    OnJSONLoaded(this, null);
+                }
 
             });
         }

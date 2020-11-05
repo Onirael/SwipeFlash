@@ -177,8 +177,10 @@ namespace SwipeFlash.Core
             Task.Run(() => 
             {
                 // Waits for the files to be available
-                while (!IsFileReady(staticFile) ||
-                       !IsFileReady(userFile)) { }
+                while ((!IsFileReady(staticFile) ||
+                       !IsFileReady(userFile)) &&
+                       File.Exists(staticFile) &&
+                       File.Exists(userFile)) { }
 
                 File.WriteAllText(staticFile, newStaticData);
                 File.WriteAllText(userFile, newUserData);

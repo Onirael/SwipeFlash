@@ -192,8 +192,6 @@
     <Compile Include="Parser\ParserVariableInstruction.cs" />
     <Compile Include="ViewModel\Base\SoundService.cs" />
     <Compile Include="ViewModel\Base\WindowService.cs" />
-    <None Include="Data\UserData.JSON" />
-    <None Include="Data\StaticData.JSON" />
     <Compile Include="DataModels\FlashcardData.cs" />
     <Compile Include="FlashcardManager.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
@@ -236,7 +234,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

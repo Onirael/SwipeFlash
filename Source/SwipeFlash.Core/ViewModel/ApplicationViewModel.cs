@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Unsplasharp;
 
@@ -99,6 +102,34 @@ namespace SwipeFlash.Core
         /// The view model of the main window
         /// </summary>
         public WindowViewModel MainWindowVM { get; set; }
+
+        /// <summary>
+        /// Get the current user data folder
+        /// </summary>
+        public static string UserDataFolder
+        {
+            get
+            {
+                string folderBase = Environment.GetFolderPath
+                                    (Environment.SpecialFolder.LocalApplicationData);
+                string dir = string.Format(@"{0}\SwipeFlash\", folderBase);
+                return CheckDir(dir);
+            }
+        }
+
+        /// <summary>
+        /// Check the specified folder, and create if it doesn't exist.
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        private static string CheckDir(string dir)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            return dir;
+        }
 
         #endregion
 
@@ -210,13 +241,8 @@ namespace SwipeFlash.Core
             Properties.Settings.Default.PropertyChanged += OnSettingsChanged;
 
             // Store the location of the data files
-            var parentDirectory = Directory.GetParent(
-                                  Directory.GetParent(
-                                  Directory.GetParent(
-                                  Directory.GetCurrentDirectory()).ToString()).ToString());
-
-            StaticDataPath = parentDirectory + "/SwipeFlash.Core/Data/StaticData.JSON";
-            UserDataPath = parentDirectory + "/SwipeFlash.Core/Data/UserData.JSON";
+            StaticDataPath = UserDataFolder + "StaticData.JSON";
+            UserDataPath = UserDataFolder + "UserData.JSON";
         }
 
         #endregion

@@ -1,4 +1,8 @@
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\Data\StaticData.JSON
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\Data\UserData.JSON
 D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\SwipeFlash.exe.config
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\SwipeFlash.exe.manifest
+D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\SwipeFlash.application
 D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\SwipeFlash.exe
 D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\SwipeFlash.pdb
 D:\Unreal\SwipeFlash\Source\SwipeFlash\bin\Release\Microsoft.Win32.Primitives.dll
@@ -134,7 +138,6 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\Windows\FlashcardManagerWindo
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\Windows\MainWindow.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\Windows\ParsedFlashcardListWindow.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\App.g.cs
-D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash_Content.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\GeneratedInternalTypeHelper.g.cs
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash_MarkupCompile.cache
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash_MarkupCompile.lref
@@ -156,6 +159,9 @@ D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.g.resources
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.Properties.Resources.resources
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.csproj.GenerateResource.cache
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.csproj.CoreCompileInputs.cache
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.exe.manifest
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.application
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.csproj.CopyComplete
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.exe
 D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash.pdb
+D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Release\SwipeFlash_Content.g.cs

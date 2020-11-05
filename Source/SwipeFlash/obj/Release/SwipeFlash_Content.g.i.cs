@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/success.wav")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("data/staticdata.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("data/userdata.json")]
 
 

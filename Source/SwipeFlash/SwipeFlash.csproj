@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>D:\Programmes\SwipeFlash\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -25,9 +25,14 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <SupportUrl>https://github.com/Onirael/SwipeFlash/issues</SupportUrl>
+    <TargetCulture>en-US</TargetCulture>
+    <ProductName>Swipe Flash</ProductName>
+    <PublisherName>Igor Francey</PublisherName>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -52,6 +57,18 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\SwipeFlashIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>F427FE8B9C0E99CC0DE664B4610E8E2686940B49</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>SwipeFlash_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emoji.Wpf, Version=0.0.0.19, Culture=neutral, processorArchitecture=MSIL">
@@ -243,6 +260,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="SwipeFlash_TemporaryKey.pfx" />
     <Resource Include="Fonts\Louis George Cafe Bold.ttf" />
     <Resource Include="Fonts\Louis George Cafe Italic.ttf" />
     <Resource Include="Fonts\Louis George Cafe Light.ttf" />
@@ -254,12 +272,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SwipeFlash.Core\SwipeFlash.Core.csproj">
-      <Project>{29fbe0f9-2fdf-48a6-a248-cd83613a8eb2}</Project>
-      <Name>SwipeFlash.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -278,8 +290,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\SwipeFlashIcon.png" />
-    <None Include="Resources\Wrong.wav" />
-    <Content Include="Resources\Success.wav" />
+    <Resource Include="Resources\Wrong.wav" />
+    <Resource Include="Resources\Success.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SwipeFlash.Core\SwipeFlash.Core.csproj">
+      <Project>{29fbe0f9-2fdf-48a6-a248-cd83613a8eb2}</Project>
+      <Name>SwipeFlash.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".sff">
+      <Visible>False</Visible>
+      <Description>Swipe Flash flashcard family file</Description>
+      <Progid>SwipeFlash.sff.1.0</Progid>
+      <DefaultIcon>Resources\SwipeFlashIcon.ico</DefaultIcon>
+    </FileAssociation>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
