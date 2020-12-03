@@ -1,6 +1,6 @@
 # Swipe Flash
 
-Swipe Flash is a flashcard app whose goal is to transform raw lists of learning material into a a satisfying and learning experience. The application has a simplified UI which creates a smooth user experience.
+Swipe Flash is a flashcard app whose goal is to transform raw lists of learning material into a satisfying and engaging learning experience. The application has a simple UI which creates a smooth user experience.
 
 In order to learn a vocabulary list, the user simply has to swipe each card left or right depending on whether the card was guessed correctly. The application will use a Leitner system combined with a forgetting curve handling to make sure the flashcards are learned in the best way possible.
 
