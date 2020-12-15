@@ -45,5 +45,9 @@
         /// The confirmation/edit window for parsed flashcards
         /// </summary>
         ParsedFlashcards = 9,
+        /// <summary>
+        /// The stats window of a given family
+        /// </summary>
+        FamilyStats=10,
     }
 }

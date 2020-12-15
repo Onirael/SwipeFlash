@@ -1,0 +1,137 @@
+﻿<local:BaseWindow x:Class="SwipeFlash.FamilyStatsWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:SwipeFlash"
+                  WindowStartupLocation="CenterOwner"
+                  WindowStyle="ToolWindow"
+                  SizeToContent="WidthAndHeight"
+                  mc:Ignorable="d"
+                  Title="Stats"
+                  MinWidth="200" MinHeight="200">
+    <Border Padding="10">
+        <StackPanel>
+            <!-- Family name -->
+            <TextBlock FontSize="{StaticResource FontSizeLarge}"
+                       HorizontalAlignment="Center"
+                       Text="{Binding FamilyName}"
+                       Margin="0 0 0 20"/>
+
+            <StackPanel>
+                <!-- Bar chart -->
+                <Grid Height="100"
+                      Width="300"
+                      x:Name="barChart">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                     <!-- Category 1 --> 
+                    <ProgressBar Grid.Column="0"
+                                 Orientation="Vertical"
+                                 Minimum="0" Maximum="1" Value="{Binding Category1BarSize, Mode=OneWay}"
+                                 Foreground="#df0000" Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="10 0"/>
+                     <!-- Category 2 -->
+                    <ProgressBar Grid.Column="1"
+                                 Orientation="Vertical"
+                                 Minimum="0" Maximum="1" Value="{Binding Category2BarSize, Mode=OneWay}"
+                                 Foreground="#8f2f00" Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="10 0"/>
+                    <!-- Category 3 -->
+                    <ProgressBar Grid.Column="2"
+                                 Orientation="Vertical"
+                                 Minimum="0" Maximum="1" Value="{Binding Category3BarSize, Mode=OneWay}"
+                                 Foreground="#efdf00" Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="10 0"/>
+                    <!-- Category 4 -->
+                    <ProgressBar Grid.Column="3"
+                                 Orientation="Vertical"
+                                 Minimum="0" Maximum="1" Value="{Binding Category4BarSize, Mode=OneWay}"
+                                 Foreground="#00df00" Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="10 0"/>
+                    <!-- Category 5 -->
+                    <ProgressBar Grid.Column="4"
+                                 Orientation="Vertical"
+                                 Minimum="0" Maximum="1" Value="{Binding Category5BarSize, Mode=OneWay}"
+                                 Foreground="#00af00" Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="10 0"/>
+                </Grid>
+                
+                <!-- Chart support line -->
+                <Line 
+                    X1="0" Y1="0"
+                    X2="300" Y2="0"
+                    Stroke="{StaticResource ForegroundVeryDarkBrush}"
+                    StrokeThickness="1"/>
+
+                <!-- Category count -->
+                <Grid Width="{Binding ActualWidth, ElementName=barChart}"
+                      Margin="0 3 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Category 1 count -->
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Category1Count}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+                    <!-- Category 2 count -->
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Category2Count}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+                    <!-- Category 3 count -->
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding Category3Count}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+                    <!-- Category 4 count -->
+                    <TextBlock Grid.Column="3"
+                               Text="{Binding Category4Count}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+                    <!-- Category 5 count -->
+                    <TextBlock Grid.Column="4"
+                               Text="{Binding Category5Count}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+
+                </Grid>
+
+            </StackPanel>
+
+            <!-- Last studied -->
+            <StackPanel Orientation="Horizontal"
+                        Margin="0 10 0 0">
+                <TextBlock Text="Last studied "/>
+                <TextBlock Text="{Binding LastStudiedDisplayString}"/>
+            </StackPanel>
+
+
+            <!-- Close button -->
+            <Button Content="Close"
+                    Height="40"
+                    HorizontalAlignment="Right"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    Padding="0"
+                    Width="120"
+                    Command="{Binding CloseButtonCommand}"/>
+        </StackPanel>
+    </Border>
+</local:BaseWindow>

@@ -219,6 +219,7 @@
     <Compile Include="ViewModel\Manager\Design\FlashcardFamilyListItemDesignModel.cs" />
     <Compile Include="ViewModel\Manager\Design\FlashcardManagerWindowDesignModel.cs" />
     <Compile Include="ViewModel\Manager\FamilyInfoViewModel.cs" />
+    <Compile Include="ViewModel\Manager\FamilyStatsViewModel.cs" />
     <Compile Include="ViewModel\Manager\FlashcardFamilyListItemViewModel.cs" />
     <Compile Include="ViewModel\Manager\FlashcardManagerWindowViewModel.cs" />
     <Compile Include="ViewModel\Window\SettingsMenuViewModel.cs" />

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Unreal\SwipeFlash\Source\SwipeFlash\obj\Debug\
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\obj\Debug\
 SwipeFlash
 none
 false
 DEBUG;TRACE
-D:\Unreal\SwipeFlash\Source\SwipeFlash\App.xaml
-14-1205155172
+D:\WPF_Apps\SwipeFlash\SwipeFlash\Source\SwipeFlash\App.xaml
+151578501992
 
-391123332343
-136-194901418
-Controls\FlashcardControl.xaml;Controls\FlashcardFamilyListItemControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;Styles\TextBoxes.xaml;Windows\AddFlashcardsWindow.xaml;Windows\FamilyInfoWindow.xaml;Windows\FlashcardManagerWindow.xaml;Windows\MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;Windows\ParsedFlashcardListWindow.xaml;
+401468340983
+1361669351195
+Controls\FlashcardControl.xaml;Controls\FlashcardFamilyListItemControl.xaml;Controls\FlashcardHost.xaml;Controls\SettingsMenuControl.xaml;Styles\TextBoxes.xaml;Windows\AddFlashcardsWindow.xaml;Windows\FamilyInfoWindow.xaml;Windows\FamilyStatsWindow.xaml;Windows\FlashcardManagerWindow.xaml;Windows\MainWindow.xaml;Styles\Checkboxes.xaml;Styles\Buttons.xaml;Styles\Fonts.xaml;Styles\Colors.xaml;Windows\ParsedFlashcardListWindow.xaml;
 
 False
 

@@ -31,6 +31,10 @@
             <Button Style="{StaticResource BorderlessIconButton}"
                     Content="{StaticResource FontAwesome_Eye}"
                     Command="{Binding OpenFamilyInfoCommand}"/>
+            <!-- Show family stats button -->
+            <Button Style="{StaticResource BorderlessIconButton}"
+                    Content="{StaticResource FontAwesome_Stats}"
+                    Command="{Binding OpenFamilyStatsCommand}"/>
             <!-- Delete family button -->
             <Button Style="{StaticResource BorderlessIconButton}"
                     Content="{StaticResource FontAwesome_Trash}"

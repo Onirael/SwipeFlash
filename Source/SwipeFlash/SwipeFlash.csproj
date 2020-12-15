@@ -29,8 +29,8 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Swipe Flash</ProductName>
     <PublisherName>Igor Francey</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -166,6 +166,9 @@
     <Compile Include="Windows\FamilyInfoWindow.xaml.cs">
       <DependentUpon>FamilyInfoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FamilyStatsWindow.xaml.cs">
+      <DependentUpon>FamilyStatsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FlashcardManagerWindow.xaml.cs">
       <DependentUpon>FlashcardManagerWindow.xaml</DependentUpon>
     </Compile>
@@ -198,6 +201,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\FamilyInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FamilyStatsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -42,6 +42,11 @@ namespace SwipeFlash.Core
         /// </summary>
         public ICommand OpenFamilyInfoCommand { get; set; }
 
+        /// <summary>
+        /// A command called by the see family stats button
+        /// </summary>
+        public ICommand OpenFamilyStatsCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -66,6 +71,9 @@ namespace SwipeFlash.Core
 
             // Initializes the open family info command
             OpenFamilyInfoCommand = new RelayCommand(OnOpenFamilyInfo);
+
+            // Initializes the open family stats command
+            OpenFamilyStatsCommand = new RelayCommand(OnOpenFamilyStats);
 
             // Sets properties from data
             FamilyName = familyData.Name;
@@ -124,6 +132,22 @@ namespace SwipeFlash.Core
             {
                 Message = FamilyName,
                 TargetType = WindowType.FamilyInfo,
+            };
+
+            // Creates the window
+            IoC.Get<WindowService>().CreateWindow(familyInfoWindowArgs);
+        }
+
+        /// <summary>
+        /// Called when the show family stats button is pressed
+        /// </summary>
+        private void OnOpenFamilyStats()
+        {
+            // Creates the window args
+            var familyInfoWindowArgs = new WindowArgs()
+            {
+                Message = FamilyName,
+                TargetType = WindowType.FamilyStats,
             };
 
             // Creates the window
